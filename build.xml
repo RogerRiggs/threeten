@@ -133,7 +133,7 @@
 
     <target name="compile-extra" depends="compile-core">
         <mkdir  dir="${extra.main.classes}"/>
-        <javac srcdir="${extra.main}" destdir="${extra.main.classes}" includeantruntime="false">
+        <javac srcdir="${extra.main}" destdir="${extra.main.classes}" debug="true" includeantruntime="false">
             <!-- <classpath location="${core.main.classes}"/> -->
             <classpath refid="extra.path"/>            
         </javac>
@@ -141,12 +141,14 @@
 
     <target name="compile-openjdk" depends="compile-core">
         <mkdir  dir="${ojdk.main.classes}"/>
-        <javac srcdir="${ojdk.main}" destdir="${ojdk.main.classes}" nowarn="true" bootclasspath="${java.home}/lib/rt.jar" includeantruntime="false">
+        <javac srcdir="${ojdk.main}" destdir="${ojdk.main.classes}" nowarn="true" debug="true" bootclasspath="${java.home}/lib/rt.jar" includeantruntime="false">
             <classpath refid="main.path"/>
         </javac>
     </target>
 
-    <target name="compile-tzdb" depends="compile-standard">
+    <available file="${lib.main}/${tzdb.outputjar}" property="tzdb.exists" />
+    
+    <target name="compile-tzdb" depends="compile-standard" unless="${tzdb.exists}" >
         <mkdir dir="${tzdata.main.workarea}"/>
         <copy todir="${tzdata.main.workarea}">
             <fileset dir="${tzdata.main}" includes="tzdata*.tar.gz"/>
@@ -175,12 +177,18 @@
     <target name="compile" depends="compile-core, compile-standard, compile-extra, compile-openjdk, compile-tzdb" description="compile all sources" />
 
     <!-- ==================================================================== -->
+    <tstamp>
+        <format property="CURR_TIME" pattern="d-MMMM-yyyy hh:mm" />
+    </tstamp>
+
     <target name="javadoc" depends="init" description="generates javadoc for the api">
       <mkdir dir="${build.javadoc}"/>
       <javadoc sourcepath="${core.main};${standard.main};${ojdk.main}" destdir="${build.javadoc}"
                group="Core javax.time:javax.time.calendrical:javax.time.builder:javax.time.zone,Standard javax.time.chrono:javax.time.extended:javax.time.format,Util java.util"
                classpathref="main.path"
+               use="true"
                windowtitle="ThreeTen date and time API"
+               header="JSR-310 ${version.full} &lt;BR&gt;${CURR_TIME}"
                failonerror="true"
                packagenames="javax.time**/*,java.util**/*"
                overview="${core.main}/javax/time/overview.html" />
@@ -189,17 +197,17 @@
     <!-- ==================================================================== -->
     <target name="compile-core-tests" depends="compile">
         <mkdir dir="${core.test.classes}" />
-        <javac srcdir="${core.test}" destdir="${core.test.classes}" classpathref="test.path" includeantruntime="false" />
+        <javac srcdir="${core.test}" destdir="${core.test.classes}" debug="true" classpathref="test.path" includeantruntime="false" />
     </target>
     
     <target name="compile-standard-tests" depends="compile">
         <mkdir dir="${standard.test.classes}" />
-        <javac srcdir="${standard.test}" destdir="${standard.test.classes}" classpathref="test.path" includeantruntime="false" />
+        <javac srcdir="${standard.test}" destdir="${standard.test.classes}" debug="true" classpathref="test.path" includeantruntime="false" />
     </target>
 
     <target name="compile-extra-tests" depends="compile">
         <mkdir dir="${extra.test.classes}" />
-        <javac srcdir="${extra.test}" destdir="${extra.test.classes}" classpathref="test.path"  includeantruntime="false" />
+        <javac srcdir="${extra.test}" destdir="${extra.test.classes}" debug="true" classpathref="test.path"  includeantruntime="false" />
     </target>
 
     <target name="test-core" depends="compile-core-tests">
