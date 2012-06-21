@@ -53,8 +53,8 @@ import javax.time.calendrical.*;
  * All implementations that can be instantiated must be final, immutable and thread-safe.
  * Subclasses should be Serializable wherever possible.
  */
-public abstract class ChronoDate<T extends Chrono>
-        implements CalendricalObject, Comparable<ChronoDate<T>> {
+public abstract class ChronoDate
+        implements CalendricalObject, Comparable<ChronoDate> {
 
     /**
      * Obtains an instance of {@code ChronoDate} from a calendrical.
@@ -70,8 +70,8 @@ public abstract class ChronoDate<T extends Chrono>
      * @return the calendar system specific date, not null
      * @throws CalendricalException if unable to convert to a {@code ChronoDate}
      */
-    public static ChronoDate<?> from(CalendricalObject calendrical) {
-        ChronoDate<?> cd = calendrical.extract(ChronoDate.class);
+    public static ChronoDate from(CalendricalObject calendrical) {
+        ChronoDate cd = calendrical.extract(ChronoDate.class);
         if (cd != null) {
             return cd;
         }
@@ -263,7 +263,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @param newValue  the new value of the field in the returned date, not null
      * @return a date based on this one with the specified field set, not null
      */
-    public abstract ChronoDate<T> with(DateTimeField field, int newValue);
+    public abstract ChronoDate with(DateTimeField field, int newValue);
 
     /**
      * Returns a copy of this date with the specified era.
@@ -274,7 +274,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the years added, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public ChronoDate<T> withEra(Era era) {
+    public ChronoDate withEra(Era era) {
         return with(LocalDateTimeField.ERA, era.getValue());
     }
 
@@ -286,7 +286,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @param prolepticYear  the proleptic-year to set
      * @return a date based on this one with the specified proleptic-year, not null
      */
-    public ChronoDate<T> withProlepticYear(int prolepticYear) {
+    public ChronoDate withProlepticYear(int prolepticYear) {
         return with(LocalDateTimeField.PROLEPTIC_YEAR, prolepticYear);
     }
 
@@ -298,7 +298,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @param yearOfEra  the year-of-era to set
      * @return a date based on this one with the specified year-of-era, not null
      */
-    public ChronoDate<T> withYearOfEra(int yearOfEra) {
+    public ChronoDate withYearOfEra(int yearOfEra) {
         return with(LocalDateTimeField.YEAR_OF_ERA, yearOfEra);
     }
 
@@ -310,7 +310,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @param monthOfYear  the month-of-year to set
      * @return a date based on this one with the specified month-of-year, not null
      */
-    public ChronoDate<T> withMonthOfYear(int monthOfYear) {
+    public ChronoDate withMonthOfYear(int monthOfYear) {
         return with(LocalDateTimeField.MONTH_OF_YEAR, monthOfYear);
     }
 
@@ -322,7 +322,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @param dayOfMonth  the day-of-month to set
      * @return a date based on this one with the specified day-of-month, not null
      */
-    public ChronoDate<T> withDayOfMonth(int dayOfMonth) {
+    public ChronoDate withDayOfMonth(int dayOfMonth) {
         return with(LocalDateTimeField.DAY_OF_MONTH, dayOfMonth);
     }
 
@@ -334,7 +334,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @param dayOfYear  the day-of-year to set
      * @return a date based on this one with the specified day-of-year, not null
      */
-    public ChronoDate<T> withDayOfYear(int dayOfYear) {
+    public ChronoDate withDayOfYear(int dayOfYear) {
         return with(LocalDateTimeField.DAY_OF_YEAR, dayOfYear);
     }
 
@@ -346,7 +346,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @param dayOfWeek  the day-of-week to set
      * @return a date based on this one with the specified day-of-week, not null
      */
-    public ChronoDate<T> withDayOfWeek(DayOfWeek dayOfWeek) {
+    public ChronoDate withDayOfWeek(DayOfWeek dayOfWeek) {
         return with(LocalDateTimeField.DAY_OF_WEEK, dayOfWeek.getValue());
     }
 
@@ -365,7 +365,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the years added, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public abstract ChronoDate<T> plusYears(long years);
+    public abstract ChronoDate plusYears(long years);
 
     /**
      * Returns a copy of this date with the specified period in months added.
@@ -381,7 +381,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the months added, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public abstract ChronoDate<T> plusMonths(long months);
+    public abstract ChronoDate plusMonths(long months);
 
     /**
      * Returns a copy of this date with the specified period in weeks added.
@@ -398,7 +398,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the weeks added, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public ChronoDate<T> plusWeeks(long weeks) {
+    public ChronoDate plusWeeks(long weeks) {
         return plusDays(DateTimes.safeMultiply(weeks, 7));
     }
 
@@ -413,7 +413,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the days added, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public abstract ChronoDate<T> plusDays(long days);
+    public abstract ChronoDate plusDays(long days);
 
     //-----------------------------------------------------------------------
     /**
@@ -432,7 +432,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the years subtracted, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public ChronoDate<T> minusYears(long years) {
+    public ChronoDate minusYears(long years) {
         return plusYears(DateTimes.safeNegate(years));
     }
 
@@ -452,7 +452,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the months subtracted, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public ChronoDate<T> minusMonths(long months) {
+    public ChronoDate minusMonths(long months) {
         return plusMonths(DateTimes.safeNegate(months));
     }
 
@@ -471,7 +471,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the weeks subtracted, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public ChronoDate<T> minusWeeks(long weeks) {
+    public ChronoDate minusWeeks(long weeks) {
         return plusWeeks(DateTimes.safeNegate(weeks));
     }
 
@@ -488,7 +488,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return a date based on this one with the days subtracted, not null
      * @throws CalendricalException if the result exceeds the supported date range
      */
-    public ChronoDate<T> minusDays(long days) {
+    public ChronoDate minusDays(long days) {
         return plusDays(DateTimes.safeNegate(days));
     }
 
@@ -528,14 +528,14 @@ public abstract class ChronoDate<T extends Chrono>
     }
 
     @Override
-    public ChronoDate<?> with(CalendricalAdjuster adjuster) {
+    public ChronoDate with(CalendricalAdjuster adjuster) {
         // TODO: chrono
         if (adjuster instanceof DateAdjuster) {
             return getChronology().date(((DateAdjuster) adjuster).adjustDate(toLocalDate()));
         } else if (adjuster instanceof LocalDate) {
             return getChronology().date((LocalDate) adjuster);
         } else if (adjuster instanceof ChronoDate) {
-            return ((ChronoDate<?>) adjuster);
+            return ((ChronoDate) adjuster);
         }
         DateTimes.checkNotNull(adjuster, "Adjuster must not be null");
         throw new CalendricalException("Unable to adjust ChronoDate with " + adjuster.getClass().getSimpleName());
@@ -586,7 +586,7 @@ public abstract class ChronoDate<T extends Chrono>
      * @return the comparator value, negative if less, positive if greater
      */
     @Override
-    public int compareTo(ChronoDate<T> other) {
+    public int compareTo(ChronoDate other) {
         int cmp = DateTimes.safeCompare(getProlepticYear(), other.getProlepticYear());
         if (cmp == 0) {
             cmp = DateTimes.safeCompare(getMonthOfYear(), other.getMonthOfYear());
@@ -614,8 +614,8 @@ public abstract class ChronoDate<T extends Chrono>
         if (this == obj) {
             return true;
         }
-        if (obj instanceof ChronoDate<?>) {
-            ChronoDate<?> other = (ChronoDate<?>) obj;
+        if (obj instanceof ChronoDate) {
+            ChronoDate other = (ChronoDate) obj;
             return getChronology().equals(other.getChronology()) &&
                     getProlepticYear() == other.getProlepticYear() &&
                     getMonthOfYear() == other.getMonthOfYear() &&
