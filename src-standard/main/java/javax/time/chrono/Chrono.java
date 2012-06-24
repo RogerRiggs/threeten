@@ -31,25 +31,51 @@
  */
 package javax.time.chrono;
 
-import javax.time.LocalDate;
 import javax.time.calendrical.CalendricalObject;
 
 /**
- * A calendar system.
- * 
- * <h4>Implementation notes</h4>
- * This interface must be implemented with care to ensure other classes operate correctly.
- * All implementations that can be instantiated must be final, immutable and thread-safe.
- * Subclasses should be Serializable wherever possible.
+ * Factory interface for calendar neutral {@code ChronoDate}s.
+ * The Chrono for a particular calendars is found using the lookup methods
+ * {@link ChronoDate#getByName} and {@link ChronoDate#getByLocale(java.util.Locale)}.
+ * New calendars can be added by providing implementations of the {@code Chrono} interface
+ * as described in the Adding New Calendars section below.
+ * <p>
+ * ChronoDate instances are created using the methods:
+ * <ul>
+ * <li> {@link #now() now()},
+ * <li> {@link #date(int, int, int) date(year, month, day)},
+ * <li> {@link #date(javax.time.chrono.Era, int, int, int) date(era, year, month, day)},
+ * <li> {@link #date(javax.time.calendrical.CalendricalObject) date(Calendrical)}.
+ * <li> {@link #dateFromEpochDay(long) dateFromEpochDay(epochDay)}, or
+ * </ul>
+ *
+ * <h4>Adding New Calendars</h4>
+ *
+ * <p>
+ * The set of calendars is extensible by defining a subclass of {@link javax.time.chrono.ChronoDate}
+ * to represent a date instance and an implementation of {@link javax.time.chrono.Chrono}
+ * to be the factory for the ChronoDate subclass.
+ * The {@link java.util.ServiceLoader} mechanism is used to register
+ * the Chrono implementation class. The calendar lookup mechanism in
+ * {@link ChronoDate} uses the ServiceLoader to find Chrono implementations
+ * and registers them by name and locale.
+ * </p>
+
+ * <p>Example getting the current date for a named calendar</p>
+ * <pre>
+ *     Chrono chrono = ChronoDate.getByName(CLDR_name);
+ *     ChronoDate date = chrono.now();
+ * </pre>
+ * @see ChronoDate
  */
-public abstract class Chrono {
+public interface Chrono {
 
     /**
      * Gets the name of the calendar system.
      * 
      * @return the name, not null
      */
-    public abstract String getName();
+    String getName();
 
     //-----------------------------------------------------------------------
     /**
@@ -61,7 +87,7 @@ public abstract class Chrono {
      * @param dayOfMonth  the calendar system day-of-month
      * @return the date in this calendar system, not null
      */
-    public abstract ChronoDate date(Era era, int yearOfEra, int monthOfYear, int dayOfMonth);
+    ChronoDate date(Era era, int yearOfEra, int monthOfYear, int dayOfMonth);
 
     /**
      * Creates a date in this calendar system from the proleptic-year, month-of-year and day-of-month fields.
@@ -71,7 +97,7 @@ public abstract class Chrono {
      * @param dayOfMonth  the calendar system day-of-month
      * @return the date in this calendar system, not null
      */
-    public abstract ChronoDate date(int prolepticYear, int monthOfYear, int dayOfMonth);
+    ChronoDate date(int prolepticYear, int monthOfYear, int dayOfMonth);
 
     /**
      * Creates a date in this calendar system from another calendrical object.
@@ -79,7 +105,7 @@ public abstract class Chrono {
      * @param calendrical  the other calendrical, not null
      * @return the date in this calendar system, not null
      */
-    public abstract ChronoDate date(CalendricalObject calendrical);
+    ChronoDate date(CalendricalObject calendrical);
 
     /**
      * Creates a date in this calendar system from the epoch day from 1970-01-01 (ISO).
@@ -87,16 +113,15 @@ public abstract class Chrono {
      * @param epochDay  the epoch day measured from 1970-01-01 (ISO), not null
      * @return the date in this calendar system, not null
      */
-    public abstract ChronoDate dateFromEpochDay(long epochDay);
+    ChronoDate dateFromEpochDay(long epochDay);
 
     /**
      * Creates the current date in this calendar system.
      * 
      * @return the current date in this calendar system, not null
      */
-    public ChronoDate now() {
-        return dateFromEpochDay(LocalDate.now().toEpochDay());
-    }
+    // This is a candidate for an SE 8 default method calling dateFromEpochDay()
+    ChronoDate now();
 
     /**
      * Checks if the specified year is a leap year.
@@ -109,7 +134,7 @@ public abstract class Chrono {
      * @param prolepticYear  the proleptic-year to check, not validated for range
      * @return true if the year is a leap year
      */
-    public abstract boolean isLeapYear(long prolepticYear);
+    boolean isLeapYear(long prolepticYear);
 
     //-----------------------------------------------------------------------
     /**
@@ -130,6 +155,6 @@ public abstract class Chrono {
      * @param eraValue  the era value
      * @return the calendar system era, not null
      */
-    public abstract Era createEra(int eraValue);
+    Era createEra(int eraValue);
 
 }

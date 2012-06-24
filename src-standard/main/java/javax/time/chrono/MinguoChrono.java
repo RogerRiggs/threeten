@@ -60,7 +60,7 @@ import javax.time.calendrical.CalendricalObject;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-public final class MinguoChrono extends Chrono implements Serializable {
+final class MinguoChrono implements Chrono, Serializable {
 
     /**
      * Singleton instance.
@@ -99,7 +99,7 @@ public final class MinguoChrono extends Chrono implements Serializable {
 
     //-----------------------------------------------------------------------
     @Override
-    public ChronoDate date(Era era, int yearOfEra, int monthOfYear, int dayOfMonth) {
+    public MinguoDate date(Era era, int yearOfEra, int monthOfYear, int dayOfMonth) {
         if (era instanceof MinguoEra) {
             throw new CalendricalException("Era must be a MinguoEra");
         }
@@ -107,12 +107,12 @@ public final class MinguoChrono extends Chrono implements Serializable {
     }
 
     @Override
-    public ChronoDate date(int prolepticYear, int monthOfYear, int dayOfMonth) {
+    public MinguoDate date(int prolepticYear, int monthOfYear, int dayOfMonth) {
         return new MinguoDate(LocalDate.of(prolepticYear - YEARS_DIFFERENCE, monthOfYear, dayOfMonth));
     }
 
     @Override
-    public ChronoDate date(CalendricalObject calendrical) {
+    public MinguoDate date(CalendricalObject calendrical) {
         if (calendrical instanceof MinguoDate) {
             return (MinguoDate) calendrical;
         }
@@ -120,10 +120,14 @@ public final class MinguoChrono extends Chrono implements Serializable {
     }
 
     @Override
-    public ChronoDate dateFromEpochDay(long epochDay) {
+    public MinguoDate dateFromEpochDay(long epochDay) {
         return new MinguoDate(LocalDate.ofEpochDay(epochDay));
     }
-
+    
+    @Override
+    public MinguoDate now() {
+        return dateFromEpochDay(LocalDate.now().toEpochDay());
+    }
     //-----------------------------------------------------------------------
     /**
      * Checks if the specified year is a leap year.

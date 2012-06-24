@@ -44,7 +44,7 @@ import javax.time.ZoneOffset;
 import javax.time.calendrical.DateTimeField;
 import javax.time.calendrical.LocalDateTimeField;
 import javax.time.chrono.Chrono;
-import javax.time.chrono.ISOChrono;
+import javax.time.chrono.ChronoDate;
 import javax.time.extended.QuarterYearField;
 
 /**
@@ -576,7 +576,7 @@ public final class DateTimeFormatterBuilder {
      * @return this, for chaining, not null
      */
     public DateTimeFormatterBuilder appendLocalized(FormatStyle dateStyle, FormatStyle timeStyle) {
-        return appendLocalized(dateStyle, timeStyle, ISOChrono.INSTANCE);
+        return appendLocalized(dateStyle, timeStyle, ChronoDate.getByName("ISO"));
     }
 
     /**

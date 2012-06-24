@@ -31,6 +31,8 @@
  */
 package javax.time.chrono;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.time.CalendricalException;
 import javax.time.DateTimes;
 import javax.time.DayOfWeek;
@@ -46,24 +48,121 @@ import javax.time.calendrical.LocalDateTimeUnit;
 import javax.time.calendrical.PeriodUnit;
 
 /**
- * A date expressed in terms of a calendar system.
- * <p>
- * This class is intended for applications that need to use a calendar system other than
- * ISO-8601, the <i>de facto</i> world calendar.
- * <p>
- * This class is limited to storing a date, using the generic concepts of year, month and day.
- * Each calendar system, represented by a {@link Chrono}, defines the exact meaning of each field.
+ * A date for a typical calendar system with generic concepts for year, month and day.
+ * ChronoDate is used for calendars such as Gregorian, Japanese, Minguo, Thai Buddist and others.
  * Note that not all calendar systems are suitable for use with this class.
  * For example, the Mayan calendar uses a system that bears no relation to years, months and days.
- * 
+ * <p>
+ * The lookup of calendars is supported by the {@link #getByName getByName(name)}
+ * and {@link #getByLocale getByLocale(locale)} methods.
+ * The {@code Chrono} is then used to create a {@code ChronoDate}
+ * from year, month, day, another Calendrical, or the current date.
+ * The names of available calendars are available via the {@link #getCalendarNames} method.
+ * The set of calendars is extensible using the mechanism described in the {@link Chrono} interface.
+ *
+ * <p> It is intended that applications use the main API whenever possible,
+ * including code to read and write from a persistent data store, such as a database,
+ * and to send dates and times across a network. This package is then used at the user interface level to deal with localized
+ * input/output. </p>
+ *
+ * <h3>Examples</h3>
+ * <pre>
+ *     // Enumerate the list of available calendars and print today for each
+ *     Set&lt;String&gt; cnames = ChronoDate.getCalendarNames();
+ *     for (String name : cnames) {
+ *         Chrono ch = ChronoDate.getByName(name);
+ *         ChronoDate chdate = ch.now();
+ *         System.out.printf("%s: %s%n", ch.getName(), chdate.toString());
+ *     }
+ *
+ *     // Print the Coptic date and calendar
+ *     ChronoDate date = ChronoDate.getByName("Coptic").now();
+ *     int day = date.getDayOfMonth();
+ *     DayOfWeek dow = date.getDayOfWeek();
+ *     int year = date.getProlepticYear();
+ *     System.out.printf("Today is %s %d-%s-%d%n", date.getChronology().getName(),
+ *           day, dow.getValue(), year);
+ *
+ *     // Print today's date and the last day of the year
+ *     ChronoDate now1 = ChronoDate.getByName("Coptic").now();
+ *     ChronoDate first = now1.withDayOfMonth(1).with(LocalDateTimeField.MONTH_OF_YEAR, 1);
+ *     ChronoDate last = first.plusYears(1).minusDays(1);
+ *     System.out.printf("Today is %s: start: %s; end: %s%n", last.getChronology().getName(),
+ *           first, last);
+ *
+ * </pre>
+ *
  * <h4>Implementation notes</h4>
  * This abstract class must be implemented with care to ensure other classes operate correctly.
  * All implementations that can be instantiated must be final, immutable and thread-safe.
  * Subclasses should be Serializable wherever possible.
+ * @see Chrono
  */
 public abstract class ChronoDate
         implements DateTimeObject, Comparable<ChronoDate> {
+    /*
+     * Initialize the available calendars.
+     * The initialization should be deferred until some application requests
+     * a specific calendar.
+     */
+    static {
+        chronos = new ConcurrentHashMap<String, Chrono>();
+        initCalendars();
+    }
+    /**
+     * The global map of available calendars; mapped from calendar name to Chrono.
+     */
+    private static final Map<String, Chrono> chronos;
 
+    /**
+     * Accumulate all of the Chrono implementations from the built-in ones
+     * and the built-in implementations.
+     */
+    private static void initCalendars() {
+        // Pre-register well known calendars
+        chronos.put(ISOChrono.INSTANCE.getName(), ISOChrono.INSTANCE);
+        chronos.put(CopticChrono.INSTANCE.getName(), CopticChrono.INSTANCE);
+        chronos.put(MinguoChrono.INSTANCE.getName(), MinguoChrono.INSTANCE);
+
+        ServiceLoader<Chrono> loader =  ServiceLoader.load(Chrono.class);
+        for (Chrono chrono : loader) {
+            chronos.put(chrono.getName(), chrono);
+        }
+    }
+
+    /**
+     * Returns the calendar for the locale.
+     * @param locale The Locale
+     * @return A calendar for the Locale.
+     * @throws UnsupportedOperationException if the calendar  for the locale cannot be found.
+     */
+    public static Chrono getByLocale(Locale locale) {
+        throw new UnsupportedOperationException("NYI: Chrono.getByLocale");
+    }
+
+    /**
+     * Returns the calendar by name.
+     * @param calendar The calendar name
+     * @return A calendar with the name requested.
+     * @throws UnsupportedOperationException if the named calendar cannot be found.
+     */
+    public static Chrono getByName(String calendar) {
+        Chrono chrono = chronos.get(calendar);
+        if (chrono == null) {
+            throw new UnsupportedOperationException("No calendar for: " + calendar);
+        }
+        return chrono;
+    }
+
+    /**
+     * Returns the names of available calendars.
+     * @return  the set of available calendar names.
+     */
+    public static Set<String> getCalendarNames() {
+        return chronos.keySet();
+    }
+
+    //-----------------------------------------------------------------------
     /**
      * Obtains an instance of {@code ChronoDate} from a calendrical.
      * <p>
@@ -71,7 +170,7 @@ public abstract class ChronoDate
      * This factory converts the arbitrary calendrical to an instance of {@code ChronoDate}.
      * <p>
      * If the calendrical can provide a calendar system, then that will be used,
-     * otherwise, {@link ISOChrono} will be used.
+     * otherwise, ISO will be used.
      * This allows a {@link LocalDate} to be converted to a {@code ChronoDate}.
      * 
      * @param calendrical  the calendrical to convert, not null
@@ -94,7 +193,7 @@ public abstract class ChronoDate
 
     //-----------------------------------------------------------------------
     /**
-     * Creates an instance.
+     * Constructor for subclasses.
      */
     protected ChronoDate() {
     }
@@ -125,6 +224,7 @@ public abstract class ChronoDate
      * @return the value for the field
      * @throws CalendricalException if a value for the field cannot be obtained
      */
+    @Override
     public abstract long get(DateTimeField field);
 
     /**

@@ -39,7 +39,7 @@ import javax.time.LocalDate;
 import javax.time.calendrical.CalendricalObject;
 
 /**
- * The Coptic calendar system.
+ * The Coptic calendar factory for CopticDate.
  * <p>
  * This chronology defines the rules of the Coptic calendar system.
  * This calendar system is primarily used in Christian Egypt.
@@ -62,7 +62,7 @@ import javax.time.calendrical.CalendricalObject;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-public final class CopticChrono extends Chrono implements Serializable {
+final class CopticChrono implements Chrono, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -107,7 +107,7 @@ public final class CopticChrono extends Chrono implements Serializable {
     }
 
     @Override
-    public ChronoDate date(CalendricalObject calendrical) {
+    public CopticDate date(CalendricalObject calendrical) {
         if (calendrical instanceof CopticDate) {
             return (CopticDate) calendrical;
         }
@@ -115,10 +115,16 @@ public final class CopticChrono extends Chrono implements Serializable {
     }
 
     @Override
-    public ChronoDate dateFromEpochDay(long epochDay) {
+    public CopticDate dateFromEpochDay(long epochDay) {
         return CopticDate.ofEpochDay(epochDay);
     }
 
+    @Override
+    public CopticDate now() {
+        return dateFromEpochDay(LocalDate.now().toEpochDay());
+
+    }
+    
     //-----------------------------------------------------------------------
     /**
      * Checks if the specified year is a leap year.

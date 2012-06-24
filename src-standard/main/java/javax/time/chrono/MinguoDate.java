@@ -42,8 +42,20 @@ import javax.time.calendrical.LocalDateTimeField;
 
 /**
  * A date in the Minguo calendar system.
+ * This calendar system is primarily used in the Republic of China, often known as Taiwan.
+ * Dates are aligned such that {@code 0001AM-01-01 (Minguo)} is {@code 0284-08-29 (ISO)}.
  * <p>
- * This date class implements a date for the {@link MinguoChrono}.
+ * The fields are defined as follows:
+ * <ul>
+ * <li>era - There are two eras, the current 'Republic' (ROC) and the previous era (BEFORE_ROC).
+ * <li>year-of-era - The year-of-era is the same as the proleptic-year for the current ROC era.
+ * <li>proleptic-year - The proleptic year is the same as the year-of-era for the
+ *  current ROC era and is equal to the ISO year minus 1911.
+ * <li>month-of-year - The Minguo month-of-year exactly matches ISO.
+ * <li>day-of-month - The Minguo day-of-month exactly matches ISO.
+ * <li>day-of-year - The Minguo day-of-year exactly matches ISO.
+ * <li>leap-year - The Minguo leap-year pattern exactly matches ISO.
+ * </ul>
  * 
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.

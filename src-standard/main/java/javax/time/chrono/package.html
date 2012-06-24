@@ -36,13 +36,55 @@
 Support for calendar systems other than the default ISO.
 </p>
 <p>
-The main API is based around the calendar system defined in ISO-8601.
+The main API in the {@code javax.time} package is based around the calendar system
+defined in ISO-8601.
 This package provides support for alternate systems.
 </p>
 <p>
 It is intended that applications use the main API whenever possible, including code to read and write
 from a persistent data store, such as a database, and to send dates and times across a network.
 This package is then used at the user interface level to deal with localized input/output.
+</p>
+
+<h3>Example</h3>
+<pre>
+        // Enumerate the list of available calendars and print today for each
+        Set&lt;String&gt; cnames = ChronoDate.getCalendarNames();
+        for (String name : cnames) {
+            Chrono ch = ChronoDate.getByName(name);
+            ChronoDate chdate = ch.now();
+            System.out.printf("%s: %s%n", ch.getName(), chdate.toString());
+        }
+
+        // Print the Coptic date and calendar
+        ChronoDate date = ChronoDate.getByName("Coptic").now();
+        int day = date.getDayOfMonth();
+        DayOfWeek dow = date.getDayOfWeek();
+        int year = date.getProlepticYear();
+        System.out.printf("Today is %s %d-%s-%d%n", date.getChronology().getName(),
+                day, dow.getValue(), year);
+
+        // Print today's date and the last day of the year
+        ChronoDate now1 = ChronoDate.getByName("Coptic").now();
+        ChronoDate first = now1.withDayOfMonth(1).withMonthOfYear(1);
+        ChronoDate last = first.plusYears(1).minusDays(1);
+        System.out.printf("Today is %s: start: %s; end: %s%n", last.getChronology().getName(),
+                first, last);
+
+</pre>
+<h4>Adding Calendars</h4>
+<p>
+    The set of calendars is extensible by defining a subclass of {@link javax.time.chrono.ChronoDate}
+    to represent a date instance and an implementation of {@link javax.time.chrono.Chrono}
+    to be the factory for the ChronoDate subclass.
+</p>
+<p>
+    To permit the discovery of the additional calendar types the implementation
+    of {@link javax.time.chrono.Chrono} must be registered as a Service
+    implementing the {@link javax.time.chrono.Chrono} interface in the META-INF/Services file
+    as per the specification of {@link java.util.ServiceLoader}.
+    The subclass must function according to the Chrono interface and must
+    provide its calendar name (getName) and locale (getLocale).
 </p>
 </body>
  

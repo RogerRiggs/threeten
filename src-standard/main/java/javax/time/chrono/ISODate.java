@@ -41,8 +41,27 @@ import javax.time.calendrical.LocalDateTimeField;
 /**
  * A date in the ISO calendar system.
  * <p>
- * This date class implements a date for the {@link ISOChrono}.
- * 
+ * This class is intended for applications that need to use a calendar system other than
+ * ISO-8601, the <i>de facto</i> world calendar.
+ * <p>
+ * This class is limited to storing a date, using the generic concepts of year, month and day.
+ * For example, the Mayan calendar uses a system that bears no relation to years, months and days.
+ * <p>
+ * The fields of ISODate are defined as follows:
+ * <ul>
+ * <li>era - There are two eras, the 'Current Era' (CE) and 'Before Current Era' (BCE).
+ * <li>year-of-era - The year-of-era is the same as the proleptic-year for the current CE era.
+ * <li>proleptic-year - The proleptic year is the same as the year-of-era for the
+ *  current CE era. For the BCE era, years have negative values.
+ * <li>month-of-year - There are 12 months in an ISO year, numbered from 1 to 12.
+ * <li>day-of-month - There are between 28 and 31 days in each of the ISO month, numbered from 1 to 31.
+ *  Months 4, 6, 9 and 11 have 30 days, Months 1, 3, 5, 7, 8, 10 and 12 have 31 days.
+ *  Month 2 has 28 days, or 29 in a leap year.
+ * <li>day-of-year - There are 365 days in a standard ISO year and 366 in a leap year.
+ *  The days are numbered from 1 to 365 or 1 to 366.
+ * <li>leap-year - Leap years occur every 4 years, except where the year is divisble by 100 and not divisble by 400.
+ * </ul>
+ *
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
