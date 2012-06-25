@@ -49,6 +49,13 @@ import javax.time.calendrical.DateTimeField;
 
 /**
  * Provides common implementations of {@code DateTimeFormatter}.
+ * <p>
+ * This utility class provides three different ways to obtain a formatter.
+ * <ul>
+ * <li>Using pattern letters, such as {@code yyyy-MMM-dd}
+ * <li>Using localized styles, such as {@code long} or {@code medium}
+ * <li>Using predefined constants, such as {@code isoLocalDate()}
+ * </ul>
  * 
  * <h4>Implementation notes</h4>
  * This is a thread-safe utility class.
@@ -219,6 +226,101 @@ public final class DateTimeFormatters {
      */
     public static DateTimeFormatter pattern(String pattern, Locale locale) {
         return new DateTimeFormatterBuilder().appendPattern(pattern).toFormatter(locale);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Returns a locale specific date format.
+     * <p>
+     * This returns a formatter that will print/parse a date.
+     * The exact format pattern used varies by locale.
+     * <p>
+     * The locale is determined from the formatter. The formatter returned directly by
+     * this method will use the {@link Locale#getDefault() default locale}.
+     * The locale can be controlled using {@link DateTimeFormatter#withLocale(Locale) withLocale(Locale)}
+     * on the result of this method.
+     * <p>
+     * Note that the localized pattern is looked up lazily.
+     * This {@code DateTimeFormatter} holds the style required and the locale,
+     * looking up the pattern required on demand.
+     *
+     * @param dateStyle  the formatter style to obtain, not null
+     * @return the date formatter, not null
+     */
+    public static DateTimeFormatter localizedDate(FormatStyle dateStyle) {
+        DateTimes.checkNotNull(dateStyle, "Date style must not be null");
+        return new DateTimeFormatterBuilder().appendLocalized(dateStyle, null).toFormatter();
+    }
+
+    /**
+     * Returns a locale specific time format.
+     * <p>
+     * This returns a formatter that will print/parse a time.
+     * The exact format pattern used varies by locale.
+     * <p>
+     * The locale is determined from the formatter. The formatter returned directly by
+     * this method will use the {@link Locale#getDefault() default locale}.
+     * The locale can be controlled using {@link DateTimeFormatter#withLocale(Locale) withLocale(Locale)}
+     * on the result of this method.
+     * <p>
+     * Note that the localized pattern is looked up lazily.
+     * This {@code DateTimeFormatter} holds the style required and the locale,
+     * looking up the pattern required on demand.
+     *
+     * @param timeStyle  the formatter style to obtain, not null
+     * @return the time formatter, not null
+     */
+    public static DateTimeFormatter localizedTime(FormatStyle timeStyle) {
+        DateTimes.checkNotNull(timeStyle, "Time style must not be null");
+        return new DateTimeFormatterBuilder().appendLocalized(null, timeStyle).toFormatter();
+    }
+
+    /**
+     * Returns a locale specific date-time format, which is typically of short length.
+     * <p>
+     * This returns a formatter that will print/parse a date-time.
+     * The exact format pattern used varies by locale.
+     * <p>
+     * The locale is determined from the formatter. The formatter returned directly by
+     * this method will use the {@link Locale#getDefault() default locale}.
+     * The locale can be controlled using {@link DateTimeFormatter#withLocale(Locale) withLocale(Locale)}
+     * on the result of this method.
+     * <p>
+     * Note that the localized pattern is looked up lazily.
+     * This {@code DateTimeFormatter} holds the style required and the locale,
+     * looking up the pattern required on demand.
+     *
+     * @param dateTimeStyle  the formatter style to obtain, not null
+     * @return the date-time formatter, not null
+     */
+    public static DateTimeFormatter localizedDateTime(FormatStyle dateTimeStyle) {
+        DateTimes.checkNotNull(dateTimeStyle, "Date-time style must not be null");
+        return new DateTimeFormatterBuilder().appendLocalized(dateTimeStyle, dateTimeStyle).toFormatter();
+    }
+
+    /**
+     * Returns a locale specific date and time format.
+     * <p>
+     * This returns a formatter that will print/parse a date-time.
+     * The exact format pattern used varies by locale.
+     * <p>
+     * The locale is determined from the formatter. The formatter returned directly by
+     * this method will use the {@link Locale#getDefault() default locale}.
+     * The locale can be controlled using {@link DateTimeFormatter#withLocale(Locale) withLocale(Locale)}
+     * on the result of this method.
+     * <p>
+     * Note that the localized pattern is looked up lazily.
+     * This {@code DateTimeFormatter} holds the style required and the locale,
+     * looking up the pattern required on demand.
+     *
+     * @param dateStyle  the date formatter style to obtain, not null
+     * @param timeStyle  the time formatter style to obtain, not null
+     * @return the date, time or date-time formatter, not null
+     */
+    public static DateTimeFormatter localizedDateTime(FormatStyle dateStyle, FormatStyle timeStyle) {
+        DateTimes.checkNotNull(dateStyle, "Date style must not be null");
+        DateTimes.checkNotNull(timeStyle, "Time style must not be null");
+        return new DateTimeFormatterBuilder().appendLocalized(dateStyle, timeStyle).toFormatter();
     }
 
     //-----------------------------------------------------------------------
@@ -701,291 +803,6 @@ public final class DateTimeFormatters {
             .appendOffset("Z", "+HHMM")
             .toFormatter()
             .withLocale(Locale.ENGLISH);
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns a locale specific date format, which is typically of full length.
-     * <p>
-     * This returns a formatter that will print/parse a full length date format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate full
-     * length date format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the full date formatter, not null
-     */
-    public static DateTimeFormatter fullDate(Locale locale) {
-        return date(FormatStyle.FULL, locale);
-    }
-
-    /**
-     * Returns a locale specific date format, which is typically of long length.
-     * <p>
-     * This returns a formatter that will print/parse a long length date format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate long
-     * length date format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the long date formatter, not null
-     */
-    public static DateTimeFormatter longDate(Locale locale) {
-        return date(FormatStyle.LONG, locale);
-    }
-
-    /**
-     * Returns a locale specific date format of medium length.
-     * <p>
-     * This returns a formatter that will print/parse a medium length date format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate medium
-     * length date format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the medium date formatter, not null
-     */
-    public static DateTimeFormatter mediumDate(Locale locale) {
-        return date(FormatStyle.MEDIUM, locale);
-    }
-
-    /**
-     * Returns a locale specific date format of short length.
-     * <p>
-     * This returns a formatter that will print/parse a short length date format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate short
-     * length date format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the short date formatter, not null
-     */
-    public static DateTimeFormatter shortDate(Locale locale) {
-        return date(FormatStyle.SHORT, locale);
-    }
-
-    /**
-     * Returns a locale specific date format.
-     * <p>
-     * This returns a formatter that will print/parse a date.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate
-     * date format for that new locale.
-     *
-     * @param dateStyle  the formatter style to obtain, not null
-     * @param locale  the locale to use, not null
-     * @return the date formatter, not null
-     */
-    public static DateTimeFormatter date(FormatStyle dateStyle, Locale locale) {
-        DateTimes.checkNotNull(dateStyle, "Date style must not be null");
-        return new DateTimeFormatterBuilder().appendLocalized(dateStyle, null).toFormatter(locale);
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns a locale specific time format, which is typically of full length.
-     * <p>
-     * This returns a formatter that will print/parse a full length time format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate full
-     * length time format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the full time formatter, not null
-     */
-    public static DateTimeFormatter fullTime(Locale locale) {
-        return time(FormatStyle.FULL, locale);
-    }
-
-    /**
-     * Returns a locale specific time format, which is typically of long length.
-     * <p>
-     * This returns a formatter that will print/parse a long length time format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate long
-     * length time format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the long time formatter, not null
-     */
-    public static DateTimeFormatter longTime(Locale locale) {
-        return time(FormatStyle.LONG, locale);
-    }
-
-    /**
-     * Returns a locale specific time format of medium length.
-     * <p>
-     * This returns a formatter that will print/parse a medium length time format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate medium
-     * length time format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the medium time formatter, not null
-     */
-    public static DateTimeFormatter mediumTime(Locale locale) {
-        return time(FormatStyle.MEDIUM, locale);
-    }
-
-    /**
-     * Returns a locale specific time format of short length.
-     * <p>
-     * This returns a formatter that will print/parse a short length time format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate short
-     * length time format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the short time formatter, not null
-     */
-    public static DateTimeFormatter shortTime(Locale locale) {
-        return time(FormatStyle.SHORT, locale);
-    }
-
-    /**
-     * Returns a locale specific time format.
-     * <p>
-     * This returns a formatter that will print/parse a time.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate
-     * time format for that new locale.
-     *
-     * @param timeStyle  the formatter style to obtain, not null
-     * @param locale  the locale to use, not null
-     * @return the time formatter, not null
-     */
-    public static DateTimeFormatter time(FormatStyle timeStyle, Locale locale) {
-        DateTimes.checkNotNull(timeStyle, "Time style must not be null");
-        return new DateTimeFormatterBuilder().appendLocalized(null, timeStyle).toFormatter(locale);
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns a locale specific date-time format, which is typically of full length.
-     * <p>
-     * This returns a formatter that will print/parse a full length date-time format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate full
-     * length date-time format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the full date-time formatter, not null
-     */
-    public static DateTimeFormatter fullDateTime(Locale locale) {
-        return dateTime(FormatStyle.FULL, locale);
-    }
-
-    /**
-     * Returns a locale specific date-time format, which is typically of long length.
-     * <p>
-     * This returns a formatter that will print/parse a long length date-time format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate long
-     * length date-time format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the long date-time formatter, not null
-     */
-    public static DateTimeFormatter longDateTime(Locale locale) {
-        return dateTime(FormatStyle.LONG, locale);
-    }
-
-    /**
-     * Returns a locale specific date-time format of medium length.
-     * <p>
-     * This returns a formatter that will print/parse a medium length date-time format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate medium
-     * length date-time format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the medium date-time formatter, not null
-     */
-    public static DateTimeFormatter mediumDateTime(Locale locale) {
-        return dateTime(FormatStyle.MEDIUM, locale);
-    }
-
-    /**
-     * Returns a locale specific date-time format of short length.
-     * <p>
-     * This returns a formatter that will print/parse a short length date-time format.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate short
-     * length date-time format for that new locale.
-     *
-     * @param locale  the locale to use, not null
-     * @return the short date-time formatter, not null
-     */
-    public static DateTimeFormatter shortDateTime(Locale locale) {
-        return dateTime(FormatStyle.SHORT, locale);
-    }
-
-    /**
-     * Returns a locale specific date-time format, which is typically of short length.
-     * <p>
-     * This returns a formatter that will print/parse a date-time.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate
-     * date-time format for that new locale.
-     *
-     * @param dateTimeStyle  the formatter style to obtain, not null
-     * @param locale  the locale to use, not null
-     * @return the date-time formatter, not null
-     */
-    public static DateTimeFormatter dateTime(FormatStyle dateTimeStyle, Locale locale) {
-        DateTimes.checkNotNull(dateTimeStyle, "Date-time style must not be null");
-        return new DateTimeFormatterBuilder().appendLocalized(dateTimeStyle, dateTimeStyle).toFormatter(locale);
-    }
-
-    /**
-     * Returns a locale specific date, time or date-time format.
-     * <p>
-     * This returns a formatter that will print/parse a date, time or date-time.
-     * The exact format pattern used varies by locale, which is determined from the
-     * locale on the formatter. That locale is initialized by method.
-     * If a new formatter is obtained using {@link DateTimeFormatter#withLocale(Locale)}
-     * then it will typically change the pattern in use to the appropriate
-     * format for that new locale.
-     *
-     * @param dateStyle  the date formatter style to obtain, not null
-     * @param timeStyle  the time formatter style to obtain, not null
-     * @param locale  the locale to use, not null
-     * @return the date, time or date-time formatter, not null
-     */
-    public static DateTimeFormatter dateTime(FormatStyle dateStyle, FormatStyle timeStyle, Locale locale) {
-        DateTimes.checkNotNull(dateStyle, "Date style must not be null");
-        DateTimes.checkNotNull(timeStyle, "Time style must not be null");
-        return new DateTimeFormatterBuilder().appendLocalized(dateStyle, timeStyle).toFormatter(locale);
     }
 
     //-------------------------------------------------------------------------
