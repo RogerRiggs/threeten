@@ -62,7 +62,7 @@ import javax.time.calendrical.CalendricalObject;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-final class CopticChrono implements Chrono, Serializable {
+final class CopticChrono extends Chrono implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -119,12 +119,6 @@ final class CopticChrono implements Chrono, Serializable {
         return CopticDate.ofEpochDay(epochDay);
     }
 
-    @Override
-    public CopticDate now() {
-        return dateFromEpochDay(LocalDate.now().toEpochDay());
-
-    }
-    
     //-----------------------------------------------------------------------
     /**
      * Checks if the specified year is a leap year.

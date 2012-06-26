@@ -576,7 +576,7 @@ public final class DateTimeFormatterBuilder {
      * @return this, for chaining, not null
      */
     public DateTimeFormatterBuilder appendLocalized(FormatStyle dateStyle, FormatStyle timeStyle) {
-        return appendLocalized(dateStyle, timeStyle, ChronoDate.getByName("ISO"));
+        return appendLocalized(dateStyle, timeStyle, Chrono.getByName("ISO"));
     }
 
     /**

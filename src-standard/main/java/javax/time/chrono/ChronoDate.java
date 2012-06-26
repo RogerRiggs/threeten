@@ -31,8 +31,6 @@
  */
 package javax.time.chrono;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.time.CalendricalException;
 import javax.time.DateTimes;
 import javax.time.DayOfWeek;
@@ -53,11 +51,11 @@ import javax.time.calendrical.PeriodUnit;
  * Note that not all calendar systems are suitable for use with this class.
  * For example, the Mayan calendar uses a system that bears no relation to years, months and days.
  * <p>
- * The lookup of calendars is supported by the {@link #getByName getByName(name)}
- * and {@link #getByLocale getByLocale(locale)} methods.
+ * The lookup of calendars is supported by the {@link Chrono#getByName Chrono.getByName(name)}
+ * and {@link Chrono#getByLocale Chrono.getByLocale(locale)} methods.
  * The {@code Chrono} is then used to create a {@code ChronoDate}
  * from year, month, day, another Calendrical, or the current date.
- * The names of available calendars are available via the {@link #getCalendarNames} method.
+ * The names of available calendars are available via the {@link Chrono#getCalendarNames Chrono.getCalendarNames} method.
  * The set of calendars is extensible using the mechanism described in the {@link Chrono} interface.
  *
  * <p> It is intended that applications use the main API whenever possible,
@@ -68,15 +66,15 @@ import javax.time.calendrical.PeriodUnit;
  * <h3>Examples</h3>
  * <pre>
  *     // Enumerate the list of available calendars and print today for each
- *     Set&lt;String&gt; cnames = ChronoDate.getCalendarNames();
+ *     Set&lt;String&gt; cnames = Chrono.getCalendarNames();
  *     for (String name : cnames) {
- *         Chrono ch = ChronoDate.getByName(name);
+ *         Chrono ch = Chrono.getByName(name);
  *         ChronoDate chdate = ch.now();
  *         System.out.printf("%s: %s%n", ch.getName(), chdate.toString());
  *     }
  *
  *     // Print the Coptic date and calendar
- *     ChronoDate date = ChronoDate.getByName("Coptic").now();
+ *     ChronoDate date = Chrono.getByName("Coptic").now();
  *     int day = date.getDayOfMonth();
  *     DayOfWeek dow = date.getDayOfWeek();
  *     int year = date.getProlepticYear();
@@ -84,7 +82,7 @@ import javax.time.calendrical.PeriodUnit;
  *           day, dow.getValue(), year);
  *
  *     // Print today's date and the last day of the year
- *     ChronoDate now1 = ChronoDate.getByName("Coptic").now();
+ *     ChronoDate now1 = Chrono.getByName("Coptic").now();
  *     ChronoDate first = now1.withDayOfMonth(1).with(LocalDateTimeField.MONTH_OF_YEAR, 1);
  *     ChronoDate last = first.plusYears(1).minusDays(1);
  *     System.out.printf("Today is %s: start: %s; end: %s%n", last.getChronology().getName(),
@@ -100,68 +98,6 @@ import javax.time.calendrical.PeriodUnit;
  */
 public abstract class ChronoDate
         implements DateTimeObject, Comparable<ChronoDate> {
-    /*
-     * Initialize the available calendars.
-     * The initialization should be deferred until some application requests
-     * a specific calendar.
-     */
-    static {
-        chronos = new ConcurrentHashMap<String, Chrono>();
-        initCalendars();
-    }
-    /**
-     * The global map of available calendars; mapped from calendar name to Chrono.
-     */
-    private static final Map<String, Chrono> chronos;
-
-    /**
-     * Accumulate all of the Chrono implementations from the built-in ones
-     * and the built-in implementations.
-     */
-    private static void initCalendars() {
-        // Pre-register well known calendars
-        chronos.put(ISOChrono.INSTANCE.getName(), ISOChrono.INSTANCE);
-        chronos.put(CopticChrono.INSTANCE.getName(), CopticChrono.INSTANCE);
-        chronos.put(MinguoChrono.INSTANCE.getName(), MinguoChrono.INSTANCE);
-
-        ServiceLoader<Chrono> loader =  ServiceLoader.load(Chrono.class);
-        for (Chrono chrono : loader) {
-            chronos.put(chrono.getName(), chrono);
-        }
-    }
-
-    /**
-     * Returns the calendar for the locale.
-     * @param locale The Locale
-     * @return A calendar for the Locale.
-     * @throws UnsupportedOperationException if the calendar  for the locale cannot be found.
-     */
-    public static Chrono getByLocale(Locale locale) {
-        throw new UnsupportedOperationException("NYI: Chrono.getByLocale");
-    }
-
-    /**
-     * Returns the calendar by name.
-     * @param calendar The calendar name
-     * @return A calendar with the name requested.
-     * @throws UnsupportedOperationException if the named calendar cannot be found.
-     */
-    public static Chrono getByName(String calendar) {
-        Chrono chrono = chronos.get(calendar);
-        if (chrono == null) {
-            throw new UnsupportedOperationException("No calendar for: " + calendar);
-        }
-        return chrono;
-    }
-
-    /**
-     * Returns the names of available calendars.
-     * @return  the set of available calendar names.
-     */
-    public static Set<String> getCalendarNames() {
-        return chronos.keySet();
-    }
-
     //-----------------------------------------------------------------------
     /**
      * Obtains an instance of {@code ChronoDate} from a calendrical.

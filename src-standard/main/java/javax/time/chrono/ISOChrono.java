@@ -63,7 +63,7 @@ import javax.time.calendrical.CalendricalObject;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-final class ISOChrono implements Chrono, Serializable {
+final class ISOChrono extends Chrono implements Serializable {
 
     /**
      * Singleton instance.
@@ -121,11 +121,6 @@ final class ISOChrono implements Chrono, Serializable {
     @Override
     public ISODate dateFromEpochDay(long epochDay) {
         return new ISODate(LocalDate.ofEpochDay(epochDay));
-    }
-
-    @Override
-    public ISODate now() {
-        return dateFromEpochDay(LocalDate.now().toEpochDay());
     }
 
     //-----------------------------------------------------------------------

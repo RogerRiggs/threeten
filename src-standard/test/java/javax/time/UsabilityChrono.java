@@ -76,7 +76,7 @@ public final class UsabilityChrono {
 //    }
 
     private static void newPackagePluggable() {
-        Chrono chrono = ChronoDate.getByName("Minguo");
+        Chrono chrono = Chrono.getByName("Minguo");
         
         ChronoDate date = chrono.now();
         System.out.println(date);

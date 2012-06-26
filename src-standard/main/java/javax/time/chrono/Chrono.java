@@ -31,14 +31,27 @@
  */
 package javax.time.chrono;
 
+import java.util.Locale;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.time.LocalDate;
 import javax.time.calendrical.CalendricalObject;
 
 /**
  * Factory interface for calendar neutral {@code ChronoDate}s.
- * The Chrono for a particular calendars is found using the lookup methods
- * {@link ChronoDate#getByName} and {@link ChronoDate#getByLocale(java.util.Locale)}.
- * New calendars can be added by providing implementations of the {@code Chrono} interface
- * as described in the Adding New Calendars section below.
+ * The Chrono for a particular calendar is found using the lookup methods
+ * {@link Chrono#getByName} and {@link Chrono#getByLocale(java.util.Locale)}.
+ * New calendars can be added by providing implementations of {@code Chrono}
+ * as described in the <a href="#addcalendars">Adding New Calendars</a> section below.
+ * <p>
+ * The lookup of calendars is supported by the {@link Chrono#getByName Chrono.getByName(name)}
+ * and {@link Chrono#getByLocale Chrono.getByLocale(locale)} methods.
+ * The {@code Chrono} is then used to create a {@code ChronoDate}
+ * from year, month, day, another Calendrical, or the current date.
+ * The names of available calendars are available via the
+ * {@link Chrono#getCalendarNames Chrono.getCalendarNames} method.
  * <p>
  * ChronoDate instances are created using the methods:
  * <ul>
@@ -49,33 +62,96 @@ import javax.time.calendrical.CalendricalObject;
  * <li> {@link #dateFromEpochDay(long) dateFromEpochDay(epochDay)}, or
  * </ul>
  *
- * <h4>Adding New Calendars</h4>
+ * <h4 id="addcalendars">Adding New Calendars</h4>
  *
  * <p>
  * The set of calendars is extensible by defining a subclass of {@link javax.time.chrono.ChronoDate}
  * to represent a date instance and an implementation of {@link javax.time.chrono.Chrono}
  * to be the factory for the ChronoDate subclass.
  * The {@link java.util.ServiceLoader} mechanism is used to register
- * the Chrono implementation class. The calendar lookup mechanism in
- * {@link ChronoDate} uses the ServiceLoader to find Chrono implementations
+ * the Chrono subclass class. The calendar lookup mechanism
+ * uses the ServiceLoader to find Chrono implementations
  * and registers them by name and locale.
  * </p>
 
  * <p>Example getting the current date for a named calendar</p>
  * <pre>
- *     Chrono chrono = ChronoDate.getByName(CLDR_name);
+ *     Chrono chrono = Chrono.getByName(CLDR_name);
  *     ChronoDate date = chrono.now();
  * </pre>
  * @see ChronoDate
  */
-public interface Chrono {
+public abstract class Chrono {
+
+    /*
+     * Initialize the available calendars.
+     * TBD: The initialization should be deferred until some application requests
+     * a specific calendar.
+     */
+    static {
+        chronos = new ConcurrentHashMap<String, Chrono>();
+        initCalendars();
+    }
+    /**
+     * The global map of available calendars; mapped from calendar name to Chrono.
+     */
+    private static final Map<String, Chrono> chronos;
+
+    /**
+     * Accumulate all of the Chrono implementations from the built-in ones
+     * and the built-in implementations.
+     */
+    private static void initCalendars() {
+        // Pre-register well known calendars
+        chronos.put(ISOChrono.INSTANCE.getName(), ISOChrono.INSTANCE);
+        chronos.put(CopticChrono.INSTANCE.getName(), CopticChrono.INSTANCE);
+        chronos.put(MinguoChrono.INSTANCE.getName(), MinguoChrono.INSTANCE);
+
+        ServiceLoader<Chrono> loader =  ServiceLoader.load(Chrono.class);
+        for (Chrono chrono : loader) {
+            chronos.put(chrono.getName(), chrono);
+        }
+    }
+
+    /**
+     * Returns the calendar for the locale.
+     *
+     * @param locale The Locale
+     * @return A calendar for the Locale
+     * @throws UnsupportedOperationException if a calendar for the locale cannot be found.
+     */
+    public static Chrono getByLocale(Locale locale) {
+        throw new UnsupportedOperationException("NYI: Chrono.getByLocale");
+    }
+
+    /**
+     * Returns the calendar by name.
+     * @param calendar The calendar name
+     * @return A calendar with the name requested.
+     * @throws UnsupportedOperationException if the named calendar cannot be found.
+     */
+    public static Chrono getByName(String calendar) {
+        Chrono chrono = chronos.get(calendar);
+        if (chrono == null) {
+            throw new UnsupportedOperationException("No calendar for: " + calendar);
+        }
+        return chrono;
+    }
+
+    /**
+     * Returns the names of available calendars.
+     * @return  the set of available calendar names.
+     */
+    public static Set<String> getCalendarNames() {
+        return chronos.keySet();
+    }
 
     /**
      * Gets the name of the calendar system.
      * 
      * @return the name, not null
      */
-    String getName();
+    public abstract String getName();
 
     //-----------------------------------------------------------------------
     /**
@@ -87,7 +163,7 @@ public interface Chrono {
      * @param dayOfMonth  the calendar system day-of-month
      * @return the date in this calendar system, not null
      */
-    ChronoDate date(Era era, int yearOfEra, int monthOfYear, int dayOfMonth);
+    public abstract ChronoDate date(Era era, int yearOfEra, int monthOfYear, int dayOfMonth);
 
     /**
      * Creates a date in this calendar system from the proleptic-year, month-of-year and day-of-month fields.
@@ -97,7 +173,7 @@ public interface Chrono {
      * @param dayOfMonth  the calendar system day-of-month
      * @return the date in this calendar system, not null
      */
-    ChronoDate date(int prolepticYear, int monthOfYear, int dayOfMonth);
+    public abstract ChronoDate date(int prolepticYear, int monthOfYear, int dayOfMonth);
 
     /**
      * Creates a date in this calendar system from another calendrical object.
@@ -105,7 +181,7 @@ public interface Chrono {
      * @param calendrical  the other calendrical, not null
      * @return the date in this calendar system, not null
      */
-    ChronoDate date(CalendricalObject calendrical);
+    public abstract ChronoDate date(CalendricalObject calendrical);
 
     /**
      * Creates a date in this calendar system from the epoch day from 1970-01-01 (ISO).
@@ -113,15 +189,16 @@ public interface Chrono {
      * @param epochDay  the epoch day measured from 1970-01-01 (ISO), not null
      * @return the date in this calendar system, not null
      */
-    ChronoDate dateFromEpochDay(long epochDay);
+    public abstract ChronoDate dateFromEpochDay(long epochDay);
 
     /**
      * Creates the current date in this calendar system.
      * 
      * @return the current date in this calendar system, not null
      */
-    // This is a candidate for an SE 8 default method calling dateFromEpochDay()
-    ChronoDate now();
+    public ChronoDate now() {
+        return dateFromEpochDay(LocalDate.now().toEpochDay());
+    }
 
     /**
      * Checks if the specified year is a leap year.
@@ -134,7 +211,7 @@ public interface Chrono {
      * @param prolepticYear  the proleptic-year to check, not validated for range
      * @return true if the year is a leap year
      */
-    boolean isLeapYear(long prolepticYear);
+    public abstract boolean isLeapYear(long prolepticYear);
 
     //-----------------------------------------------------------------------
     /**
@@ -155,6 +232,6 @@ public interface Chrono {
      * @param eraValue  the era value
      * @return the calendar system era, not null
      */
-    Era createEra(int eraValue);
+    public abstract Era createEra(int eraValue);
 
 }

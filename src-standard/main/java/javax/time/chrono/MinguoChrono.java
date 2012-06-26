@@ -60,7 +60,7 @@ import javax.time.calendrical.CalendricalObject;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-final class MinguoChrono implements Chrono, Serializable {
+final class MinguoChrono extends Chrono implements Serializable {
 
     /**
      * Singleton instance.
@@ -123,11 +123,7 @@ final class MinguoChrono implements Chrono, Serializable {
     public MinguoDate dateFromEpochDay(long epochDay) {
         return new MinguoDate(LocalDate.ofEpochDay(epochDay));
     }
-    
-    @Override
-    public MinguoDate now() {
-        return dateFromEpochDay(LocalDate.now().toEpochDay());
-    }
+
     //-----------------------------------------------------------------------
     /**
      * Checks if the specified year is a leap year.
