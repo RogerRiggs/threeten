@@ -35,14 +35,13 @@ import java.util.Arrays;
 
 import javax.time.calendrical.TestDateTimeAdjusters;
 import javax.time.calendrical.TestDateTimeValueRange;
+import javax.time.calendrical.TestJulianDayField;
 import javax.time.calendrical.TestLocalDateTimeUnit;
-import javax.time.calendrical.TestZoneResolvers;
+import javax.time.calendrical.TestMonthDay;
+import javax.time.calendrical.TestQuarterOfYear;
+import javax.time.calendrical.TestYear;
+import javax.time.calendrical.TestYearMonth;
 import javax.time.chrono.TestCopticChrono;
-import javax.time.extended.TestJulianDayField;
-import javax.time.extended.TestMonthDay;
-import javax.time.extended.TestQuarterOfYear;
-import javax.time.extended.TestYear;
-import javax.time.extended.TestYearMonth;
 import javax.time.format.TestCalendricalPrintException;
 import javax.time.format.TestCaseSensitivePrinterParser;
 import javax.time.format.TestCharLiteralParser;
@@ -52,6 +51,7 @@ import javax.time.format.TestDateTimeFormatter;
 import javax.time.format.TestDateTimeFormatterBuilder;
 import javax.time.format.TestDateTimeFormatters;
 import javax.time.format.TestDateTimeParseContext;
+import javax.time.format.TestDateTimeTextPrinting;
 import javax.time.format.TestFractionPrinterParser;
 import javax.time.format.TestNumberParser;
 import javax.time.format.TestNumberPrinter;
@@ -74,6 +74,7 @@ import javax.time.zone.TestTZDBZoneRulesCompiler;
 import javax.time.zone.TestZoneOffsetInfo;
 import javax.time.zone.TestZoneOffsetTransition;
 import javax.time.zone.TestZoneOffsetTransitionRule;
+import javax.time.zone.TestZoneResolvers;
 import javax.time.zone.TestZoneRulesBuilder;
 import javax.time.zone.TestZoneRulesGroup;
 
@@ -118,27 +119,29 @@ public class AllTest {
             TestZonedDateTime.class,
             TestZoneId.class,
             TestZoneOffset.class,
+            // additional main classes
+            TestMonthDay.class,
+            TestYear.class,
+            TestYearMonth.class,
             // advanced calendar classes
             TestDateTimeAdjusters.class,
             TestLocalDateTimeUnit.class,
             TestDateTimeValueRange.class,
-            TestZoneResolvers.class,
-            // extended
+            // additional calendrical classes
             TestJulianDayField.class,
-            TestMonthDay.class,
             TestQuarterOfYear.class,
-            TestYear.class,
-            TestYearMonth.class,
             // format
             TestCalendricalPrintException.class,
-            TestCaseSensitivePrinterParser.class,
-            TestCharLiteralParser.class,
-            TestCharLiteralPrinter.class,
             TestDateTimeFormatSymbols.class,
             TestDateTimeFormatter.class,
             TestDateTimeFormatterBuilder.class,
             TestDateTimeFormatters.class,
             TestDateTimeParseContext.class,
+            TestDateTimeTextPrinting.class,
+            // format internal
+            TestCaseSensitivePrinterParser.class,
+            TestCharLiteralParser.class,
+            TestCharLiteralPrinter.class,
             TestFractionPrinterParser.class,
             TestNumberParser.class,
             TestNumberPrinter.class,
@@ -162,6 +165,7 @@ public class AllTest {
             TestZoneOffsetInfo.class,
             TestZoneOffsetTransition.class,
             TestZoneOffsetTransitionRule.class,
+            TestZoneResolvers.class,
             TestZoneRulesBuilder.class,
             TestZoneRulesGroup.class,
             TestCopticChrono.class,

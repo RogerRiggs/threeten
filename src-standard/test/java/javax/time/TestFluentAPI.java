@@ -42,14 +42,14 @@ import static javax.time.calendrical.DateTimeAdjusters.lastDayOfMonth;
 import static javax.time.calendrical.DateTimeAdjusters.next;
 import static javax.time.calendrical.DateTimeAdjusters.nextOrCurrent;
 import static javax.time.calendrical.LocalDateTimeField.DAY_OF_MONTH;
-import static javax.time.calendrical.LocalDateTimeUnit.DAYS;
-import static javax.time.calendrical.LocalDateTimeUnit.HOURS;
-import static javax.time.calendrical.LocalDateTimeUnit.MINUTES;
+import static javax.time.calendrical.LocalPeriodUnit.DAYS;
+import static javax.time.calendrical.LocalPeriodUnit.HOURS;
+import static javax.time.calendrical.LocalPeriodUnit.MINUTES;
 
-import javax.time.extended.MonthDay;
-import javax.time.extended.QuarterOfYear;
-import javax.time.extended.Year;
-import javax.time.extended.YearMonth;
+import javax.time.calendrical.MonthDay;
+import javax.time.calendrical.QuarterOfYear;
+import javax.time.calendrical.Year;
+import javax.time.calendrical.YearMonth;
 import javax.time.zone.ZoneOffsetTransition;
 
 /**

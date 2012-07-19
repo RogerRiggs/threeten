@@ -31,7 +31,7 @@
  */
 package javax.time.zone;
 
-import static javax.time.calendrical.LocalDateTimeUnit.SECONDS;
+import static javax.time.calendrical.LocalPeriodUnit.SECONDS;
 import static org.testng.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
@@ -43,7 +43,7 @@ import javax.time.Instant;
 import javax.time.OffsetDateTime;
 import javax.time.Period;
 import javax.time.ZoneOffset;
-import javax.time.extended.Year;
+import javax.time.calendrical.Year;
 
 import org.testng.annotations.Test;
 

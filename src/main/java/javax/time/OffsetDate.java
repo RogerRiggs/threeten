@@ -42,9 +42,10 @@ import javax.time.calendrical.DateTimeAdjuster;
 import javax.time.calendrical.DateTimeBuilder;
 import javax.time.calendrical.DateTimeField;
 import javax.time.calendrical.LocalDateTimeField;
-import javax.time.calendrical.LocalDateTimeUnit;
+import javax.time.calendrical.LocalPeriodUnit;
 import javax.time.calendrical.PeriodUnit;
-import javax.time.calendrical.ZoneResolvers;
+import javax.time.format.DateTimeFormatters;
+import javax.time.zone.ZoneResolvers;
 
 /**
  * A date with a zone offset from UTC in the ISO-8601 calendar system,
@@ -211,16 +212,13 @@ public final class OffsetDate
      * <p>
      * The string must represent a valid date and is parsed using
      * {@link javax.time.format.DateTimeFormatters#isoOffsetDate()}.
-     * Year, month, day-of-month and offset are required.
-     * Years outside the range 0000 to 9999 must be prefixed by the plus or minus symbol.
      *
      * @param text  the text to parse such as "2007-12-03+01:00", not null
      * @return the parsed offset date, not null
      * @throws CalendricalParseException if the text cannot be parsed
      */
     public static OffsetDate parse(CharSequence text) {
-        throw new UnsupportedOperationException();
-//        return DateTimeFormatters.isoOffsetDate().parse(text, rule());
+        return parse(text, DateTimeFormatters.isoOffsetDate());
     }
 
     /**
@@ -231,10 +229,9 @@ public final class OffsetDate
      * @param text  the text to parse, not null
      * @param formatter  the formatter to use, not null
      * @return the parsed offset date, not null
-     * @throws UnsupportedOperationException if the formatter cannot parse
      * @throws CalendricalParseException if the text cannot be parsed
      */
-    public static OffsetDate parse(String text, CalendricalFormatter formatter) {
+    public static OffsetDate parse(CharSequence text, CalendricalFormatter formatter) {
         DateTimes.checkNotNull(formatter, "CalendricalFormatter must not be null");
         return formatter.parse(text, OffsetDate.class);
     }
@@ -518,7 +515,7 @@ public final class OffsetDate
      * @throws CalendricalException if the unit cannot be added to this type
      */
     public OffsetDate plus(long periodAmount, PeriodUnit unit) {
-        if (unit instanceof LocalDateTimeUnit) {
+        if (unit instanceof LocalPeriodUnit) {
             return with(date.plus(periodAmount, unit), offset);
         }
         return unit.doAdd(this, periodAmount);

@@ -47,18 +47,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 
+import javax.time.calendrical.AdjustableDateTime;
 import javax.time.calendrical.CalendricalFormatter;
 import javax.time.calendrical.DateTime;
 import javax.time.calendrical.DateTimeAdjuster;
 import javax.time.calendrical.DateTimeField;
-import javax.time.calendrical.AdjustableDateTime;
 import javax.time.calendrical.LocalDateTimeField;
-import javax.time.calendrical.LocalDateTimeUnit;
+import javax.time.calendrical.LocalPeriodUnit;
 import javax.time.calendrical.MockFieldNoValue;
 import javax.time.calendrical.MockZoneResolverReturnsNull;
-import javax.time.calendrical.ZoneResolver;
-import javax.time.calendrical.ZoneResolvers;
-import javax.time.extended.Year;
+import javax.time.calendrical.Year;
+import javax.time.zone.ZoneResolver;
+import javax.time.zone.ZoneResolvers;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -463,7 +463,7 @@ public class TestOffsetDateTime extends AbstractTest {
             }
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
-            public Object parse(String text, Class type) {
+            public Object parse(CharSequence text, Class type) {
                 return dateTime;
             }
         };
@@ -480,7 +480,7 @@ public class TestOffsetDateTime extends AbstractTest {
             }
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
-            public Object parse(String text, Class type) {
+            public Object parse(CharSequence text, Class type) {
                 assertEquals(text, null);
                 throw new NullPointerException();
             }
@@ -903,7 +903,7 @@ public class TestOffsetDateTime extends AbstractTest {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_plus_Period() {
-        Period period = Period.of(7, LocalDateTimeUnit.MONTHS);
+        Period period = Period.of(7, LocalPeriodUnit.MONTHS);
         OffsetDateTime t = TEST_2008_6_30_11_30_59_000000500.plus(period);
         assertEquals(t, OffsetDateTime.of(2009, 1, 30, 11, 30, 59, 500, OFFSET_PONE));
     }
@@ -1076,7 +1076,7 @@ public class TestOffsetDateTime extends AbstractTest {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_minus_Period() {
-        Period period = Period.of(7, LocalDateTimeUnit.MONTHS);
+        Period period = Period.of(7, LocalPeriodUnit.MONTHS);
         OffsetDateTime t = TEST_2008_6_30_11_30_59_000000500.minus(period);
         assertEquals(t, OffsetDateTime.of(2007, 11, 30, 11, 30, 59, 500, OFFSET_PONE));
     }
@@ -1670,7 +1670,7 @@ public class TestOffsetDateTime extends AbstractTest {
                 return "PRINTED";
             }
             @Override
-            public <T> T parse(String text, Class<T> type) {
+            public <T> T parse(CharSequence text, Class<T> type) {
                 throw new AssertionError();
             }
         };

@@ -33,11 +33,11 @@ package javax.time;
 
 import static javax.time.Month.DECEMBER;
 import static javax.time.calendrical.DateTimeAdjusters.lastDayOfMonth;
-import static javax.time.calendrical.LocalDateTimeUnit.MONTHS;
+import static javax.time.calendrical.LocalPeriodUnit.MONTHS;
 
-import javax.time.calendrical.ZoneResolvers;
-import javax.time.extended.MonthDay;
-import javax.time.extended.Year;
+import javax.time.calendrical.MonthDay;
+import javax.time.calendrical.Year;
+import javax.time.zone.ZoneResolvers;
 
 /**
  * Examples for this project.

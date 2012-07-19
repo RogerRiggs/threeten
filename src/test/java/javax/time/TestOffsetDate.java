@@ -47,15 +47,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 
+import javax.time.calendrical.AdjustableDateTime;
 import javax.time.calendrical.CalendricalFormatter;
 import javax.time.calendrical.DateTime;
 import javax.time.calendrical.DateTimeAdjuster;
 import javax.time.calendrical.DateTimeField;
-import javax.time.calendrical.AdjustableDateTime;
 import javax.time.calendrical.LocalDateTimeField;
-import javax.time.calendrical.LocalDateTimeUnit;
+import javax.time.calendrical.LocalPeriodUnit;
 import javax.time.calendrical.MockFieldNoValue;
-import javax.time.extended.Year;
+import javax.time.calendrical.Year;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -457,7 +457,7 @@ public class TestOffsetDate extends AbstractTest {
             }
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
-            public Object parse(String text, Class type) {
+            public Object parse(CharSequence text, Class type) {
                 return date;
             }
         };
@@ -474,7 +474,7 @@ public class TestOffsetDate extends AbstractTest {
             }
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
-            public Object parse(String text, Class type) {
+            public Object parse(CharSequence text, Class type) {
                 assertEquals(text, null);
                 throw new NullPointerException();
             }
@@ -817,7 +817,7 @@ public class TestOffsetDate extends AbstractTest {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_plus_Period() {
-        Period period = Period.of(7, LocalDateTimeUnit.MONTHS);
+        Period period = Period.of(7, LocalPeriodUnit.MONTHS);
         OffsetDate t = TEST_2007_07_15_PONE.plus(period);
         assertEquals(t, OffsetDate.of(2008, 2, 15, OFFSET_PONE));
     }
@@ -1228,7 +1228,7 @@ public class TestOffsetDate extends AbstractTest {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_minus_PeriodProvider() {
-        Period period = Period.of(7, LocalDateTimeUnit.MONTHS);
+        Period period = Period.of(7, LocalPeriodUnit.MONTHS);
         OffsetDate t = TEST_2007_07_15_PONE.minus(period);
         assertEquals(t, OffsetDate.of(2006, 12, 15, OFFSET_PONE));
     }
@@ -2098,7 +2098,7 @@ public class TestOffsetDate extends AbstractTest {
                 return "PRINTED";
             }
             @Override
-            public <T> T parse(String text, Class<T> type) {
+            public <T> T parse(CharSequence text, Class<T> type) {
                 throw new AssertionError();
             }
         };

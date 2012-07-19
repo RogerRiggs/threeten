@@ -35,6 +35,7 @@ import static javax.time.calendrical.LocalDateTimeField.AMPM_OF_DAY;
 import static javax.time.calendrical.LocalDateTimeField.HOUR_OF_DAY;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import javax.time.calendrical.AdjustableDateTime;
 import javax.time.calendrical.DateTime;
@@ -42,8 +43,9 @@ import javax.time.calendrical.DateTimeAdjuster;
 import javax.time.calendrical.DateTimeBuilder;
 import javax.time.calendrical.DateTimeField;
 import javax.time.calendrical.LocalDateTimeField;
-import javax.time.calendrical.LocalDateTimeUnit;
+import javax.time.calendrical.LocalPeriodUnit;
 import javax.time.calendrical.PeriodUnit;
+import javax.time.format.TextStyle;
 
 /**
  * A half-day before or after midday, with the values 'AM' and 'PM'.
@@ -148,19 +150,18 @@ public enum AmPm implements AdjustableDateTime, DateTimeAdjuster {
     /**
      * Gets the textual representation, such as 'AM' or 'PM'.
      * <p>
-     * This method is notionally specific to {@link ISOChronology} as it uses
-     * the AM/PM rule to obtain the text. However, it is expected that
-     * the text will be equivalent for all AM/PM rules, thus this aspect
-     * of the implementation should be irrelevant to applications.
+     * This returns the textual name used to identify the am-pm.
+     * The parameters control the length of the returned text and the locale.
      * <p>
      * If no textual mapping is found then the {@link #getValue() numeric value} is returned.
      *
      * @param locale  the locale to use, not null
      * @return the short text value of the AM/PM, not null
      */
-//    public String getText(TextStyle style, Locale locale) {
+    public String getText(TextStyle style, Locale locale) {
+        throw new UnsupportedOperationException();  // TODO
 //        return AMPM_OF_DAY.getText(getValue(), style, locale);
-//    }
+    }
 
     //-----------------------------------------------------------------------
     @Override
@@ -186,8 +187,8 @@ public enum AmPm implements AdjustableDateTime, DateTimeAdjuster {
 
     @Override
     public AmPm plus(long periodAmount, PeriodUnit unit) {
-        if (unit instanceof LocalDateTimeUnit) {
-            switch ((LocalDateTimeUnit) unit) {
+        if (unit instanceof LocalPeriodUnit) {
+            switch ((LocalPeriodUnit) unit) {
                 case HALF_DAYS: return (periodAmount % 2) == 0 ? this : (this == AM ? PM : AM);
                 case DAYS:
                 case WEEKS:

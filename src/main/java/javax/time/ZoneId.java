@@ -39,12 +39,14 @@ import java.io.StreamCorruptedException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.time.calendrical.DateTime;
+import javax.time.format.TextStyle;
 import javax.time.zone.ZoneOffsetInfo;
 import javax.time.zone.ZoneOffsetTransition;
 import javax.time.zone.ZoneOffsetTransitionRule;
@@ -103,7 +105,7 @@ import javax.time.zone.ZoneRulesGroup;
  * <p>
  * The purpose of capturing all the time-zone information is to handle issues when
  * manipulating and persisting time-zones. For example, consider what happens if the
- * government of a country changed the start or end of daylight savings time.
+ * government of a country changed the start or end of daylight saving time.
  * If a date-time is created and stored using one version of the rules, and then loaded
  * when a new version of the rules are in force, what should happen?
  * The date might now be invalid, for example due to a gap in the local time-line.
@@ -585,9 +587,9 @@ public abstract class ZoneId implements Serializable {
      * @param locale  the locale to use, not null
      * @return the short text value of the day-of-week, not null
      */
-//    public String getText(TextStyle style, Locale locale) {
-//        return getRegionID();  // TODO
-//    }
+    public String getText(TextStyle style, Locale locale) {
+        return getRegionID();  // TODO
+    }
 
     //-----------------------------------------------------------------------
     /**
