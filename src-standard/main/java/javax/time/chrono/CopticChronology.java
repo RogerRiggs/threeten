@@ -37,49 +37,65 @@ import javax.time.CalendricalException;
 import javax.time.DateTimes;
 import javax.time.LocalDate;
 import javax.time.calendrical.DateTime;
+import javax.time.calendrical.DateTimeValueRange;
 
 /**
- * The ISO calendar system.
+ * The Coptic calendar system.
  * <p>
- * This chronology defines the rules of the ISO calendar system.
- * This calendar system is based on the ISO-8601 standard, which is the
- * <i>de facto</i> world calendar.
+ * This chronology defines the rules of the Coptic calendar system.
+ * This calendar system is primarily used in Christian Egypt.
+ * Dates are aligned such that {@code 0001AM-01-01 (Coptic)} is {@code 0284-08-29 (ISO)}.
  * <p>
  * The fields are defined as follows:
  * <ul>
- * <li>era - There are two eras, 'Current Era' (CE) and 'Before Current Era' (BCE).
- * <li>year-of-era - The year-of-era is the same as the proleptic-year for the current CE era.
- *  For the BCE era before the ISO epoch the year increases from 1 upwards as time goes backwards.
+ * <li>era - There are two eras, the current 'Era of the Martyrs' (AM) and the previous era (BEFORE_AM).
+ * <li>year-of-era - The year-of-era for the current era increases uniformly from the epoch at year one.
+ *  For the previous era the year increases from one as time goes backwards.
  * <li>proleptic-year - The proleptic year is the same as the year-of-era for the
  *  current era. For the previous era, years have zero, then negative values.
- * <li>month-of-year - There are 12 months in an ISO year, numbered from 1 to 12.
- * <li>day-of-month - There are between 28 and 31 days in each of the ISO month, numbered from 1 to 31.
- *  Months 4, 6, 9 and 11 have 30 days, Months 1, 3, 5, 7, 8, 10 and 12 have 31 days.
- *  Month 2 has 28 days, or 29 in a leap year.
- * <li>day-of-year - There are 365 days in a standard ISO year and 366 in a leap year.
+ * <li>month-of-year - There are 13 months in a Coptic year, numbered from 1 to 13.
+ * <li>day-of-month - There are 30 days in each of the first 12 Coptic months, numbered 1 to 30.
+ *  The 13th month has 5 days, or 6 in a leap year, numbered 1 to 5 or 1 to 6.
+ * <li>day-of-year - There are 365 days in a standard Coptic year and 366 in a leap year.
  *  The days are numbered from 1 to 365 or 1 to 366.
- * <li>leap-year - Leap years occur every 4 years, except where the year is divisble by 100 and not divisble by 400.
+ * <li>leap-year - Leap years occur every 4 years.
  * </ul>
  * 
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-public final class ISOChrono extends Chrono implements Serializable {
+public final class CopticChronology extends Chrono implements Serializable {
 
     /**
      * Singleton instance.
      */
-    public static final ISOChrono INSTANCE = new ISOChrono();
+    public static final CopticChronology INSTANCE = new CopticChronology();
 
     /**
      * Serialization version.
      */
     private static final long serialVersionUID = 1L;
+    /**
+     * Range of months.
+     */
+    static final DateTimeValueRange MOY_RANGE = DateTimeValueRange.of(1, 13);
+    /**
+     * Range of days.
+     */
+    static final DateTimeValueRange DOM_RANGE = DateTimeValueRange.of(1, 5, 30);
+    /**
+     * Range of days.
+     */
+    static final DateTimeValueRange DOM_RANGE_NONLEAP = DateTimeValueRange.of(1, 5);
+    /**
+     * Range of days.
+     */
+    static final DateTimeValueRange DOM_RANGE_LEAP = DateTimeValueRange.of(1, 6);
 
     /**
      * Restricted constructor.
      */
-    private ISOChrono() {
+    private CopticChronology() {
     }
 
     /**
@@ -94,41 +110,41 @@ public final class ISOChrono extends Chrono implements Serializable {
     //-----------------------------------------------------------------------
     @Override
     public String getName() {
-        return "ISO";
+        return "Coptic";
     }
 
     //-----------------------------------------------------------------------
     @Override
     public ChronoDate date(Era era, int yearOfEra, int month, int dayOfMonth) {
-        if (era instanceof ISOEra) {
-            throw new CalendricalException("Era must be a ISOEra");
+        if (era instanceof CopticEra) {
+            throw new CalendricalException("Era must be a CopticEra");
         }
-        return date(prolepticYear((ISOEra) era, yearOfEra), month, dayOfMonth);
+        return date(prolepticYear((CopticEra) era, yearOfEra), month, dayOfMonth);
     }
 
     @Override
     public ChronoDate date(int prolepticYear, int month, int dayOfMonth) {
-        return new ISODate(LocalDate.of(prolepticYear, month, dayOfMonth));
+        return new CopticDate(prolepticYear, month, dayOfMonth);
     }
 
     @Override
     public ChronoDate date(DateTime calendrical) {
-        if (calendrical instanceof ISODate) {
-            return (ISODate) calendrical;
+        if (calendrical instanceof CopticDate) {
+            return (CopticDate) calendrical;
         }
-        return new ISODate(LocalDate.from(calendrical));
+        return dateFromEpochDay(LocalDate.from(calendrical).toEpochDay());
     }
 
     @Override
     public ChronoDate dateFromEpochDay(long epochDay) {
-        return new ISODate(LocalDate.ofEpochDay(epochDay));
+        return CopticDate.ofEpochDay(epochDay);
     }
 
     //-----------------------------------------------------------------------
     /**
      * Checks if the specified year is a leap year.
      * <p>
-     * ISO leap years occur exactly in line with ISO leap years.
+     * A Coptic proleptic-year is leap if the remainder after division by four equals three.
      * This method does not validate the year passed in, and only has a
      * well-defined result for years in the supported range.
      *
@@ -137,16 +153,16 @@ public final class ISOChrono extends Chrono implements Serializable {
      */
     @Override
     public boolean isLeapYear(long prolepticYear) {
-        return DateTimes.isLeapYear(prolepticYear);
+        return DateTimes.floorMod(prolepticYear, 4) == 3;
     }
 
     @Override
-    public ISOEra createEra(int eraValue) {
-        return ISOEra.of(eraValue);
+    public CopticEra createEra(int eraValue) {
+        return CopticEra.of(eraValue);
     }
 
-    private static int prolepticYear(ISOEra era, int yearOfEra) {
-        return (era == ISOEra.ISO_CE ? yearOfEra : 1 - yearOfEra);
+    private static int prolepticYear(CopticEra era, int yearOfEra) {
+        return (era == CopticEra.AM ? yearOfEra : 1 - yearOfEra);
     }
 
 }

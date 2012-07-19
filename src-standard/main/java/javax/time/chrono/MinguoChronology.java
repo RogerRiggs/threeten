@@ -63,12 +63,12 @@ import javax.time.calendrical.DateTime;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-public final class MinguoChrono extends Chrono implements Serializable {
+public final class MinguoChronology extends Chrono implements Serializable {
 
     /**
      * Singleton instance.
      */
-    public static final MinguoChrono INSTANCE = new MinguoChrono();
+    public static final MinguoChronology INSTANCE = new MinguoChronology();
 
     /**
      * Serialization version.
@@ -82,7 +82,7 @@ public final class MinguoChrono extends Chrono implements Serializable {
     /**
      * Restricted constructor.
      */
-    private MinguoChrono() {
+    private MinguoChronology() {
     }
 
     /**

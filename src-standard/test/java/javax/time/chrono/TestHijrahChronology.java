@@ -37,8 +37,6 @@ import javax.time.CalendricalException;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.calendrical.DateTimeAdjusters;
-import javax.time.calendrical.LocalDateTimeField;
-import javax.time.calendrical.LocalDateTimeUnit;
 import org.testng.Assert;
 
 import org.testng.annotations.DataProvider;
@@ -125,12 +123,6 @@ public class TestHijrahChronology {
     @Test(groups={"tck"})
     public void test_adjust1() {
         ChronoDate base = HijrahChronology.INSTANCE.date(1728, 10, 28);
-        ChronoDate b1 = base.with(LocalDateTimeField.DAY_OF_MONTH, 1);
-        ChronoDate b2 = b1.plus(1, LocalDateTimeUnit.MONTHS);
-        ChronoDate b3 = b2.minus(1, LocalDateTimeUnit.DAYS);
-
-        System.out.printf("adjust1: base: %s; b1: %s; b2: %s; b3: %s %n", base, b1, b2, b3);
-
         ChronoDate test = base.with(DateTimeAdjusters.lastDayOfMonth());
         assertEquals(test, HijrahChronology.INSTANCE.date(1728, 10, 29));
     }

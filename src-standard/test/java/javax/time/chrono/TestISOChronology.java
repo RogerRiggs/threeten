@@ -37,8 +37,6 @@ import javax.time.CalendricalException;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.calendrical.DateTimeAdjusters;
-import javax.time.calendrical.LocalDateTimeField;
-import javax.time.calendrical.LocalDateTimeUnit;
 import org.testng.Assert;
 
 import org.testng.annotations.DataProvider;
@@ -48,14 +46,14 @@ import org.testng.annotations.Test;
  * Test.
  */
 @Test
-public class TestISOChrono {
+public class TestISOChronology {
 
     //-----------------------------------------------------------------------
     // Chrono.ofName("ISO")  Lookup by name
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_chrono_byName() {
-        Chrono c = ISOChrono.INSTANCE;
+        Chrono c = ISOChronology.INSTANCE;
         Chrono ISO = Chrono.ofName("ISO");
         Assert.assertNotNull(ISO, "The ISO calendar could not be found byName");
         Assert.assertEquals(ISO.getName(), "ISO", "Name mismatch");
@@ -67,20 +65,20 @@ public class TestISOChrono {
     @DataProvider(name="samples")
     Object[][] data_samples() {
         return new Object[][] {
-            {ISOChrono.INSTANCE.date(1, 7, 8), LocalDate.of(1, 7, 8)},
-            {ISOChrono.INSTANCE.date(1, 7, 20), LocalDate.of(1, 7, 20)},
-            {ISOChrono.INSTANCE.date(1, 7, 21), LocalDate.of(1, 7, 21)},
+            {ISOChronology.INSTANCE.date(1, 7, 8), LocalDate.of(1, 7, 8)},
+            {ISOChronology.INSTANCE.date(1, 7, 20), LocalDate.of(1, 7, 20)},
+            {ISOChronology.INSTANCE.date(1, 7, 21), LocalDate.of(1, 7, 21)},
             
-            {ISOChrono.INSTANCE.date(2, 7, 8), LocalDate.of(2, 7, 8)},
-            {ISOChrono.INSTANCE.date(3, 6, 27), LocalDate.of(3, 6, 27)},
-            {ISOChrono.INSTANCE.date(3, 5, 23), LocalDate.of(3, 5, 23)},
-            {ISOChrono.INSTANCE.date(4, 6, 16), LocalDate.of(4, 6, 16)},
-            {ISOChrono.INSTANCE.date(4, 7, 3), LocalDate.of(4, 7, 3)},
-            {ISOChrono.INSTANCE.date(4, 7, 4), LocalDate.of(4, 7, 4)},
-            {ISOChrono.INSTANCE.date(5, 1, 1), LocalDate.of(5, 1, 1)},
-            {ISOChrono.INSTANCE.date(1727, 3, 3), LocalDate.of(1727, 3, 3)},
-            {ISOChrono.INSTANCE.date(1728, 10, 28), LocalDate.of(1728, 10, 28)},
-            {ISOChrono.INSTANCE.date(2012, 10, 29), LocalDate.of(2012, 10, 29)},
+            {ISOChronology.INSTANCE.date(2, 7, 8), LocalDate.of(2, 7, 8)},
+            {ISOChronology.INSTANCE.date(3, 6, 27), LocalDate.of(3, 6, 27)},
+            {ISOChronology.INSTANCE.date(3, 5, 23), LocalDate.of(3, 5, 23)},
+            {ISOChronology.INSTANCE.date(4, 6, 16), LocalDate.of(4, 6, 16)},
+            {ISOChronology.INSTANCE.date(4, 7, 3), LocalDate.of(4, 7, 3)},
+            {ISOChronology.INSTANCE.date(4, 7, 4), LocalDate.of(4, 7, 4)},
+            {ISOChronology.INSTANCE.date(5, 1, 1), LocalDate.of(5, 1, 1)},
+            {ISOChronology.INSTANCE.date(1727, 3, 3), LocalDate.of(1727, 3, 3)},
+            {ISOChronology.INSTANCE.date(1728, 10, 28), LocalDate.of(1728, 10, 28)},
+            {ISOChronology.INSTANCE.date(2012, 10, 29), LocalDate.of(2012, 10, 29)},
         };
     }
 
@@ -91,7 +89,7 @@ public class TestISOChrono {
 
     @Test(dataProvider="samples", groups={"tck"})
     public void test_fromCalendrical(ChronoDate ISODate, LocalDate iso) {
-        assertEquals(ISOChrono.INSTANCE.date(iso), ISODate);
+        assertEquals(ISOChronology.INSTANCE.date(iso), ISODate);
     }
 
     @DataProvider(name="badDates")
@@ -116,7 +114,7 @@ public class TestISOChrono {
 
     @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=CalendricalException.class)
     public void test_badDates(int year, int month, int dom) {
-        ISOChrono.INSTANCE.date(year, month, dom);
+        ISOChronology.INSTANCE.date(year, month, dom);
     }
 
     //-----------------------------------------------------------------------
@@ -124,16 +122,16 @@ public class TestISOChrono {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_adjust1() {
-        ChronoDate base = ISOChrono.INSTANCE.date(1728, 10, 28);
+        ChronoDate base = ISOChronology.INSTANCE.date(1728, 10, 28);
         ChronoDate test = base.with(DateTimeAdjusters.lastDayOfMonth());
-        assertEquals(test, ISOChrono.INSTANCE.date(1728, 10, 31));
+        assertEquals(test, ISOChronology.INSTANCE.date(1728, 10, 31));
     }
 
     @Test(groups={"tck"})
     public void test_adjust2() {
-        ChronoDate base = ISOChrono.INSTANCE.date(1728, 12, 2);
+        ChronoDate base = ISOChronology.INSTANCE.date(1728, 12, 2);
         ChronoDate test = base.with(DateTimeAdjusters.lastDayOfMonth());
-        assertEquals(test, ISOChrono.INSTANCE.date(1728, 12, 31));
+        assertEquals(test, ISOChronology.INSTANCE.date(1728, 12, 31));
     }
 
     //-----------------------------------------------------------------------
@@ -141,14 +139,14 @@ public class TestISOChrono {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_adjust_toLocalDate() {
-        ChronoDate ISODate = ISOChrono.INSTANCE.date(1726, 1, 4);
+        ChronoDate ISODate = ISOChronology.INSTANCE.date(1726, 1, 4);
         ChronoDate test = ISODate.with(LocalDate.of(2012, 7, 6));
-        assertEquals(test, ISOChrono.INSTANCE.date(2012, 7, 6));
+        assertEquals(test, ISOChronology.INSTANCE.date(2012, 7, 6));
     }
 
 //    @Test(groups={"tck"}, expectedExceptions=CalendricalException.class)
 //    public void test_adjust_toMonth() {
-//        ChronoDate ISODate = ISOChrono.INSTANCE.date(1726, 1, 4);
+//        ChronoDate ISODate = ISOChronology.INSTANCE.date(1726, 1, 4);
 //        ISODate.with(Month.APRIL);
 //    }  // TODO: shouldn't really accept ISO Month
 
@@ -157,14 +155,14 @@ public class TestISOChrono {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_LocalDate_adjustToISODate() {
-        ChronoDate ISODate = ISOChrono.INSTANCE.date(1728, 10, 29);
+        ChronoDate ISODate = ISOChronology.INSTANCE.date(1728, 10, 29);
         LocalDate test = LocalDate.MIN_DATE.with(ISODate);
         assertEquals(test, LocalDate.of(1728, 10, 29));
     }
 
     @Test(groups={"tck"})
     public void test_LocalDateTime_adjustToISODate() {
-        ChronoDate ISODate = ISOChrono.INSTANCE.date(1728, 10, 29);
+        ChronoDate ISODate = ISOChronology.INSTANCE.date(1728, 10, 29);
         LocalDateTime test = LocalDateTime.MIN_DATE_TIME.with(ISODate);
         assertEquals(test, LocalDateTime.ofMidnight(1728, 10, 29));
     }
@@ -175,11 +173,11 @@ public class TestISOChrono {
     @DataProvider(name="toString")
     Object[][] data_toString() {
         return new Object[][] {
-            {ISOChrono.INSTANCE.date(1, 1, 1), "0001ISO_CE-01-01 (ISO)"},
-            {ISOChrono.INSTANCE.date(1728, 10, 28), "1728ISO_CE-10-28 (ISO)"},
-            {ISOChrono.INSTANCE.date(1728, 10, 29), "1728ISO_CE-10-29 (ISO)"},
-            {ISOChrono.INSTANCE.date(1727, 12, 5), "1727ISO_CE-12-05 (ISO)"},
-            {ISOChrono.INSTANCE.date(1727, 12, 6), "1727ISO_CE-12-06 (ISO)"},
+            {ISOChronology.INSTANCE.date(1, 1, 1), "0001ISO_CE-01-01 (ISO)"},
+            {ISOChronology.INSTANCE.date(1728, 10, 28), "1728ISO_CE-10-28 (ISO)"},
+            {ISOChronology.INSTANCE.date(1728, 10, 29), "1728ISO_CE-10-29 (ISO)"},
+            {ISOChronology.INSTANCE.date(1727, 12, 5), "1727ISO_CE-12-05 (ISO)"},
+            {ISOChronology.INSTANCE.date(1727, 12, 6), "1727ISO_CE-12-06 (ISO)"},
         };
     }
 

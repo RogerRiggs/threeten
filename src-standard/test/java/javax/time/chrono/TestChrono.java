@@ -40,11 +40,11 @@ public class TestChrono {
     public void setUp() {
         // Ensure each of the classes are initialized (until initialization is fixed)
         Chrono c;
-        c = CopticChrono.INSTANCE;
+        c = CopticChronology.INSTANCE;
         c = HijrahChronology.INSTANCE;
-        c = ISOChrono.INSTANCE;
+        c = ISOChronology.INSTANCE;
         c = JapaneseChronology.INSTANCE;
-        c = MinguoChrono.INSTANCE;
+        c = MinguoChronology.INSTANCE;
         c = ThaiBuddhistChronology.INSTANCE;
     }
 
