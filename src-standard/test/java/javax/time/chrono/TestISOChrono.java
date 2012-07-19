@@ -37,6 +37,8 @@ import javax.time.CalendricalException;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.calendrical.DateTimeAdjusters;
+import javax.time.calendrical.LocalDateTimeField;
+import javax.time.calendrical.LocalDateTimeUnit;
 import org.testng.Assert;
 
 import org.testng.annotations.DataProvider;
@@ -46,16 +48,17 @@ import org.testng.annotations.Test;
  * Test.
  */
 @Test
-public class TestCopticChrono {
+public class TestISOChrono {
+
     //-----------------------------------------------------------------------
-    // Chrono.ofName("Coptic")  Lookup by name
+    // Chrono.ofName("ISO")  Lookup by name
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_chrono_byName() {
-        Chrono c = CopticChrono.INSTANCE;
-        Chrono Coptic = Chrono.ofName("Coptic");
-        Assert.assertNotNull(Coptic, "The Coptic calendar could not be found byName");
-        Assert.assertEquals(Coptic.getName(), "Coptic", "Name mismatch");
+        Chrono c = ISOChrono.INSTANCE;
+        Chrono ISO = Chrono.ofName("ISO");
+        Assert.assertNotNull(ISO, "The ISO calendar could not be found byName");
+        Assert.assertEquals(ISO.getName(), "ISO", "Name mismatch");
     }
 
     //-----------------------------------------------------------------------
@@ -64,68 +67,56 @@ public class TestCopticChrono {
     @DataProvider(name="samples")
     Object[][] data_samples() {
         return new Object[][] {
-            {CopticChrono.INSTANCE.date(1, 1, 1), LocalDate.of(284, 8, 29)},
-            {CopticChrono.INSTANCE.date(1, 1, 2), LocalDate.of(284, 8, 30)},
-            {CopticChrono.INSTANCE.date(1, 1, 3), LocalDate.of(284, 8, 31)},
+            {ISOChrono.INSTANCE.date(1, 7, 8), LocalDate.of(1, 7, 8)},
+            {ISOChrono.INSTANCE.date(1, 7, 20), LocalDate.of(1, 7, 20)},
+            {ISOChrono.INSTANCE.date(1, 7, 21), LocalDate.of(1, 7, 21)},
             
-            {CopticChrono.INSTANCE.date(2, 1, 1), LocalDate.of(285, 8, 29)},
-            {CopticChrono.INSTANCE.date(3, 1, 1), LocalDate.of(286, 8, 29)},
-            {CopticChrono.INSTANCE.date(3, 13, 6), LocalDate.of(287, 8, 29)},
-            {CopticChrono.INSTANCE.date(4, 1, 1), LocalDate.of(287, 8, 30)},
-            {CopticChrono.INSTANCE.date(4, 7, 3), LocalDate.of(288, 2, 28)},
-            {CopticChrono.INSTANCE.date(4, 7, 4), LocalDate.of(288, 2, 29)},
-            {CopticChrono.INSTANCE.date(5, 1, 1), LocalDate.of(288, 8, 29)},
-            {CopticChrono.INSTANCE.date(1662, 3, 3), LocalDate.of(1945, 11, 12)},
-            {CopticChrono.INSTANCE.date(1728, 10, 28), LocalDate.of(2012, 7, 5)},
-            {CopticChrono.INSTANCE.date(1728, 10, 29), LocalDate.of(2012, 7, 6)},
+            {ISOChrono.INSTANCE.date(2, 7, 8), LocalDate.of(2, 7, 8)},
+            {ISOChrono.INSTANCE.date(3, 6, 27), LocalDate.of(3, 6, 27)},
+            {ISOChrono.INSTANCE.date(3, 5, 23), LocalDate.of(3, 5, 23)},
+            {ISOChrono.INSTANCE.date(4, 6, 16), LocalDate.of(4, 6, 16)},
+            {ISOChrono.INSTANCE.date(4, 7, 3), LocalDate.of(4, 7, 3)},
+            {ISOChrono.INSTANCE.date(4, 7, 4), LocalDate.of(4, 7, 4)},
+            {ISOChrono.INSTANCE.date(5, 1, 1), LocalDate.of(5, 1, 1)},
+            {ISOChrono.INSTANCE.date(1727, 3, 3), LocalDate.of(1727, 3, 3)},
+            {ISOChrono.INSTANCE.date(1728, 10, 28), LocalDate.of(1728, 10, 28)},
+            {ISOChrono.INSTANCE.date(2012, 10, 29), LocalDate.of(2012, 10, 29)},
         };
     }
 
     @Test(dataProvider="samples", groups={"tck"})
-    public void test_toLocalDate(ChronoDate coptic, LocalDate iso) {
-        assertEquals(coptic.toLocalDate(), iso);
+    public void test_toLocalDate(ChronoDate ISODate, LocalDate iso) {
+        assertEquals(ISODate.toLocalDate(), iso);
     }
 
     @Test(dataProvider="samples", groups={"tck"})
-    public void test_fromCalendrical(ChronoDate coptic, LocalDate iso) {
-        assertEquals(CopticChrono.INSTANCE.date(iso), coptic);
+    public void test_fromCalendrical(ChronoDate ISODate, LocalDate iso) {
+        assertEquals(ISOChrono.INSTANCE.date(iso), ISODate);
     }
 
     @DataProvider(name="badDates")
     Object[][] data_badDates() {
         return new Object[][] {
-            {1728, 0, 0},
+            {2012, 0, 0},
             
-            {1728, -1, 1},
-            {1728, 0, 1},
-            {1728, 14, 1},
-            {1728, 15, 1},
+            {2012, -1, 1},
+            {2012, 0, 1},
+            {2012, 14, 1},
+            {2012, 15, 1},
             
-            {1728, 1, -1},
-            {1728, 1, 0},
-            {1728, 1, 31},
-            {1728, 1, 32},
+            {2012, 1, -1},
+            {2012, 1, 0},
+            {2012, 1, 32},
             
-            {1728, 12, -1},
-            {1728, 12, 0},
-            {1728, 12, 31},
-            {1728, 12, 32},
-            
-            {1728, 13, -1},
-            {1728, 13, 0},
-            {1728, 13, 6},
-            {1728, 13, 7},
-            
-            {1727, 13, -1},
-            {1727, 13, 0},
-            {1727, 13, 7},
-            {1727, 13, 8},
+            {2012, 12, -1},
+            {2012, 12, 0},
+            {2012, 12, 32},
         };
     }
 
     @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=CalendricalException.class)
     public void test_badDates(int year, int month, int dom) {
-        CopticChrono.INSTANCE.date(year, month, dom);
+        ISOChrono.INSTANCE.date(year, month, dom);
     }
 
     //-----------------------------------------------------------------------
@@ -133,49 +124,49 @@ public class TestCopticChrono {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_adjust1() {
-        ChronoDate base = CopticChrono.INSTANCE.date(1728, 10, 29);
+        ChronoDate base = ISOChrono.INSTANCE.date(1728, 10, 28);
         ChronoDate test = base.with(DateTimeAdjusters.lastDayOfMonth());
-        assertEquals(test, CopticChrono.INSTANCE.date(1728, 10, 30));
+        assertEquals(test, ISOChrono.INSTANCE.date(1728, 10, 31));
     }
 
     @Test(groups={"tck"})
     public void test_adjust2() {
-        ChronoDate base = CopticChrono.INSTANCE.date(1728, 13, 2);
+        ChronoDate base = ISOChrono.INSTANCE.date(1728, 12, 2);
         ChronoDate test = base.with(DateTimeAdjusters.lastDayOfMonth());
-        assertEquals(test, CopticChrono.INSTANCE.date(1728, 13, 5));
+        assertEquals(test, ISOChrono.INSTANCE.date(1728, 12, 31));
     }
 
     //-----------------------------------------------------------------------
-    // CopticDate.with(Local*)
+    // ISODate.with(Local*)
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_adjust_toLocalDate() {
-        ChronoDate coptic = CopticChrono.INSTANCE.date(1726, 1, 4);
-        ChronoDate test = coptic.with(LocalDate.of(2012, 7, 6));
-        assertEquals(test, CopticChrono.INSTANCE.date(1728, 10, 29));
+        ChronoDate ISODate = ISOChrono.INSTANCE.date(1726, 1, 4);
+        ChronoDate test = ISODate.with(LocalDate.of(2012, 7, 6));
+        assertEquals(test, ISOChrono.INSTANCE.date(2012, 7, 6));
     }
 
 //    @Test(groups={"tck"}, expectedExceptions=CalendricalException.class)
 //    public void test_adjust_toMonth() {
-//        ChronoDate coptic = CopticChrono.INSTANCE.date(1726, 1, 4);
-//        coptic.with(Month.APRIL);
+//        ChronoDate ISODate = ISOChrono.INSTANCE.date(1726, 1, 4);
+//        ISODate.with(Month.APRIL);
 //    }  // TODO: shouldn't really accept ISO Month
 
     //-----------------------------------------------------------------------
-    // LocalDate.with(CopticDate)
+    // LocalDate.with(ISODate)
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
-    public void test_LocalDate_adjustToCopticDate() {
-        ChronoDate coptic = CopticChrono.INSTANCE.date(1728, 10, 29);
-        LocalDate test = LocalDate.MIN_DATE.with(coptic);
-        assertEquals(test, LocalDate.of(2012, 7, 6));
+    public void test_LocalDate_adjustToISODate() {
+        ChronoDate ISODate = ISOChrono.INSTANCE.date(1728, 10, 29);
+        LocalDate test = LocalDate.MIN_DATE.with(ISODate);
+        assertEquals(test, LocalDate.of(1728, 10, 29));
     }
 
     @Test(groups={"tck"})
-    public void test_LocalDateTime_adjustToCopticDate() {
-        ChronoDate coptic = CopticChrono.INSTANCE.date(1728, 10, 29);
-        LocalDateTime test = LocalDateTime.MIN_DATE_TIME.with(coptic);
-        assertEquals(test, LocalDateTime.ofMidnight(2012, 7, 6));
+    public void test_LocalDateTime_adjustToISODate() {
+        ChronoDate ISODate = ISOChrono.INSTANCE.date(1728, 10, 29);
+        LocalDateTime test = LocalDateTime.MIN_DATE_TIME.with(ISODate);
+        assertEquals(test, LocalDateTime.ofMidnight(1728, 10, 29));
     }
 
     //-----------------------------------------------------------------------
@@ -184,17 +175,17 @@ public class TestCopticChrono {
     @DataProvider(name="toString")
     Object[][] data_toString() {
         return new Object[][] {
-            {CopticChrono.INSTANCE.date(1, 1, 1), "0001AM-01-01 (Coptic)"},
-            {CopticChrono.INSTANCE.date(1728, 10, 28), "1728AM-10-28 (Coptic)"},
-            {CopticChrono.INSTANCE.date(1728, 10, 29), "1728AM-10-29 (Coptic)"},
-            {CopticChrono.INSTANCE.date(1727, 13, 5), "1727AM-13-05 (Coptic)"},
-            {CopticChrono.INSTANCE.date(1727, 13, 6), "1727AM-13-06 (Coptic)"},
+            {ISOChrono.INSTANCE.date(1, 1, 1), "0001ISO_CE-01-01 (ISO)"},
+            {ISOChrono.INSTANCE.date(1728, 10, 28), "1728ISO_CE-10-28 (ISO)"},
+            {ISOChrono.INSTANCE.date(1728, 10, 29), "1728ISO_CE-10-29 (ISO)"},
+            {ISOChrono.INSTANCE.date(1727, 12, 5), "1727ISO_CE-12-05 (ISO)"},
+            {ISOChrono.INSTANCE.date(1727, 12, 6), "1727ISO_CE-12-06 (ISO)"},
         };
     }
 
     @Test(dataProvider="toString", groups={"tck"})
-    public void test_toString(ChronoDate coptic, String expected) {
-        assertEquals(coptic.toString(), expected);
+    public void test_toString(ChronoDate ISODate, String expected) {
+        assertEquals(ISODate.toString(), expected);
     }
 
     

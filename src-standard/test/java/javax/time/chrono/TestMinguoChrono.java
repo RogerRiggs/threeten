@@ -46,17 +46,18 @@ import org.testng.annotations.Test;
  * Test.
  */
 @Test
-public class TestCopticChrono {
+public class TestMinguoChrono {
     //-----------------------------------------------------------------------
-    // Chrono.ofName("Coptic")  Lookup by name
+    // Chrono.ofName("Minguo")  Lookup by name
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_chrono_byName() {
-        Chrono c = CopticChrono.INSTANCE;
-        Chrono Coptic = Chrono.ofName("Coptic");
-        Assert.assertNotNull(Coptic, "The Coptic calendar could not be found byName");
-        Assert.assertEquals(Coptic.getName(), "Coptic", "Name mismatch");
+        Chrono c = MinguoChrono.INSTANCE;
+        Chrono minguo = Chrono.ofName("Minguo");
+        Assert.assertNotNull(minguo, "The Minguo calendar could not be found byName");
+        Assert.assertEquals(minguo.getName(), "Minguo", "Name mismatch");
     }
+
 
     //-----------------------------------------------------------------------
     // creation, toLocalDate()
@@ -64,68 +65,58 @@ public class TestCopticChrono {
     @DataProvider(name="samples")
     Object[][] data_samples() {
         return new Object[][] {
-            {CopticChrono.INSTANCE.date(1, 1, 1), LocalDate.of(284, 8, 29)},
-            {CopticChrono.INSTANCE.date(1, 1, 2), LocalDate.of(284, 8, 30)},
-            {CopticChrono.INSTANCE.date(1, 1, 3), LocalDate.of(284, 8, 31)},
+            {MinguoChrono.INSTANCE.date(1, 1, 1), LocalDate.of(1912, 1, 1)},
+            {MinguoChrono.INSTANCE.date(1, 1, 2), LocalDate.of(1912, 1, 2)},
+            {MinguoChrono.INSTANCE.date(1, 1, 3), LocalDate.of(1912, 1, 3)},
             
-            {CopticChrono.INSTANCE.date(2, 1, 1), LocalDate.of(285, 8, 29)},
-            {CopticChrono.INSTANCE.date(3, 1, 1), LocalDate.of(286, 8, 29)},
-            {CopticChrono.INSTANCE.date(3, 13, 6), LocalDate.of(287, 8, 29)},
-            {CopticChrono.INSTANCE.date(4, 1, 1), LocalDate.of(287, 8, 30)},
-            {CopticChrono.INSTANCE.date(4, 7, 3), LocalDate.of(288, 2, 28)},
-            {CopticChrono.INSTANCE.date(4, 7, 4), LocalDate.of(288, 2, 29)},
-            {CopticChrono.INSTANCE.date(5, 1, 1), LocalDate.of(288, 8, 29)},
-            {CopticChrono.INSTANCE.date(1662, 3, 3), LocalDate.of(1945, 11, 12)},
-            {CopticChrono.INSTANCE.date(1728, 10, 28), LocalDate.of(2012, 7, 5)},
-            {CopticChrono.INSTANCE.date(1728, 10, 29), LocalDate.of(2012, 7, 6)},
+            {MinguoChrono.INSTANCE.date(2, 1, 1), LocalDate.of(1913, 1, 1)},
+            {MinguoChrono.INSTANCE.date(3, 1, 1), LocalDate.of(1914, 1, 1)},
+            {MinguoChrono.INSTANCE.date(3, 12, 6), LocalDate.of(1914, 12, 6)},
+            {MinguoChrono.INSTANCE.date(4, 1, 1), LocalDate.of(1915, 1, 1)},
+            {MinguoChrono.INSTANCE.date(4, 7, 3), LocalDate.of(1915, 7, 3)},
+            {MinguoChrono.INSTANCE.date(4, 7, 4), LocalDate.of(1915, 7, 4)},
+            {MinguoChrono.INSTANCE.date(5, 1, 1), LocalDate.of(1916, 1, 1)},
+            {MinguoChrono.INSTANCE.date(100, 3, 3), LocalDate.of(2011, 3, 3)},
+            {MinguoChrono.INSTANCE.date(101, 10, 28), LocalDate.of(2012, 10, 28)},
+            {MinguoChrono.INSTANCE.date(101, 10, 29), LocalDate.of(2012, 10, 29)},
         };
     }
 
     @Test(dataProvider="samples", groups={"tck"})
-    public void test_toLocalDate(ChronoDate coptic, LocalDate iso) {
-        assertEquals(coptic.toLocalDate(), iso);
+    public void test_toLocalDate(ChronoDate minguo, LocalDate iso) {
+        assertEquals(minguo.toLocalDate(), iso);
     }
 
     @Test(dataProvider="samples", groups={"tck"})
-    public void test_fromCalendrical(ChronoDate coptic, LocalDate iso) {
-        assertEquals(CopticChrono.INSTANCE.date(iso), coptic);
+    public void test_fromCalendrical(ChronoDate minguo, LocalDate iso) {
+        assertEquals(MinguoChrono.INSTANCE.date(iso), minguo);
     }
 
     @DataProvider(name="badDates")
     Object[][] data_badDates() {
         return new Object[][] {
-            {1728, 0, 0},
+            {1912, 0, 0},
             
-            {1728, -1, 1},
-            {1728, 0, 1},
-            {1728, 14, 1},
-            {1728, 15, 1},
+            {1912, -1, 1},
+            {1912, 0, 1},
+            {1912, 14, 1},
+            {1912, 15, 1},
             
-            {1728, 1, -1},
-            {1728, 1, 0},
-            {1728, 1, 31},
-            {1728, 1, 32},
+            {1912, 1, -1},
+            {1912, 1, 0},
+            {1912, 1, 32},
+            {1912, 2, 29},
+            {1912, 2, 30},
             
-            {1728, 12, -1},
-            {1728, 12, 0},
-            {1728, 12, 31},
-            {1728, 12, 32},
-            
-            {1728, 13, -1},
-            {1728, 13, 0},
-            {1728, 13, 6},
-            {1728, 13, 7},
-            
-            {1727, 13, -1},
-            {1727, 13, 0},
-            {1727, 13, 7},
-            {1727, 13, 8},
-        };
+            {1912, 12, -1},
+            {1912, 12, 0},
+            {1912, 12, 32},
+            };
     }
 
     @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=CalendricalException.class)
     public void test_badDates(int year, int month, int dom) {
-        CopticChrono.INSTANCE.date(year, month, dom);
+        MinguoChrono.INSTANCE.date(year, month, dom);
     }
 
     //-----------------------------------------------------------------------
@@ -133,49 +124,49 @@ public class TestCopticChrono {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_adjust1() {
-        ChronoDate base = CopticChrono.INSTANCE.date(1728, 10, 29);
+        ChronoDate base = MinguoChrono.INSTANCE.date(2012, 10, 29);
         ChronoDate test = base.with(DateTimeAdjusters.lastDayOfMonth());
-        assertEquals(test, CopticChrono.INSTANCE.date(1728, 10, 30));
+        assertEquals(test, MinguoChrono.INSTANCE.date(2012, 10, 31));
     }
 
     @Test(groups={"tck"})
     public void test_adjust2() {
-        ChronoDate base = CopticChrono.INSTANCE.date(1728, 13, 2);
+        ChronoDate base = MinguoChrono.INSTANCE.date(1728, 12, 2);
         ChronoDate test = base.with(DateTimeAdjusters.lastDayOfMonth());
-        assertEquals(test, CopticChrono.INSTANCE.date(1728, 13, 5));
+        assertEquals(test, MinguoChrono.INSTANCE.date(1728, 12, 31));
     }
 
     //-----------------------------------------------------------------------
-    // CopticDate.with(Local*)
+    // MinguoDate.with(Local*)
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_adjust_toLocalDate() {
-        ChronoDate coptic = CopticChrono.INSTANCE.date(1726, 1, 4);
-        ChronoDate test = coptic.with(LocalDate.of(2012, 7, 6));
-        assertEquals(test, CopticChrono.INSTANCE.date(1728, 10, 29));
+        ChronoDate minguo = MinguoChrono.INSTANCE.date(99, 1, 4);
+        ChronoDate test = minguo.with(LocalDate.of(2012, 7, 6));
+        assertEquals(test, MinguoChrono.INSTANCE.date(101, 7, 6));
     }
 
 //    @Test(groups={"tck"}, expectedExceptions=CalendricalException.class)
 //    public void test_adjust_toMonth() {
-//        ChronoDate coptic = CopticChrono.INSTANCE.date(1726, 1, 4);
-//        coptic.with(Month.APRIL);
+//        ChronoDate minguo = MinguoChrono.INSTANCE.date(1726, 1, 4);
+//        minguo.with(Month.APRIL);
 //    }  // TODO: shouldn't really accept ISO Month
 
     //-----------------------------------------------------------------------
-    // LocalDate.with(CopticDate)
+    // LocalDate.with(MinguoDate)
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
-    public void test_LocalDate_adjustToCopticDate() {
-        ChronoDate coptic = CopticChrono.INSTANCE.date(1728, 10, 29);
-        LocalDate test = LocalDate.MIN_DATE.with(coptic);
-        assertEquals(test, LocalDate.of(2012, 7, 6));
+    public void test_LocalDate_adjustToMinguoDate() {
+        ChronoDate minguo = MinguoChrono.INSTANCE.date(101, 10, 29);
+        LocalDate test = LocalDate.MIN_DATE.with(minguo);
+        assertEquals(test, LocalDate.of(2012, 10, 29));
     }
 
     @Test(groups={"tck"})
-    public void test_LocalDateTime_adjustToCopticDate() {
-        ChronoDate coptic = CopticChrono.INSTANCE.date(1728, 10, 29);
-        LocalDateTime test = LocalDateTime.MIN_DATE_TIME.with(coptic);
-        assertEquals(test, LocalDateTime.ofMidnight(2012, 7, 6));
+    public void test_LocalDateTime_adjustToMinguoDate() {
+        ChronoDate minguo = MinguoChrono.INSTANCE.date(101, 10, 29);
+        LocalDateTime test = LocalDateTime.MIN_DATE_TIME.with(minguo);
+        assertEquals(test, LocalDateTime.ofMidnight(2012, 10, 29));
     }
 
     //-----------------------------------------------------------------------
@@ -184,17 +175,17 @@ public class TestCopticChrono {
     @DataProvider(name="toString")
     Object[][] data_toString() {
         return new Object[][] {
-            {CopticChrono.INSTANCE.date(1, 1, 1), "0001AM-01-01 (Coptic)"},
-            {CopticChrono.INSTANCE.date(1728, 10, 28), "1728AM-10-28 (Coptic)"},
-            {CopticChrono.INSTANCE.date(1728, 10, 29), "1728AM-10-29 (Coptic)"},
-            {CopticChrono.INSTANCE.date(1727, 13, 5), "1727AM-13-05 (Coptic)"},
-            {CopticChrono.INSTANCE.date(1727, 13, 6), "1727AM-13-06 (Coptic)"},
+            {MinguoChrono.INSTANCE.date(1, 1, 1), "0001ROC-01-01 (Minguo)"},
+            {MinguoChrono.INSTANCE.date(1728, 10, 28), "1728ROC-10-28 (Minguo)"},
+            {MinguoChrono.INSTANCE.date(1728, 10, 29), "1728ROC-10-29 (Minguo)"},
+            {MinguoChrono.INSTANCE.date(1727, 12, 5), "1727ROC-12-05 (Minguo)"},
+            {MinguoChrono.INSTANCE.date(1727, 12, 6), "1727ROC-12-06 (Minguo)"},
         };
     }
 
     @Test(dataProvider="toString", groups={"tck"})
-    public void test_toString(ChronoDate coptic, String expected) {
-        assertEquals(coptic.toString(), expected);
+    public void test_toString(ChronoDate minguo, String expected) {
+        assertEquals(minguo.toString(), expected);
     }
 
     
