@@ -50,7 +50,7 @@ import javax.time.calendrical.DateTime;
  * @author Ryoji Suzuki
  * @author Stephen Colebourne
  */
-public final class ThaiBuddhistChronology extends Chrono implements Serializable {
+public final class ThaiBuddhistChronology extends Chronology implements Serializable {
 
     /**
      * A serialization identifier for this class.

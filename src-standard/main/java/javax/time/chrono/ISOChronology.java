@@ -64,7 +64,7 @@ import javax.time.calendrical.DateTime;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-public final class ISOChronology extends Chrono implements Serializable {
+public final class ISOChronology extends Chronology implements Serializable {
 
     /**
      * Singleton instance.
@@ -101,9 +101,9 @@ public final class ISOChronology extends Chrono implements Serializable {
     @Override
     public ChronoDate date(Era era, int yearOfEra, int month, int dayOfMonth) {
         if (era instanceof ISOEra) {
-            throw new CalendricalException("Era must be a ISOEra");
+            return date(prolepticYear((ISOEra) era, yearOfEra), month, dayOfMonth);
         }
-        return date(prolepticYear((ISOEra) era, yearOfEra), month, dayOfMonth);
+        throw new CalendricalException("Era must be a ISOEra");
     }
 
     @Override

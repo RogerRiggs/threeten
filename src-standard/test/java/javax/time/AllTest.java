@@ -168,7 +168,8 @@ public class AllTest {
             TestZoneResolvers.class,
             TestZoneRulesBuilder.class,
             TestZoneRulesGroup.class,
-            TestChrono.class,
+            // chronology
+            TestChronology.class,
             TestCopticChronology.class,
             TestHijrahChronology.class,
             TestISOChronology.class,

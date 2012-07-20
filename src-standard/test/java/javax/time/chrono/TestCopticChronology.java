@@ -47,13 +47,14 @@ import org.testng.annotations.Test;
  */
 @Test
 public class TestCopticChronology {
+
     //-----------------------------------------------------------------------
     // Chrono.ofName("Coptic")  Lookup by name
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_chrono_byName() {
-        Chrono c = CopticChronology.INSTANCE;
-        Chrono Coptic = Chrono.ofName("Coptic");
+        Chronology c = CopticChronology.INSTANCE;
+        Chronology Coptic = Chronology.ofName("Coptic");
         Assert.assertNotNull(Coptic, "The Coptic calendar could not be found byName");
         Assert.assertEquals(Coptic.getName(), "Coptic", "Name mismatch");
     }

@@ -41,6 +41,7 @@ import javax.time.Clock;
 import javax.time.DateTimes;
 import javax.time.LocalDate;
 import javax.time.calendrical.DateTime;
+import javax.time.calendrical.LocalDateTimeField;
 
 /**
  * A standard year-month-day calendar system.
@@ -76,19 +77,19 @@ import javax.time.calendrical.DateTime;
  * All implementations that can be instantiated must be final, immutable and thread-safe.
  * Subclasses should be Serializable wherever possible.
  */
-public abstract class Chrono {
+public abstract class Chronology {
 
     /**
      * Map of available calendars by name.
      */
-    private static final ConcurrentHashMap<String, Chrono> CHRONOS;
+    private static final ConcurrentHashMap<String, Chronology> CHRONOS;
     static {
         // TODO: defer initialization?
 
-        ConcurrentHashMap<String, Chrono> map = new ConcurrentHashMap<String, Chrono>();
-        ServiceLoader<Chrono> loader =  ServiceLoader.load(Chrono.class);
-        for (Chrono chrono : loader) {
-            map.putIfAbsent(chrono.getName(), chrono);
+        ConcurrentHashMap<String, Chronology> map = new ConcurrentHashMap<String, Chronology>();
+        ServiceLoader<Chronology> loader =  ServiceLoader.load(Chronology.class);
+        for (Chronology chronology : loader) {
+            map.putIfAbsent(chronology.getName(), chronology);
         }
 
         CHRONOS = map;
@@ -98,7 +99,7 @@ public abstract class Chrono {
      * Protected constructor.
      * Registers this Chrono with the map of available Chronos.
      */
-    protected Chrono() {
+    protected Chronology() {
         CHRONOS.putIfAbsent(this.getName(), this);
     }
 
@@ -116,8 +117,8 @@ public abstract class Chrono {
      * @return the calendar system with the name requested, not null
      * @throws CalendricalException if the named calendar cannot be found
      */
-    public static Chrono ofName(String name) {
-        Chrono chrono = CHRONOS.get(name);
+    public static Chronology ofName(String name) {
+        Chronology chrono = CHRONOS.get(name);
         if (chrono == null) {
             throw new CalendricalException("Unknown Chrono calendar system: " + name);
         }
@@ -166,11 +167,16 @@ public abstract class Chrono {
 
     /**
      * Creates a date in this calendar system from another calendrical object.
+     * <p>
+     * This implementation uses {@link #dateFromEpochDay(long)}.
      * 
      * @param calendrical  the other calendrical, not null
      * @return the date in this calendar system, not null
      */
-    public abstract ChronoDate date(DateTime calendrical);
+    public ChronoDate date(DateTime calendrical) {
+        long epochDay = calendrical.get(LocalDateTimeField.EPOCH_DAY);
+        return dateFromEpochDay(epochDay);
+    }
 
     /**
      * Creates a date in this calendar system from the epoch day from 1970-01-01 (ISO).
@@ -188,6 +194,8 @@ public abstract class Chrono {
      * <p>
      * Using this method will prevent the ability to use an alternate clock for testing
      * because the clock is hard-coded.
+     * <p>
+     * This implementation uses {@link #now(Clock)}.
      *
      * @return the current date using the system clock, not null
      */
@@ -201,6 +209,8 @@ public abstract class Chrono {
      * This will query the specified clock to obtain the current date - today.
      * Using this method allows the use of an alternate clock for testing.
      * The alternate clock may be introduced using {@link Clock dependency injection}.
+     * <p>
+     * This implementation uses {@link #dateFromEpochDay(long)}.
      *
      * @param clock  the clock to use, not null
      * @return the current date, not null
@@ -262,7 +272,7 @@ public abstract class Chrono {
            return true;
         }
         if (obj != null && getClass() == obj.getClass()) {
-            Chrono other = (Chrono) obj;
+            Chronology other = (Chronology) obj;
             return getName().equals(other.getName());
         }
         return false;

@@ -53,8 +53,8 @@ public class TestHijrahChronology {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_chrono_byName() {
-        Chrono c = HijrahChronology.INSTANCE;
-        Chrono Hijrah = Chrono.ofName("Hijrah");
+        Chronology c = HijrahChronology.INSTANCE;
+        Chronology Hijrah = Chronology.ofName("Hijrah");
         Assert.assertNotNull(Hijrah, "The Hijrah calendar could not be found byName");
         Assert.assertEquals(Hijrah.getName(), "Hijrah", "Name mismatch");
     }
@@ -173,11 +173,11 @@ public class TestHijrahChronology {
     @DataProvider(name="toString")
     Object[][] data_toString() {
         return new Object[][] {
-            {HijrahChronology.INSTANCE.date(1, 1, 1), "01-01-01 (Hijrah)"},
-            {HijrahChronology.INSTANCE.date(1728, 10, 28), "1728-10-28 (Hijrah)"},
-            {HijrahChronology.INSTANCE.date(1728, 10, 29), "1728-10-29 (Hijrah)"},
-            {HijrahChronology.INSTANCE.date(1727, 12, 5), "1727-12-05 (Hijrah)"},
-            {HijrahChronology.INSTANCE.date(1727, 12, 6), "1727-12-06 (Hijrah)"},
+            {HijrahChronology.INSTANCE.date(1, 1, 1), "0001HIJRAH-01-01 (Hijrah)"},
+            {HijrahChronology.INSTANCE.date(1728, 10, 28), "1728HIJRAH-10-28 (Hijrah)"},
+            {HijrahChronology.INSTANCE.date(1728, 10, 29), "1728HIJRAH-10-29 (Hijrah)"},
+            {HijrahChronology.INSTANCE.date(1727, 12, 5), "1727HIJRAH-12-05 (Hijrah)"},
+            {HijrahChronology.INSTANCE.date(1727, 12, 6), "1727HIJRAH-12-06 (Hijrah)"},
         };
     }
 

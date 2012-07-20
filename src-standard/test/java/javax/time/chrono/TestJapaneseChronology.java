@@ -53,8 +53,8 @@ public class TestJapaneseChronology {
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
     public void test_chrono_byName() {
-        Chrono c = JapaneseChronology.INSTANCE;
-        Chrono japanese = Chrono.ofName("Japanese");
+        Chronology c = JapaneseChronology.INSTANCE;
+        Chronology japanese = Chronology.ofName("Japanese");
         Assert.assertNotNull(japanese, "The Japanese calendar could not be found byName");
         Assert.assertEquals(japanese.getName(), "Japanese", "Name mismatch");
     }
@@ -173,11 +173,11 @@ public class TestJapaneseChronology {
     @DataProvider(name="toString")
     Object[][] data_toString() {
         return new Object[][] {
-            {JapaneseChronology.INSTANCE.date(1, 1, 1), "01-01-01 (Japanese)"},
-            {JapaneseChronology.INSTANCE.date(1728, 10, 28), "1728-10-28 (Japanese)"},
-            {JapaneseChronology.INSTANCE.date(1728, 10, 29), "1728-10-29 (Japanese)"},
-            {JapaneseChronology.INSTANCE.date(1727, 12, 5), "1727-12-05 (Japanese)"},
-            {JapaneseChronology.INSTANCE.date(1727, 12, 6), "1727-12-06 (Japanese)"},
+            {JapaneseChronology.INSTANCE.date(1, 1, 1), "0001UNKNOWN-01-01 (Japanese)"},
+            {JapaneseChronology.INSTANCE.date(1728, 10, 28), "1728UNKNOWN-10-28 (Japanese)"},
+            {JapaneseChronology.INSTANCE.date(1728, 10, 29), "1728UNKNOWN-10-29 (Japanese)"},
+            {JapaneseChronology.INSTANCE.date(1727, 12, 5), "1727UNKNOWN-12-05 (Japanese)"},
+            {JapaneseChronology.INSTANCE.date(1727, 12, 6), "1727UNKNOWN-12-06 (Japanese)"},
         };
     }
 

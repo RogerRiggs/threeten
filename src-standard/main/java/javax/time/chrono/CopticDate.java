@@ -145,7 +145,8 @@ final class CopticDate extends ChronoDate implements Comparable<ChronoDate>, Ser
 
     //-----------------------------------------------------------------------
     @Override
-    public Chrono getChronology() {
+
+    public Chronology getChronology() {
         return CopticChronology.INSTANCE;
     }
 

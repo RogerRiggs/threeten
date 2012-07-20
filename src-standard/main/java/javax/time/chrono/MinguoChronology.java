@@ -41,6 +41,7 @@ import javax.time.calendrical.DateTime;
 /**
  * The Minguo calendar system.
  * <p>
+ * This chronology defines the rules of the Minguo calendar system.
  * This calendar system is primarily used in the Republic of China, often known as Taiwan.
  * Dates are aligned such that {@code 0001AM-01-01 (Minguo)} is {@code 0284-08-29 (ISO)}.
  * <p>
@@ -63,7 +64,7 @@ import javax.time.calendrical.DateTime;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-public final class MinguoChronology extends Chrono implements Serializable {
+public final class MinguoChronology extends Chronology implements Serializable {
 
     /**
      * Singleton instance.
@@ -104,9 +105,9 @@ public final class MinguoChronology extends Chrono implements Serializable {
     @Override
     public ChronoDate date(Era era, int yearOfEra, int month, int dayOfMonth) {
         if (era instanceof MinguoEra) {
-            throw new CalendricalException("Era must be a MinguoEra");
+            return date(prolepticYear((MinguoEra) era, yearOfEra), month, dayOfMonth);
         }
-        return date(prolepticYear((MinguoEra) era, yearOfEra), month, dayOfMonth);
+        throw new CalendricalException("Era must be a MinguoEra");
     }
 
     @Override
@@ -116,10 +117,13 @@ public final class MinguoChronology extends Chrono implements Serializable {
 
     @Override
     public ChronoDate date(DateTime calendrical) {
+        if (calendrical instanceof LocalDate) {
+            return new MinguoDate((LocalDate) calendrical);
+        }
         if (calendrical instanceof MinguoDate) {
             return (MinguoDate) calendrical;
         }
-        return new MinguoDate(LocalDate.from(calendrical));
+        return super.date(calendrical);
     }
 
     @Override

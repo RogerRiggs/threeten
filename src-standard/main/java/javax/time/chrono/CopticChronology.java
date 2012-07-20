@@ -64,7 +64,8 @@ import javax.time.calendrical.DateTimeValueRange;
  * <h4>Implementation notes</h4>
  * This class is immutable and thread-safe.
  */
-public final class CopticChronology extends Chrono implements Serializable {
+
+public final class CopticChronology extends Chronology implements Serializable {
 
     /**
      * Singleton instance.
@@ -117,9 +118,9 @@ public final class CopticChronology extends Chrono implements Serializable {
     @Override
     public ChronoDate date(Era era, int yearOfEra, int month, int dayOfMonth) {
         if (era instanceof CopticEra) {
-            throw new CalendricalException("Era must be a CopticEra");
+            return date(prolepticYear((CopticEra) era, yearOfEra), month, dayOfMonth);
         }
-        return date(prolepticYear((CopticEra) era, yearOfEra), month, dayOfMonth);
+        throw new CalendricalException("Era must be a CopticEra");
     }
 
     @Override
@@ -129,10 +130,13 @@ public final class CopticChronology extends Chrono implements Serializable {
 
     @Override
     public ChronoDate date(DateTime calendrical) {
+        if (calendrical instanceof LocalDate) {
+            return dateFromEpochDay(((LocalDate) calendrical).toEpochDay());
+        }
         if (calendrical instanceof CopticDate) {
             return (CopticDate) calendrical;
         }
-        return dateFromEpochDay(LocalDate.from(calendrical).toEpochDay());
+        return super.date(calendrical);
     }
 
     @Override
