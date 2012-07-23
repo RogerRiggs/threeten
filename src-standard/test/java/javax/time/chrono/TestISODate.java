@@ -36,6 +36,10 @@ import static javax.time.calendrical.LocalDateTimeField.MONTH_OF_YEAR;
 import static javax.time.calendrical.LocalDateTimeField.YEAR;
 import static javax.time.calendrical.LocalPeriodUnit.DAYS;
 import static javax.time.calendrical.LocalPeriodUnit.MONTHS;
+import static javax.time.calendrical.LocalPeriodUnit.WEEKS;
+import static javax.time.calendrical.LocalPeriodUnit.YEARS;
+import static javax.time.chrono.ISOEra.ISO_BCE;
+import static javax.time.chrono.ISOEra.ISO_CE;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNull;
@@ -43,6 +47,8 @@ import static org.testng.Assert.assertTrue;
 
 import javax.time.LocalDate;
 import javax.time.Period;
+import javax.time.calendrical.LocalPeriodUnit;
+import javax.time.calendrical.PeriodUnit;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -62,43 +68,47 @@ public class TestISODate {
     }
 
     //-----------------------------------------------------------------
-    @Test(expectedExceptions=NullPointerException.class, groups="tck")
+    @Test(expectedExceptions=NullPointerException.class, groups="implementation")
     public void testFromFactory_null() {
         ISODate.from(null);
     }
 
     //-----------------------------------------------------------------
+    // extract()
+    //-----------------------------------------------------------------
     @Test(groups="tck")
-    public void extractLocal() {
+    public void test_extract_LocalDate() {
         assertEquals(TEST_2007_07_15.extract(LocalDate.class), TEST_LOCAL_2007_07_15);
     }
     
     @Test(groups="tck")
-    public void extractChronoDate() {
+    public void test_extract_ChronoDate() {
         assertEquals(TEST_2007_07_15.extract(ChronoDate.class), TEST_2007_07_15);
     }
     
     @Test(groups="tck")
-    public void extractChrono() {
+    public void test_extract_Chrono() {
         assertEquals(TEST_2007_07_15.extract(Chronology.class), ISOChronology.INSTANCE);
     }
     
     @Test(groups="tck")
-    public void extractClass() {
+    public void test_extract_Class() {
         assertEquals(TEST_2007_07_15.extract(Class.class), ChronoDate.class);
     }
     
     @Test(groups="tck")
-    public void extractLocal_null() {
+    public void test_extract_null() {
         assertNull(TEST_2007_07_15.extract(null));
     }
     
     //-----------------------------------------------------------------
     @Test(groups="tck")
-    public void testGetters() {
+    public void test_Getters() {
         check(TEST_2007_07_15, 2007, 7, 15);
     }
 
+    //-----------------------------------------------------------------
+    // get()
     //-----------------------------------------------------------------
     @Test(groups="tck")
     public void testFieldGetters() {
@@ -113,37 +123,45 @@ public class TestISODate {
     }
 
     //-----------------------------------------------------------------
+    // getChronology()
+    //-----------------------------------------------------------------
     @Test(groups="tck")
-    public void testChronology() {
+    public void test_getChronology() {
         assertEquals(TEST_2007_07_15.getChronology(), ISOChronology.INSTANCE);
     }
 
     //-----------------------------------------------------------------
+    // isAfter()
+    //-----------------------------------------------------------------
     @Test(groups="tck")
-    public void testIsAfter() {
+    public void test_IsAfter() {
         assertTrue(TEST_2007_07_16.isAfter(TEST_2007_07_15));
         assertFalse(TEST_2007_07_15.isAfter(TEST_2007_07_16));
         assertFalse(TEST_2007_07_15.isAfter(TEST_2007_07_15));
     }
     
     @Test(expectedExceptions=NullPointerException.class, groups="tck")
-    public void testIsAfter_null() {
+    public void test_IsAfter_null() {
         TEST_2007_07_15.isAfter(null);
     }
     
     //-----------------------------------------------------------------
+    // isBefore()
+    //-----------------------------------------------------------------
     @Test(groups="tck")
-    public void testIsBefore() {
+    public void test_IsBefore() {
         assertTrue(TEST_2007_07_15.isBefore(TEST_2007_07_16));
         assertFalse(TEST_2007_07_16.isBefore(TEST_2007_07_15));
         assertFalse(TEST_2007_07_15.isBefore(TEST_2007_07_15));
     }
     
     @Test(expectedExceptions=NullPointerException.class, groups="tck")
-    public void testIsBefore_null() {
+    public void test_IsBefore_null() {
         TEST_2007_07_15.isBefore(null);
     }
     
+    //-----------------------------------------------------------------
+    // isLeapYear()
     //-----------------------------------------------------------------
     @DataProvider(name="leapYears")
     Object[][] leapYearInformation() {
@@ -163,6 +181,8 @@ public class TestISODate {
     }
     
     //-----------------------------------------------------------------
+    // lengthOfMonth()
+    //-----------------------------------------------------------------
     @DataProvider(name="monthLengths")
     Object[][] monthLengths() {
         return new Object[][] {
@@ -176,18 +196,22 @@ public class TestISODate {
     }
     
     @Test(dataProvider="monthLengths", groups="tck")
-    public void testLengthOfMonth(int year, int monthOfYear, int daysInMonth) {
+    public void test_lengthOfMonth(int year, int monthOfYear, int daysInMonth) {
         ChronoDate date = ISOChronology.INSTANCE.date(year, monthOfYear, 1);
         assertEquals(date.lengthOfMonth(), daysInMonth);
     }
     
     //-----------------------------------------------------------------
+    // lengthOfYear()
+    //-----------------------------------------------------------------
     @Test(dataProvider="leapYears", groups="tck")
-    public void testLengthOfYear(int year, boolean isLeapYear) {
+    public void test_lengthOfYear(int year, boolean isLeapYear) {
         int lengthOfYear = isLeapYear ? 366 : 365;
         assertEquals(TEST_2007_07_15.withYearOfEra(year).lengthOfYear(), lengthOfYear);
     }
     
+    //-----------------------------------------------------------------
+    // minusDays()
     //-----------------------------------------------------------------
     @DataProvider(name="minusDays")
     Object[][] minusDays() {
@@ -200,11 +224,31 @@ public class TestISODate {
     }
     
     @Test(dataProvider="minusDays", groups="tck")
-    public void testMinusDays(long daysToSubtract, int year, int month, int dayOfMonth) {
+    public void test_minusDays(long daysToSubtract, int year, int month, int dayOfMonth) {
         ChronoDate newDate = TEST_2007_07_15.minusDays(daysToSubtract);
         check(newDate, year, month, dayOfMonth);
     }
     
+    //-----------------------------------------------------------------
+    // minusWeeks()
+    //-----------------------------------------------------------------
+    @DataProvider(name="minusWeeks")
+    Object[][] minusWeeks() {
+        return new Object[][] {
+            {1, 2007, 7, 8},
+            {3, 2007, 6, 24},
+            {52, 2006, 7, 16},
+        };
+    }
+
+    @Test(dataProvider="minusWeeks", groups="tck")
+    public void test_minusWeeks(long weeksToSubtract, int year, int month, int dayOfMonth) {
+        ChronoDate newDate = TEST_2007_07_15.minusWeeks(weeksToSubtract);
+        check(newDate, year, month, dayOfMonth);
+    }
+
+    //-----------------------------------------------------------------
+    // minusMonths()
     //-----------------------------------------------------------------
     @DataProvider(name="minusMonths")
     Object[][] minusMonths() {
@@ -217,67 +261,129 @@ public class TestISODate {
     }
     
     @Test(dataProvider="minusMonths", groups="tck")
-    public void testMinusMonths(long monthsToSubtract, int year, int month, int dayOfMonth) {
+    public void test_minusMonths(long monthsToSubtract, int year, int month, int dayOfMonth) {
         ChronoDate newDate = TEST_2007_07_15.minusMonths(monthsToSubtract);
         check(newDate, year, month, dayOfMonth);
     }
     
     @Test(groups="tck")
-    public void testMinusMonths_missingDay() {
+    public void test_minusMonths_missingDay() {
         ChronoDate newDate = ISOChronology.INSTANCE.date(2012, 3, 31).minusMonths(1);
         check(newDate, 2012, 2, 29);
     }
     
     //-----------------------------------------------------------------
+    // minusYears()
+    //-----------------------------------------------------------------
+    @DataProvider(name="minusYears")
+    Object[][] minusYears() {
+        return new Object[][] {
+            {1, 2006, 7, 15},
+            {8, 1999, 7, 15},
+            {2007, 0, 7, 15},
+            {2008, -1, 7, 15},
+        };
+    }
+    
+    @Test(dataProvider="minusYears", groups="tck")
+    public void test_minusYears(long yearsToSubtract, int year, int month, int dayOfMonth) {
+        ChronoDate newDate = TEST_2007_07_15.minusYears(yearsToSubtract);
+        System.out.println(newDate);
+        check(newDate, year, month, dayOfMonth);
+        if (year > 0) {
+            assertEquals(newDate.getYearOfEra(), year);
+            assertEquals(newDate.getEra(), ISO_CE);
+        } else {
+            assertEquals(newDate.getYearOfEra(), 1 + (-1 * year));
+            assertEquals(newDate.getEra(), ISO_BCE);
+        }
+    }
+    
+    @Test(groups="tck")
+    public void test_minusYears_missingDay() {
+        ChronoDate newDate = ISOChronology.INSTANCE.date(2012, 2, 29).minusYears(1);
+        check(newDate, 2011, 2, 28);
+    }
+
+    
+    //-----------------------------------------------------------------
+    // minus(long, PeriodUnit)
+    //-----------------------------------------------------------------
     @Test(dataProvider="minusDays", groups="tck")
-    public void testMinus_daysPeriod(long daysToSubtract, int year, int month, int dayOfMonth) {
+    public void test_minus_daysPeriod(long daysToSubtract, int year, int month, int dayOfMonth) {
         ChronoDate newDate = TEST_2007_07_15.minus(daysToSubtract, DAYS);
+        check(newDate, year, month, dayOfMonth);
+    }
+    
+    @Test(dataProvider="minusWeeks", groups="tck")
+    public void test_minus_weeksPeriod(long weeksToSubtract, int year, int month, int dayOfMonth) {
+        ChronoDate newDate = TEST_2007_07_15.minus(weeksToSubtract, WEEKS);
         check(newDate, year, month, dayOfMonth);
     }
 
     @Test(dataProvider="minusMonths", groups="tck")
-    public void testMinus_monthsPeriod(long monthsToSubtract, int year, int month, int dayOfMonth) {
+    public void test_minus_monthsPeriod(long monthsToSubtract, int year, int month, int dayOfMonth) {
         ChronoDate newDate = TEST_2007_07_15.minus(monthsToSubtract, MONTHS);
         check(newDate, year, month, dayOfMonth);
     }
 
+    @Test(dataProvider="minusYears", groups="tck")
+    public void test_minus_yearsPeriod(long yearsToSubtract, int year, int month, int dayOfMonth) {
+        ChronoDate newDate = TEST_2007_07_15.minus(yearsToSubtract, YEARS);
+        check(newDate, year, month, dayOfMonth);
+    }
+    
     @Test(groups="tck")
-    public void testMinus_monthsPeriod_missingDay() {
+    public void test_minus_monthsPeriod_missingDay() {
         ChronoDate newDate = ISOChronology.INSTANCE.date(2012, 3, 31).minus(1, MONTHS);
         check(newDate, 2012, 2, 29);
     }
     
     @Test(expectedExceptions=NullPointerException.class, groups="tck")
-    public void testMinus_null() {
+    public void test_minus_null() {
         TEST_2007_07_15.minus(1, null);
     }
     
     //-----------------------------------------------------------------
+    // minus(Period)
+    //-----------------------------------------------------------------
     @Test(dataProvider="minusDays", groups="tck")
-    public void testMinusPeriod_daysPeriod(long daysToSubtract, int year, int month, int dayOfMonth) {
+    public void test_minusPeriod_daysPeriod(long daysToSubtract, int year, int month, int dayOfMonth) {
         ChronoDate newDate = TEST_2007_07_15.minus(Period.of(daysToSubtract, DAYS));
+        check(newDate, year, month, dayOfMonth);
+    }
+    
+    @Test(dataProvider="minusWeeks", groups="tck")
+    public void test_minusPeriod_weeksPeriod(long weeksToSubtract, int year, int month, int dayOfMonth) {
+        ChronoDate newDate = TEST_2007_07_15.minus(Period.of(weeksToSubtract, WEEKS));
         check(newDate, year, month, dayOfMonth);
     }
 
     @Test(dataProvider="minusMonths", groups="tck")
-    public void testMinusPeriod_monthsPeriod(long monthsToSubtract, int year, int month, int dayOfMonth) {
+    public void test_minusPeriod_monthsPeriod(long monthsToSubtract, int year, int month, int dayOfMonth) {
         ChronoDate newDate = TEST_2007_07_15.minus(Period.of(monthsToSubtract, MONTHS));
+        check(newDate, year, month, dayOfMonth);
+    }
+    
+
+    @Test(dataProvider="minusYears", groups="tck")
+    public void test_minusPeriod_yearsPeriod(long yearsToSubtract, int year, int month, int dayOfMonth) {
+        ChronoDate newDate = TEST_2007_07_15.minus(Period.of(yearsToSubtract, YEARS));
         check(newDate, year, month, dayOfMonth);
     }
 
     @Test(groups="tck")
-    public void testMinusPeriod_monthsPeriod_missingDay() {
+    public void test_minusPeriod_monthsPeriod_missingDay() {
         ChronoDate newDate = ISOChronology.INSTANCE.date(2012, 3, 31).minus(Period.of(1, MONTHS));
         check(newDate, 2012, 2, 29);
     }
     
     @Test(expectedExceptions=NullPointerException.class, groups="tck")
-    public void testMinusPeriod_null() {
+    public void test_minusPeriod_null() {
         TEST_2007_07_15.minus(null);
     }
 
     //-----------------------------------------------------------------
-    // TODO: minus years, weeks
     // TODO: with and plus methods
     
     //-----------------------------------------------------------------

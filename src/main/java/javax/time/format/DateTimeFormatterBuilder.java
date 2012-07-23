@@ -153,7 +153,7 @@ public final class DateTimeFormatterBuilder {
      * @return this, for chaining, not null
      */
     public DateTimeFormatterBuilder parseCaseSensitive() {
-        appendInternal(CaseSensitivePrinterParser.SENSITIVE);
+        appendInternal(SettingsParser.SENSITIVE);
         return this;
     }
 
@@ -170,7 +170,7 @@ public final class DateTimeFormatterBuilder {
      * @return this, for chaining, not null
      */
     public DateTimeFormatterBuilder parseCaseInsensitive() {
-        appendInternal(CaseSensitivePrinterParser.INSENSITIVE);
+        appendInternal(SettingsParser.INSENSITIVE);
         return this;
     }
 
@@ -189,7 +189,7 @@ public final class DateTimeFormatterBuilder {
      * @return this, for chaining, not null
      */
     public DateTimeFormatterBuilder parseStrict() {
-        appendInternal(StrictLenientPrinterParser.STRICT);
+        appendInternal(SettingsParser.STRICT);
         return this;
     }
 
@@ -208,7 +208,7 @@ public final class DateTimeFormatterBuilder {
      * @return this, for chaining, not null
      */
     public DateTimeFormatterBuilder parseLenient() {
-        appendInternal(StrictLenientPrinterParser.LENIENT);
+        appendInternal(SettingsParser.LENIENT);
         return this;
     }
 
@@ -618,6 +618,36 @@ public final class DateTimeFormatterBuilder {
 
     //-----------------------------------------------------------------------
     /**
+     * Appends the chronology id to the formatter.
+     * <p>
+     * The chronology id will be output during a print.
+     * If the chronology cannot be obtained then an exception will be thrown.
+     *
+     * @return this, for chaining, not null
+     */
+    public DateTimeFormatterBuilder appendChronologyId() {
+        appendInternal(new ChronologyPrinterParser(null));
+        return this;
+    }
+
+    /**
+     * Appends the chronology name to the formatter.
+     * <p>
+     * The calendar system name will be output during a print.
+     * If the chronology cannot be obtained then an exception will be thrown.
+     * The calendar system name is obtained from the formatting symbols.
+     *
+     * @param textStyle  the text style to use, not null
+     * @return this, for chaining, not null
+     */
+    public DateTimeFormatterBuilder appendChronologyText(TextStyle textStyle) {
+        DateTimes.checkNotNull(textStyle, "TextStyle must not be null");
+        appendInternal(new ChronologyPrinterParser(textStyle));
+        return this;
+    }
+
+    //-----------------------------------------------------------------------
+    /**
      * Appends a localized date-time pattern to the formatter.
      * <p>
      * The pattern is resolved lazily using the locale being used during the print/parse
@@ -981,6 +1011,7 @@ public final class DateTimeFormatterBuilder {
                     appendValue(field, count, 19, SignStyle.EXCEEDS_PAD);
                 }
                 break;
+            case 'G':
             case 'M':
             case 'Q':
             case 'E':
@@ -1038,12 +1069,12 @@ public final class DateTimeFormatterBuilder {
     /** Map of letters to fields. */
     private static final Map<Character, DateTimeField> FIELD_MAP = new HashMap<Character, DateTimeField>();
     static {
-        // TODO: G -> era
         // TODO: y -> year-of-era
         // TODO: u -> year
         // TODO: g -> mjDay
         // TODO: e -> day-of-week localized number (config somewhere)
         // TODO: standalone (L months, q quarters, c dayofweek, but use L as prefix instead -> LM,LQ,LE
+        FIELD_MAP.put('G', LocalDateTimeField.ERA);                       // TODO confirm Java, CLDR
         FIELD_MAP.put('y', LocalDateTimeField.YEAR);                      // 310, CLDR
 //        FIELD_MAP.put('Y', ISODateTimeField.WEEK_BASED_YEAR);         // Java7, CLDR
         FIELD_MAP.put('Q', QuarterYearField.QUARTER_OF_YEAR);         // 310, CLDR
@@ -1186,7 +1217,7 @@ public final class DateTimeFormatterBuilder {
      * Appends a printer and/or parser to the internal list handling padding.
      *
      * @param pp  the printer-parser to add, not null
-     * @return this, for chaining, not null
+     * @return the index into the active parsers list
      */
     private int appendInternal(DateTimePrinterParser pp) {
         DateTimes.checkNotNull(pp, "DateTimePrinterParser must not be null");
@@ -1479,34 +1510,11 @@ public final class DateTimeFormatterBuilder {
 
     //-----------------------------------------------------------------------
     /**
-     * Enumeration to set the case sensitivity parse style.
+     * Enumeration to apply simple parse settings.
      */
-    static enum CaseSensitivePrinterParser implements DateTimePrinterParser {
+    static enum SettingsParser implements DateTimePrinterParser {
         SENSITIVE,
-        INSENSITIVE;
-
-        @Override
-        public boolean print(DateTimePrintContext context, StringBuilder buf) {
-            return true;  // nothing to do here
-        }
-
-        @Override
-        public int parse(DateTimeParseContext context, CharSequence text, int position) {
-            context.setCaseSensitive(this == SENSITIVE);
-            return position;
-        }
-
-        @Override
-        public String toString() {
-            return "ParseCaseSensitive(" + (this == SENSITIVE) + ")";
-        }
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Enumeration printer/parser to set the strict/lenient parse style.
-     */
-    static enum StrictLenientPrinterParser implements DateTimePrinterParser {
+        INSENSITIVE,
         STRICT,
         LENIENT;
 
@@ -1517,13 +1525,24 @@ public final class DateTimeFormatterBuilder {
 
         @Override
         public int parse(DateTimeParseContext context, CharSequence text, int position) {
-            context.setStrict(this == STRICT);
+            switch (this) {
+                case SENSITIVE: context.setCaseSensitive(true); break;
+                case INSENSITIVE: context.setCaseSensitive(false); break;
+                case STRICT: context.setStrict(true); break;
+                case LENIENT: context.setStrict(false); break;
+            }
             return position;
         }
 
         @Override
         public String toString() {
-            return "ParseStrict(" + (this == STRICT) + ")";
+            switch (this) {
+                case SENSITIVE: return "ParseCaseSensitive(true)";
+                case INSENSITIVE: return "ParseCaseSensitive(false)";
+                case STRICT: return "ParseStrict(true)";
+                case LENIENT: return "ParseStrict(false)";
+            }
+            throw new IllegalStateException("Unreachable");
         }
     }
 
@@ -2384,6 +2403,7 @@ public final class DateTimeFormatterBuilder {
          */
         @Override
         public int parse(DateTimeParseContext context, CharSequence text, int position) {
+            // TODO case insensitive?
             int length = text.length();
             if (position > length) {
                 throw new IndexOutOfBoundsException();
@@ -2534,6 +2554,39 @@ public final class DateTimeFormatterBuilder {
                 return "ZoneId()";
             }
             return "ZoneText(" + textStyle + ")";
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Prints or parses a chronology.
+     */
+    static final class ChronologyPrinterParser implements DateTimePrinterParser {
+        /** The text style to output, null means the id. */
+        private final TextStyle textStyle;
+
+        ChronologyPrinterParser(TextStyle textStyle) {
+            // validated by caller
+            this.textStyle = textStyle;
+        }
+
+        @Override
+        public boolean print(DateTimePrintContext context, StringBuilder buf) {
+            Chronology chrono = context.getValue(Chronology.class);
+            if (chrono == null) {
+                return false;
+            }
+            if (textStyle == null) {
+                buf.append(chrono.getName());
+            } else {
+                buf.append(chrono.getName());  // TODO: Use symbols
+            }
+            return true;
+        }
+
+        @Override
+        public int parse(DateTimeParseContext context, CharSequence text, int position) {
+            return ~position;  // TODO, inlcuding case insensitive
         }
     }
 
