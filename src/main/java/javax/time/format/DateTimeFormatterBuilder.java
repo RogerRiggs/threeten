@@ -868,7 +868,7 @@ public final class DateTimeFormatterBuilder {
      * Despite this, it is recommended to use single quotes around all characters that you want to
      * output directly to ensure that future changes do not break your application.
      * <p>
-     * The pattern string is similar, but not identical, to {@link SimpleDateFormat}.
+     * The pattern string is similar, but not identical, to {@link java.text.SimpleDateFormat}.
      * Pattern letters 'E' and 'u' are merged.
      * Pattern letters 'G' and 'W' are not available.
      * Pattern letters 'Z' and 'X' are extended.
