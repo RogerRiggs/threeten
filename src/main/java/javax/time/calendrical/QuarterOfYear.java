@@ -187,6 +187,7 @@ public enum QuarterOfYear implements AdjustableDateTime, DateTimeAdjuster {
         return field.doSet(this, newValue);
     }
 
+    //-----------------------------------------------------------------------
     @Override
     public QuarterOfYear plus(long periodAmount, PeriodUnit unit) {
         if (unit instanceof LocalPeriodUnit) {
@@ -220,9 +221,13 @@ public enum QuarterOfYear implements AdjustableDateTime, DateTimeAdjuster {
         return values()[(ordinal() + (amount + 4)) % 4];
     }
 
+    //-----------------------------------------------------------------------
     @Override
     public QuarterOfYear minus(long periodAmount, PeriodUnit unit) {
-        return plus(DateTimes.safeNegate(periodAmount), unit);
+        if (unit instanceof LocalPeriodUnit) {
+            return plus(-(periodAmount % 4), unit);
+        }
+        return unit.doAdd(this, DateTimes.safeNegate(periodAmount));
     }
 
     /**
@@ -254,7 +259,7 @@ public enum QuarterOfYear implements AdjustableDateTime, DateTimeAdjuster {
      *
      * @return the first month in the quarter, not null
      */
-    public Month getFirstMonthOfQuarter() {
+    public Month firstMonth() {
         switch (this) {
             case Q1: return Month.JANUARY;
             case Q2: return Month.APRIL;

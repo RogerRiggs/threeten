@@ -39,12 +39,12 @@ import static javax.time.calendrical.LocalDateTimeField.YEAR;
 import java.io.Serializable;
 
 import javax.time.CalendricalException;
-import javax.time.CalendricalParseException;
 import javax.time.Clock;
 import javax.time.DateTimes;
 import javax.time.LocalDate;
 import javax.time.Month;
 import javax.time.format.CalendricalFormatter;
+import javax.time.format.CalendricalParseException;
 import javax.time.format.DateTimeFormatter;
 import javax.time.format.DateTimeFormatterBuilder;
 import javax.time.format.SignStyle;
@@ -318,7 +318,31 @@ public final class YearMonth
     }
 
     //-----------------------------------------------------------------------
+    /**
+     * Returns an adjusted year-month based on this year-month.
+     * <p>
+     * This adjusts the year-month according to the rules of the specified adjuster.
+     * A simple adjuster might simply set the one of the fields, such as the year field.
+     * A more complex adjuster might set the year-month to the next month that
+     * Halley's comet will pass the Earth.
+     * <p>
+     * In addition, all principal classes implement the {@link DateTimeAdjuster} interface,
+     * including this one. For example, {@link Month} implements the adjuster interface.
+     * As such, this code will compile and run:
+     * <pre>
+     *  yearMonth.with(month);
+     * </pre>
+     * <p>
+     * This instance is immutable and unaffected by this method call.
+     *
+     * @param adjuster the adjuster to use, not null
+     * @return a {@code YearMonth} based on this year-month with the adjustment made, not null
+     * @throws CalendricalException if the adjustment cannot be made
+     */
     public YearMonth with(DateTimeAdjuster adjuster) {
+        if (adjuster instanceof YearMonth) {
+            return (YearMonth) adjuster;
+        }
         return (YearMonth) adjuster.doAdjustment(this);
     }
 
