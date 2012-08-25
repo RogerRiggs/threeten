@@ -1830,11 +1830,7 @@ public final class ZonedDateTime
             return (R) this;
         } else if (type == ZoneId.class) {
             return (R) zone;
-        } else if (type == Class.class) {
-            return (R) ZonedDateTime.class;
-        } else if (type == DateTimeBuilder.class) {
-            return (R) new DateTimeBuilder(this);
-        }
+        } 
         return dateTime.extract(type);
     }
 
