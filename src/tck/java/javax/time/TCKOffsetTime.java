@@ -353,7 +353,7 @@ public class TCKOffsetTime extends AbstractDateTimeTest {
         assertEquals(OffsetTime.from(OffsetDateTime.of(2007, 7, 15, 17, 30, OFFSET_PONE)), OffsetTime.of(17, 30, OFFSET_PONE));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         OffsetTime.from(LocalDate.of(2007, 7, 15));
     }
@@ -398,17 +398,17 @@ public class TCKOffsetTime extends AbstractDateTimeTest {
     }
 
     //-----------------------------------------------------------------------s
-    @Test(expectedExceptions={DateTimeParseException.class}, groups={"tck"})
+    @Test(expectedExceptions={IllegalArgumentException.class}, groups={"tck"})
     public void factory_parse_illegalHour() {
         OffsetTime.parse("25:00+01:00");
     }
 
-    @Test(expectedExceptions={DateTimeParseException.class}, groups={"tck"})
+    @Test(expectedExceptions={IllegalArgumentException.class}, groups={"tck"})
     public void factory_parse_illegalMinute() {
         OffsetTime.parse("12:60+01:00");
     }
 
-    @Test(expectedExceptions={DateTimeParseException.class}, groups={"tck"})
+    @Test(expectedExceptions={IllegalArgumentException.class}, groups={"tck"})
     public void factory_parse_illegalSecond() {
         OffsetTime.parse("12:12:60+01:00");
     }
@@ -532,7 +532,7 @@ public class TCKOffsetTime extends AbstractDateTimeTest {
         assertEquals(test.getLong(ChronoField.OFFSET_SECONDS), 3600);
     }
 
-    @Test(dataProvider="invalidFields", expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(dataProvider="invalidFields", expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_invalidField(DateTimeField field) {
         TEST_11_30_59_500_PONE.getLong(field);
     }
@@ -643,7 +643,7 @@ public class TCKOffsetTime extends AbstractDateTimeTest {
         TEST_11_30_59_500_PONE.with((DateTimeField) null, 0);
     }
 
-    @Test(dataProvider="invalidFields", expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(dataProvider="invalidFields", expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_with_DateTimeField_invalidField(DateTimeField field) {
         TEST_11_30_59_500_PONE.with(field, 0);
     }

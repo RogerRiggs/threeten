@@ -41,7 +41,7 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import javax.time.DateTimeException;
+
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.calendrical.ChronoField;
@@ -140,7 +140,7 @@ public class TestISOChrono {
         };
     }
 
-    @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=DateTimeException.class)
+    @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=IllegalArgumentException.class)
     public void test_badDates(int year, int month, int dom) {
         ISOChrono.INSTANCE.date(year, month, dom);
     }
@@ -162,7 +162,7 @@ public class TestISOChrono {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    @Test(expectedExceptions=DateTimeException.class, groups="tck")
+    @Test(expectedExceptions=IllegalArgumentException.class, groups="tck")
     public void test_date_withEra_withWrongEra() {
         ISOChrono.INSTANCE.date((Era) HijrahChrono.ERA_AH, 1, 1, 1);
     }
@@ -194,7 +194,7 @@ public class TestISOChrono {
         assertEquals(test, ISOChrono.INSTANCE.date(2012, 7, 6));
     }
 
-//    @Test(groups={"tck"}, expectedExceptions=DateTimeException.class)
+//    @Test(groups={"tck"}, expectedExceptions=IllegalArgumentException.class)
 //    public void test_adjust_toMonth() {
 //        ChronoLocalDate<ISOChrono> ISODate = ISOChrono.INSTANCE.date(1726, 1, 4);
 //        ISODate.with(Month.APRIL);

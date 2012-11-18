@@ -43,7 +43,7 @@ import java.util.List;
 
 import javax.time.AbstractDateTimeTest;
 import javax.time.Clock;
-import javax.time.DateTimeException;
+
 import javax.time.Instant;
 import javax.time.LocalDate;
 import javax.time.LocalTime;
@@ -166,12 +166,12 @@ public class TCKYear extends AbstractDateTimeTest {
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_int_tooLow() {
         Year.of(Year.MIN_YEAR - 1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_int_tooHigh() {
         Year.of(Year.MAX_YEAR + 1);
     }
@@ -182,7 +182,7 @@ public class TCKYear extends AbstractDateTimeTest {
         assertEquals(Year.from(LocalDate.of(2007, 7, 15)), Year.of(2007));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         Year.from(LocalTime.of(12, 30));
     }
@@ -314,12 +314,12 @@ public class TCKYear extends AbstractDateTimeTest {
         TEST_2008.getLong((DateTimeField) null);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_invalidField() {
         TEST_2008.getLong(MockFieldNoValue.INSTANCE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_timeField() {
         TEST_2008.getLong(ChronoField.AMPM_OF_DAY);
     }
@@ -394,22 +394,22 @@ public class TCKYear extends AbstractDateTimeTest {
         assertEquals(Year.of(-40).plusYears(years), Year.of((int) (-40L + years)));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusYears_max() {
         Year.of(Year.MAX_YEAR).plusYears(1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusYears_maxLots() {
         Year.of(Year.MAX_YEAR).plusYears(1000);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusYears_min() {
         Year.of(Year.MIN_YEAR).plusYears(-1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusYears_minLots() {
         Year.of(Year.MIN_YEAR).plusYears(-1000);
     }
@@ -443,22 +443,22 @@ public class TCKYear extends AbstractDateTimeTest {
         assertEquals(Year.of(40).minusYears(years), Year.of((int) (40L - years)));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusYears_max() {
         Year.of(Year.MAX_YEAR).minusYears(-1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusYears_maxLots() {
         Year.of(Year.MAX_YEAR).minusYears(-1000);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusYears_min() {
         Year.of(Year.MIN_YEAR).minusYears(1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusYears_minLots() {
         Year.of(Year.MIN_YEAR).minusYears(1000);
     }
@@ -582,7 +582,7 @@ public class TCKYear extends AbstractDateTimeTest {
         assertEquals(test.atMonth(6), YearMonth.of(2008, 6));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_atMonth_int_invalidMonth() {
         Year test = Year.of(2008);
         test.atMonth(13);
@@ -603,7 +603,7 @@ public class TCKYear extends AbstractDateTimeTest {
         test.atMonthDay((MonthDay) null);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_atMonthDay_invalidMonthDay() {
         Year test = Year.of(2008);
         test.atMonthDay(MonthDay.of(6, 31));
@@ -622,7 +622,7 @@ public class TCKYear extends AbstractDateTimeTest {
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_atDay_notLeapYear_day366() {
         Year test = Year.of(2007);
         test.atDay(366);
@@ -638,13 +638,13 @@ public class TCKYear extends AbstractDateTimeTest {
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_atDay_day0() {
         Year test = Year.of(2007);
         test.atDay(0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_atDay_day367() {
         Year test = Year.of(2007);
         test.atDay(367);

@@ -132,13 +132,13 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoLocalDate")
     Object[][] provider_sample_isoLocalDate() {
         return new Object[][]{
-                {2008, null, null, null, null, null, DateTimeException.class},
-                {null, 6, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, DateTimeException.class},
-                {null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, "Europe/Paris", null, DateTimeException.class},
-                {2008, 6, null, null, null, null, DateTimeException.class},
-                {null, 6, 30, null, null, null, DateTimeException.class},
+                {2008, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, IllegalArgumentException.class},
+                {null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
+                {2008, 6, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, 30, null, null, null, IllegalArgumentException.class},
 
                 {2008, 6, 30, null, null,                   "2008-06-30", null},
                 {2008, 6, 30, "+01:00", null,               "2008-06-30", null},
@@ -191,7 +191,7 @@ public class TCKDateTimeFormatters {
         assertParseMatch(DateTimeFormatters.isoLocalDate().parseToBuilder("+1000000000-08-06", new ParsePosition(0)), expected);
     }
 
-    @Test(expectedExceptions = DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions = IllegalArgumentException.class, groups={"tck"})
     public void test_parse_isoLocalDate_1000000000_failedCreate() {
         LocalDate.parse("+1000000000-08-06");
     }
@@ -209,7 +209,7 @@ public class TCKDateTimeFormatters {
         assertParseMatch(DateTimeFormatters.isoLocalDate().parseToBuilder("-1000000000-08-06", new ParsePosition(0)), expected);
     }
 
-    @Test(expectedExceptions = DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions = IllegalArgumentException.class, groups={"tck"})
     public void test_parse_isoLocalDate_M1000000000_failedCreate() {
         LocalDate.parse("-1000000000-08-06");
     }
@@ -220,18 +220,18 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoOffsetDate")
     Object[][] provider_sample_isoOffsetDate() {
         return new Object[][]{
-                {2008, null, null, null, null, null, DateTimeException.class},
-                {null, 6, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, DateTimeException.class},
-                {null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, "Europe/Paris", null, DateTimeException.class},
-                {2008, 6, null, null, null, null, DateTimeException.class},
-                {null, 6, 30, null, null, null, DateTimeException.class},
+                {2008, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, IllegalArgumentException.class},
+                {null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
+                {2008, 6, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, 30, null, null, null, IllegalArgumentException.class},
 
-                {2008, 6, 30, null, null,                   null, DateTimeException.class},
+                {2008, 6, 30, null, null,                   null, IllegalArgumentException.class},
                 {2008, 6, 30, "+01:00", null,               "2008-06-30+01:00", null},
                 {2008, 6, 30, "+01:00", "Europe/Paris",     "2008-06-30+01:00", null},
-                {2008, 6, 30, null, "Europe/Paris",         null, DateTimeException.class},
+                {2008, 6, 30, null, "Europe/Paris",         null, IllegalArgumentException.class},
 
                 {123456, 6, 30, "+01:00", null,             "+123456-06-30+01:00", null},
         };
@@ -272,13 +272,13 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoDate")
     Object[][] provider_sample_isoDate() {
         return new Object[][]{
-                {2008, null, null, null, null, null, DateTimeException.class},
-                {null, 6, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, DateTimeException.class},
-                {null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, "Europe/Paris", null, DateTimeException.class},
-                {2008, 6, null, null, null, null, DateTimeException.class},
-                {null, 6, 30, null, null, null, DateTimeException.class},
+                {2008, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, IllegalArgumentException.class},
+                {null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
+                {2008, 6, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, 30, null, null, null, IllegalArgumentException.class},
 
                 {2008, 6, 30, null, null,                   "2008-06-30", null},
                 {2008, 6, 30, "+01:00", null,               "2008-06-30+01:00", null},
@@ -329,12 +329,12 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoLocalTime")
     Object[][] provider_sample_isoLocalTime() {
         return new Object[][]{
-                {11, null, null, null, null, null, null, DateTimeException.class},
-                {null, 5, null, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, null, DateTimeException.class},
-                {null, null, null, 1, null, null, null, DateTimeException.class},
-                {null, null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, null, "Europe/Paris", null, DateTimeException.class},
+                {11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, 1, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
 
                 {11, 5, null, null, null, null,     "11:05", null},
                 {11, 5, 30, null, null, null,       "11:05:30", null},
@@ -393,17 +393,17 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoOffsetTime")
     Object[][] provider_sample_isoOffsetTime() {
         return new Object[][]{
-                {11, null, null, null, null, null, null, DateTimeException.class},
-                {null, 5, null, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, null, DateTimeException.class},
-                {null, null, null, 1, null, null, null, DateTimeException.class},
-                {null, null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, null, "Europe/Paris", null, DateTimeException.class},
+                {11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, 1, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
 
-                {11, 5, null, null, null, null,     null, DateTimeException.class},
-                {11, 5, 30, null, null, null,       null, DateTimeException.class},
-                {11, 5, 30, 500000000, null, null,  null, DateTimeException.class},
-                {11, 5, 30, 1, null, null,          null, DateTimeException.class},
+                {11, 5, null, null, null, null,     null, IllegalArgumentException.class},
+                {11, 5, 30, null, null, null,       null, IllegalArgumentException.class},
+                {11, 5, 30, 500000000, null, null,  null, IllegalArgumentException.class},
+                {11, 5, 30, 1, null, null,          null, IllegalArgumentException.class},
 
                 {11, 5, null, null, "+01:00", null,     "11:05+01:00", null},
                 {11, 5, 30, null, "+01:00", null,       "11:05:30+01:00", null},
@@ -415,10 +415,10 @@ public class TCKDateTimeFormatters {
                 {11, 5, 30, 500000000, "+01:00", "Europe/Paris",    "11:05:30.5+01:00", null},
                 {11, 5, 30, 1, "+01:00", "Europe/Paris",            "11:05:30.000000001+01:00", null},
 
-                {11, 5, null, null, null, "Europe/Paris",       null, DateTimeException.class},
-                {11, 5, 30, null, null, "Europe/Paris",         null, DateTimeException.class},
-                {11, 5, 30, 500000000, null, "Europe/Paris",    null, DateTimeException.class},
-                {11, 5, 30, 1, null, "Europe/Paris",            null, DateTimeException.class},
+                {11, 5, null, null, null, "Europe/Paris",       null, IllegalArgumentException.class},
+                {11, 5, 30, null, null, "Europe/Paris",         null, IllegalArgumentException.class},
+                {11, 5, 30, 500000000, null, "Europe/Paris",    null, IllegalArgumentException.class},
+                {11, 5, 30, 1, null, "Europe/Paris",            null, IllegalArgumentException.class},
         };
     }
 
@@ -457,12 +457,12 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoTime")
     Object[][] provider_sample_isoTime() {
         return new Object[][]{
-                {11, null, null, null, null, null, null, DateTimeException.class},
-                {null, 5, null, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, null, DateTimeException.class},
-                {null, null, null, 1, null, null, null, DateTimeException.class},
-                {null, null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, null, "Europe/Paris", null, DateTimeException.class},
+                {11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, 1, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
 
                 {11, 5, null, null, null, null,     "11:05", null},
                 {11, 5, 30, null, null, null,       "11:05:30", null},
@@ -526,18 +526,18 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoLocalDateTime")
     Object[][] provider_sample_isoLocalDateTime() {
         return new Object[][]{
-                {2008, null, null, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, 6, null, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, 11, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, null, 5, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, null, null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, null, null, null, null, "Europe/Paris", null, DateTimeException.class},
-                {2008, 6, 30, 11, null, null, null, null, null, null, DateTimeException.class},
-                {2008, 6, 30, null, 5, null, null, null, null, null, DateTimeException.class},
-                {2008, 6, null, 11, 5, null, null, null, null, null, DateTimeException.class},
-                {2008, null, 30, 11, 5, null, null, null, null, null, DateTimeException.class},
-                {null, 6, 30, 11, 5, null, null, null, null, null, DateTimeException.class},
+                {2008, null, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, 11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, 6, 30, null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, 6, null, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, null, 30, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, 30, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
 
                 {2008, 6, 30, 11, 5, null, null, null, null,                    "2008-06-30T11:05", null},
                 {2008, 6, 30, 11, 5, 30, null, null, null,                      "2008-06-30T11:05:30", null},
@@ -599,23 +599,23 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoOffsetDateTime")
     Object[][] provider_sample_isoOffsetDateTime() {
         return new Object[][]{
-                {2008, null, null, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, 6, null, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, 11, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, null, 5, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, null, null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, null, null, null, null, "Europe/Paris", null, DateTimeException.class},
-                {2008, 6, 30, 11, null, null, null, null, null, null, DateTimeException.class},
-                {2008, 6, 30, null, 5, null, null, null, null, null, DateTimeException.class},
-                {2008, 6, null, 11, 5, null, null, null, null, null, DateTimeException.class},
-                {2008, null, 30, 11, 5, null, null, null, null, null, DateTimeException.class},
-                {null, 6, 30, 11, 5, null, null, null, null, null, DateTimeException.class},
+                {2008, null, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, 11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, 6, 30, null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, 6, null, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, null, 30, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, 30, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
 
-                {2008, 6, 30, 11, 5, null, null, null, null,                    null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, null, null, null,                      null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, 500000000, null, null,                 null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, 1, null, null,                         null, DateTimeException.class},
+                {2008, 6, 30, 11, 5, null, null, null, null,                    null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, null, null, null,                      null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, 500000000, null, null,                 null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, 1, null, null,                         null, IllegalArgumentException.class},
 
                 {2008, 6, 30, 11, 5, null, null, "+01:00", null,                "2008-06-30T11:05+01:00", null},
                 {2008, 6, 30, 11, 5, 30, null, "+01:00", null,                  "2008-06-30T11:05:30+01:00", null},
@@ -627,10 +627,10 @@ public class TCKDateTimeFormatters {
                 {2008, 6, 30, 11, 5, 30, 500000000, "+01:00", "Europe/Paris",   "2008-06-30T11:05:30.5+01:00", null},
                 {2008, 6, 30, 11, 5, 30, 1, "+01:00", "Europe/Paris",           "2008-06-30T11:05:30.000000001+01:00", null},
 
-                {2008, 6, 30, 11, 5, null, null, null, "Europe/Paris",          null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, null, null, "Europe/Paris",            null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, 500000000, null, "Europe/Paris",       null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, 1, null, "Europe/Paris",               null, DateTimeException.class},
+                {2008, 6, 30, 11, 5, null, null, null, "Europe/Paris",          null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, null, null, "Europe/Paris",            null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, 500000000, null, "Europe/Paris",       null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, 1, null, "Europe/Paris",               null, IllegalArgumentException.class},
 
                 {123456, 6, 30, 11, 5, null, null, "+01:00", null,              "+123456-06-30T11:05+01:00", null},
         };
@@ -673,23 +673,23 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoZonedDateTime")
     Object[][] provider_sample_isoZonedDateTime() {
         return new Object[][]{
-                {2008, null, null, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, 6, null, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, 11, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, null, 5, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, null, null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, null, null, null, null, "Europe/Paris", null, DateTimeException.class},
-                {2008, 6, 30, 11, null, null, null, null, null, null, DateTimeException.class},
-                {2008, 6, 30, null, 5, null, null, null, null, null, DateTimeException.class},
-                {2008, 6, null, 11, 5, null, null, null, null, null, DateTimeException.class},
-                {2008, null, 30, 11, 5, null, null, null, null, null, DateTimeException.class},
-                {null, 6, 30, 11, 5, null, null, null, null, null, DateTimeException.class},
+                {2008, null, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, 11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, 6, 30, null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, 6, null, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, null, 30, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, 30, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
 
-                {2008, 6, 30, 11, 5, null, null, null, null,                    null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, null, null, null,                      null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, 500000000, null, null,                 null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, 1, null, null,                         null, DateTimeException.class},
+                {2008, 6, 30, 11, 5, null, null, null, null,                    null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, null, null, null,                      null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, 500000000, null, null,                 null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, 1, null, null,                         null, IllegalArgumentException.class},
 
                 {2008, 6, 30, 11, 5, null, null, "+01:00", null,                null, DateTimeException.class},
                 {2008, 6, 30, 11, 5, 30, null, "+01:00", null,                  null, DateTimeException.class},
@@ -701,10 +701,10 @@ public class TCKDateTimeFormatters {
                 {2008, 6, 30, 11, 5, 30, 500000000, "+01:00", "Europe/Paris",   "2008-06-30T11:05:30.5+01:00[Europe/Paris]", null},
                 {2008, 6, 30, 11, 5, 30, 1, "+01:00", "Europe/Paris",           "2008-06-30T11:05:30.000000001+01:00[Europe/Paris]", null},
 
-                {2008, 6, 30, 11, 5, null, null, null, "Europe/Paris",          null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, null, null, "Europe/Paris",            null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, 500000000, null, "Europe/Paris",       null, DateTimeException.class},
-                {2008, 6, 30, 11, 5, 30, 1, null, "Europe/Paris",               null, DateTimeException.class},
+                {2008, 6, 30, 11, 5, null, null, null, "Europe/Paris",          null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, null, null, "Europe/Paris",            null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, 500000000, null, "Europe/Paris",       null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, 5, 30, 1, null, "Europe/Paris",               null, IllegalArgumentException.class},
 
                 {123456, 6, 30, 11, 5, null, null, "+01:00", "Europe/Paris",    "+123456-06-30T11:05+01:00[Europe/Paris]", null},
         };
@@ -747,18 +747,18 @@ public class TCKDateTimeFormatters {
     @DataProvider(name="sample_isoDateTime")
     Object[][] provider_sample_isoDateTime() {
         return new Object[][]{
-                {2008, null, null, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, 6, null, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, 30, null, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, 11, null, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, null, 5, null, null, null, null, null, DateTimeException.class},
-                {null, null, null, null, null, null, null, "+01:00", null, null, DateTimeException.class},
-                {null, null, null, null, null, null, null, null, "Europe/Paris", null, DateTimeException.class},
-                {2008, 6, 30, 11, null, null, null, null, null, null, DateTimeException.class},
-                {2008, 6, 30, null, 5, null, null, null, null, null, DateTimeException.class},
-                {2008, 6, null, 11, 5, null, null, null, null, null, DateTimeException.class},
-                {2008, null, 30, 11, 5, null, null, null, null, null, DateTimeException.class},
-                {null, 6, 30, 11, 5, null, null, null, null, null, DateTimeException.class},
+                {2008, null, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, 30, null, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, 11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, null, null, "+01:00", null, null, IllegalArgumentException.class},
+                {null, null, null, null, null, null, null, null, "Europe/Paris", null, IllegalArgumentException.class},
+                {2008, 6, 30, 11, null, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, 6, 30, null, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, 6, null, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {2008, null, 30, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
+                {null, 6, 30, 11, 5, null, null, null, null, null, IllegalArgumentException.class},
 
                 {2008, 6, 30, 11, 5, null, null, null, null,                    "2008-06-30T11:05", null},
                 {2008, 6, 30, 11, 5, 30, null, null, null,                      "2008-06-30T11:05:30", null},
@@ -853,7 +853,7 @@ public class TCKDateTimeFormatters {
         assertEquals(DateTimeFormatters.isoOrdinalDate().print(test), "2008-231");
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_print_isoOrdinalDate_missingField() {
         DateTimeAccessor test = Year.of(2008);
         DateTimeFormatters.isoOrdinalDate().print(test);
@@ -905,7 +905,7 @@ public class TCKDateTimeFormatters {
         assertEquals(DateTimeFormatters.basicIsoDate().print(test), "20080630");
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_print_basicIsoDate_missingField() {
         DateTimeAccessor test = YearMonth.of(2008, 6);
         DateTimeFormatters.basicIsoDate().print(test);
@@ -1024,7 +1024,7 @@ public class TCKDateTimeFormatters {
         assertEquals(DateTimeFormatters.rfc1123().print(test), "Tue, 03 Jun 2008 11:05:30 Z");
     }
 
-    @Test(groups={"tck"}, expectedExceptions=DateTimeException.class)
+    @Test(groups={"tck"}, expectedExceptions=IllegalArgumentException.class)
     public void test_print_rfc1123_missingField() {
         DateTimeAccessor test = YearMonth.of(2008, 6);
         DateTimeFormatters.rfc1123().print(test);

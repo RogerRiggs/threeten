@@ -33,7 +33,6 @@ package javax.time.calendrical;
 
 import java.util.Comparator;
 
-import javax.time.DateTimeException;
 
 /**
  * A field of date-time, such as month-of-year or hour-of-minute.
@@ -102,7 +101,7 @@ public interface DateTimeField extends Comparator<DateTimeAccessor> {
      *
      * @param dateTime1  the first date-time object to compare, not null
      * @param dateTime2  the second date-time object to compare, not null
-     * @throws DateTimeException if unable to obtain the value for this field
+     * @throws IllegalArgumentException if unable to obtain the value for this field
      */
     int compare(DateTimeAccessor dateTime1, DateTimeAccessor dateTime2);  // JAVA8 default method
 
@@ -181,7 +180,7 @@ public interface DateTimeField extends Comparator<DateTimeAccessor> {
      *
      * @param dateTime  the date-time object to query, not null
      * @return the value of this field, not null
-     * @throws DateTimeException if unable to get the field
+     * @throws IllegalArgumentException if unable to get the field
      */
     long doGet(DateTimeAccessor dateTime);
 
@@ -203,7 +202,8 @@ public interface DateTimeField extends Comparator<DateTimeAccessor> {
      * @param dateTime the date-time object to adjust, not null
      * @param newValue the new value of the field
      * @return the adjusted date-time object, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
+     * @throws IllegalArgumentException if the date-time does not support this field
      */
     <R extends DateTimeAccessor> R doSet(R dateTime, long newValue);
 
@@ -217,7 +217,7 @@ public interface DateTimeField extends Comparator<DateTimeAccessor> {
      * @param builder  the builder to resolve, not null
      * @param value  the value of the associated field
      * @return true if builder has been changed, false otherwise
-     * @throws DateTimeException if unable to resolve
+     * @throws IllegalArgumentException if unable to resolve
      */
     boolean resolve(DateTimeBuilder builder, long value);
 

@@ -33,7 +33,7 @@ package javax.time.format;
 
 import java.util.Locale;
 
-import javax.time.DateTimeException;
+
 import javax.time.ZoneId;
 import javax.time.ZonedDateTime;
 import javax.time.calendrical.DateTimeAccessor;
@@ -68,11 +68,11 @@ public class AbstractTestPrinterParser {
         }
         @Override
         public long getLong(DateTimeField field) {
-            throw new DateTimeException("Mock");
+            throw new IllegalArgumentException("Mock");
         }
         @Override
         public DateTimeAccessor with(DateTimeField field, long newValue) {
-            throw new DateTimeException("Mock");
+            throw new IllegalArgumentException("Mock");
         }
     };
 }

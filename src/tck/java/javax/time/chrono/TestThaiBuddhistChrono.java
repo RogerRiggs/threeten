@@ -38,7 +38,7 @@ import static javax.time.calendrical.ChronoField.YEAR;
 import static javax.time.calendrical.ChronoField.YEAR_OF_ERA;
 import static org.testng.Assert.assertEquals;
 
-import javax.time.DateTimeException;
+
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.calendrical.ChronoField;
@@ -124,7 +124,7 @@ public class TestThaiBuddhistChrono {
         };
     }
 
-    @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=DateTimeException.class)
+    @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=IllegalArgumentException.class)
     public void test_badDates(int year, int month, int dom) {
         ThaiBuddhistChrono.INSTANCE.date(year, month, dom);
     }
@@ -197,7 +197,7 @@ public class TestThaiBuddhistChrono {
         assertEquals(test, ThaiBuddhistChrono.INSTANCE.date(2555, 7, 6));
     }
 
-//    @Test(groups={"tck"}, expectedExceptions=DateTimeException.class)
+//    @Test(groups={"tck"}, expectedExceptions=IllegalArgumentException.class)
 //    public void test_adjust_toMonth() {
 //        ChronoLocalDate<ThaiBuddhistChrono> jdate = BuddhistChrono.INSTANCE.date(1726, 1, 4);
 //        jdate.with(Month.APRIL);

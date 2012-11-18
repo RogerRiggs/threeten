@@ -39,7 +39,6 @@ import static javax.time.calendrical.ChronoField.OFFSET_SECONDS;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.time.DateTimeException;
 import javax.time.DayOfWeek;
 import javax.time.Instant;
 import javax.time.LocalTime;
@@ -196,7 +195,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param offset  the zone offset to change to, not null
      * @return an {@code OffsetDateTime} based on this date-time with the requested offset, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     @Override
     public ChronoOffsetDateTimeImpl<C> withOffsetSameInstant(ZoneOffset offset) {
@@ -328,7 +327,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param adjuster the adjuster to use, not null
      * @return an {@code OffsetDateTime} based on this date-time with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -360,7 +359,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      * @param field  the field to set in the returned date-time, not null
      * @param newValue  the new value of the field in the returned date-time, not null
      * @return an {@code OffsetDateTime} based on this date-time with the specified field set, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
      */
     @Override
     public ChronoOffsetDateTimeImpl<C> with(DateTimeField field, long newValue) {
@@ -393,7 +392,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param year  the year to set in the returned date, from MIN_YEAR to MAX_YEAR
      * @return an {@code OffsetDateTime} based on this date-time with the requested year, not null
-     * @throws DateTimeException if the year value is invalid
+     * @throws IllegalArgumentException if the year value is invalid
      */
     ChronoOffsetDateTimeImpl<C> withYear(int year) {
         return with(dateTime.withYear(year), offset);
@@ -408,7 +407,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param month  the month-of-year to set in the returned date, from 1 (January) to 12 (December)
      * @return an {@code OffsetDateTime} based on this date-time with the requested month, not null
-     * @throws DateTimeException if the month-of-year value is invalid
+     * @throws IllegalArgumentException if the month-of-year value is invalid
      */
     ChronoOffsetDateTime<C> withMonth(int month) {
         return with(dateTime.withMonth(month), offset);
@@ -423,8 +422,8 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param dayOfMonth  the day-of-month to set in the returned date, from 1 to 28-31
      * @return an {@code OffsetDateTime} based on this date-time with the requested day, not null
-     * @throws DateTimeException if the day-of-month value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the day-of-month value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     ChronoOffsetDateTime<C> withDayOfMonth(int dayOfMonth) {
         return with(dateTime.withDayOfMonth(dayOfMonth), offset);
@@ -438,8 +437,8 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param dayOfYear  the day-of-year to set in the returned date, from 1 to 365-366
      * @return an {@code OffsetDateTime} based on this date with the requested day, not null
-     * @throws DateTimeException if the day-of-year value is invalid
-     * @throws DateTimeException if the day-of-year is invalid for the year
+     * @throws IllegalArgumentException if the day-of-year value is invalid
+     * @throws IllegalArgumentException if the day-of-year is invalid for the year
      */
     ChronoOffsetDateTime<C> withDayOfYear(int dayOfYear) {
         return with(dateTime.withDayOfYear(dayOfYear), offset);
@@ -458,8 +457,8 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return an {@code OffsetDateTime} based on this date-time with the requested date, not null
-     * @throws DateTimeException if any field value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if any field value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     ChronoOffsetDateTime<C> withDate(int year, int month, int dayOfMonth) {
         return with(dateTime.withDate(year, month, dayOfMonth), offset);
@@ -473,7 +472,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @return an {@code OffsetDateTime} based on this date-time with the requested hour, not null
-     * @throws DateTimeException if the hour value is invalid
+     * @throws IllegalArgumentException if the hour value is invalid
      */
     ChronoOffsetDateTime<C> withHour(int hour) {
         ChronoDateTimeImpl<C> newDT = dateTime.withHour(hour);
@@ -487,7 +486,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return an {@code OffsetDateTime} based on this date-time with the requested minute, not null
-     * @throws DateTimeException if the minute value is invalid
+     * @throws IllegalArgumentException if the minute value is invalid
      */
     ChronoOffsetDateTime<C> withMinute(int minute) {
         ChronoDateTimeImpl<C> newDT = dateTime.withMinute(minute);
@@ -501,7 +500,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return an {@code OffsetDateTime} based on this date-time with the requested second, not null
-     * @throws DateTimeException if the second value is invalid
+     * @throws IllegalArgumentException if the second value is invalid
      */
     ChronoOffsetDateTime<C> withSecond(int second) {
         return with(dateTime.withSecond(second), offset);
@@ -514,7 +513,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return an {@code OffsetDateTime} based on this date-time with the requested nanosecond, not null
-     * @throws DateTimeException if the nanos value is invalid
+     * @throws IllegalArgumentException if the nanos value is invalid
      */
     ChronoOffsetDateTime<C> withNano(int nanoOfSecond) {
         return with(dateTime.withNano(nanoOfSecond), offset);
@@ -533,7 +532,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return an {@code OffsetDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     ChronoOffsetDateTimeImpl<C> withTime(int hour, int minute) {
         ChronoDateTimeImpl<C> newDT = dateTime.withTime(hour, minute);
@@ -554,7 +553,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return an {@code OffsetDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     ChronoOffsetDateTime<C> withTime(int hour, int minute, int second) {
         ChronoDateTimeImpl<C> newDT = dateTime.withTime(hour, minute, second);
@@ -571,7 +570,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return an {@code OffsetDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     ChronoOffsetDateTimeImpl<C> withTime(int hour, int minute, int second, int nanoOfSecond) {
         ChronoDateTimeImpl<C> newDT = dateTime.withTime(hour, minute, second, nanoOfSecond);
@@ -606,7 +605,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param years  the years to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTimeImpl<C> plusYears(long years) {
         ChronoDateTimeImpl<C> newDT = dateTime.plusYears(years);
@@ -631,7 +630,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param months  the months to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the months added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTimeImpl<C> plusMonths(long months) {
         ChronoDateTimeImpl<C> newDT = dateTime.plusMonths(months);
@@ -651,7 +650,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param weeks  the weeks to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the weeks added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTimeImpl<C> plusWeeks(long weeks) {
         ChronoDateTimeImpl<C> newDT = dateTime.plusWeeks(weeks);
@@ -671,7 +670,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param days  the days to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the days added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTimeImpl<C> plusDays(long days) {
         ChronoDateTimeImpl<C> newDT = dateTime.plusDays(days);
@@ -685,7 +684,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param hours  the hours to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the hours added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTimeImpl<C> plusHours(long hours) {
         ChronoDateTimeImpl<C> newDT = dateTime.plusHours(hours);
@@ -699,7 +698,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param minutes  the minutes to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the minutes added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTimeImpl<C> plusMinutes(long minutes) {
         ChronoDateTimeImpl<C> newDT = dateTime.plusMinutes(minutes);
@@ -713,7 +712,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param seconds  the seconds to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the seconds added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTimeImpl<C> plusSeconds(long seconds) {
         ChronoDateTimeImpl<C> newDT = dateTime.plusSeconds(seconds);
@@ -727,7 +726,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param nanos  the nanos to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the nanoseconds added, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     ChronoOffsetDateTimeImpl<C> plusNanos(long nanos) {
         ChronoDateTimeImpl<C> newDT = dateTime.plusNanos(nanos);
@@ -753,7 +752,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param years  the years to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the years subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> minusYears(long years) {
         ChronoDateTimeImpl<C> newDT = dateTime.minusYears(years);
@@ -778,7 +777,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param months  the months to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the months subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> minusMonths(long months) {
         ChronoDateTimeImpl<C> newDT = dateTime.minusMonths(months);
@@ -798,7 +797,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param weeks  the weeks to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the weeks subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> minusWeeks(long weeks) {
         ChronoDateTimeImpl<C> newDT = dateTime.minusWeeks(weeks);
@@ -818,7 +817,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param days  the days to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the days subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> minusDays(long days) {
         ChronoDateTimeImpl<C> newDT = dateTime.minusDays(days);
@@ -832,7 +831,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param hours  the hours to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the hours subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> minusHours(long hours) {
         ChronoDateTimeImpl<C> newDT = dateTime.minusHours(hours);
@@ -846,7 +845,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param minutes  the minutes to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the minutes subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> minusMinutes(long minutes) {
         ChronoDateTimeImpl<C> newDT = dateTime.minusMinutes(minutes);
@@ -860,7 +859,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param seconds  the seconds to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the seconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> minusSeconds(long seconds) {
         ChronoDateTimeImpl<C> newDT = dateTime.minusSeconds(seconds);
@@ -874,7 +873,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      *
      * @param nanos  the nanos to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the nanoseconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> minusNanos(long nanos) {
         ChronoDateTimeImpl<C> newDT = dateTime.minusNanos(nanos);
@@ -949,7 +948,7 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
      * @param zone  the time-zone to use, not null
      * @param resolver  the zone resolver to use for gaps and overlaps, not null
      * @return the zoned date-time formed from this date and the earliest valid time for the zone, not null
-     * @throws DateTimeException if the date-time cannot be resolved
+     * @throws IllegalArgumentException if the date-time cannot be resolved
      */
     @Override
     public ChronoZonedDateTime<C> atZoneSimilarLocal(ZoneId zone, ZoneResolver resolver) {
@@ -972,14 +971,14 @@ class ChronoOffsetDateTimeImpl<C extends Chrono<C>>
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof ChronoOffsetDateTime == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
 //        ChronoOffsetDateTime<?> end = (ChronoOffsetDateTime<?>) endDateTime;
         if (unit instanceof ChronoUnit) {
 //            ChronoUnit f = (ChronoUnit) unit;
 //            long until = dateTime.periodUntil(end.getDateTime(), unit);
             // NYI Adjust for offsets
-            throw new DateTimeException("nyi: ChronoOffsetDateTime.periodUntil");
+            throw new IllegalArgumentException("nyi: ChronoOffsetDateTime.periodUntil");
         }
         return unit.between(this, endDateTime).getAmount();
     }

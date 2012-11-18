@@ -35,7 +35,6 @@ import static javax.time.calendrical.ChronoField.EPOCH_DAY;
 import static javax.time.calendrical.ChronoUnit.DAYS;
 import static javax.time.calendrical.ChronoUnit.FOREVER;
 
-import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.jdk8.Jdk8Methods;
 
@@ -65,7 +64,7 @@ public enum JulianDayField implements DateTimeField {
      * When 'JULIAN_DAY.doSet()' is applied to a date-time, the time of day portion remains unaltered.
      * 'JULIAN_DAY.doSet()' and 'JULIAN_DAY.doGet()' only apply to {@code DateTimeAccessor} objects that
      * can be converted into {@link ChronoField#EPOCH_DAY}.
-     * A {@link DateTimeException} is thrown for any other type of object.
+     * A {@link IllegalArgumentException} is thrown for any other type of object.
      * <p>
      * <h4>Astronomical and Scientific Notes</h4>
      * The standard astronomical definition uses a fraction to indicate the time-of-day,
@@ -106,7 +105,7 @@ public enum JulianDayField implements DateTimeField {
      * When 'MODIFIED_JULIAN_DAY.doSet()' is applied to a date-time, the time of day portion remains unaltered.
      * 'MODIFIED_JULIAN_DAY.doSet()' and 'MODIFIED_JULIAN_DAY.doGet()' only apply to {@code DateTimeAccessor} objects
      * that can be converted into {@link ChronoField#EPOCH_DAY}.
-     * A {@link DateTimeException} is thrown for any other type of object.
+     * A {@link IllegalArgumentException} is thrown for any other type of object.
      * <p>
      * This implementation is an integer version of MJD with the decimal part rounded to floor.
      * <p>
@@ -139,7 +138,7 @@ public enum JulianDayField implements DateTimeField {
      * When 'RATA_DIE.doSet()' is applied to a date-time, the time of day portion remains unaltered.
      * 'MODIFIED_JULIAN_DAY.doSet()' and 'RATA_DIE.doGet()' only apply to {@code DateTimeAccessor} objects
      * that can be converted into {@link ChronoField#EPOCH_DAY}.
-     * A {@link DateTimeException} is thrown for any other type of object.
+     * A {@link IllegalArgumentException} is thrown for any other type of object.
      */
     RATA_DIE("RataDie", DAYS, FOREVER, 719163L),
     // lots of others Truncated,Lilian, ANSI COBOL (also dotnet related), Excel?
@@ -193,7 +192,7 @@ public enum JulianDayField implements DateTimeField {
      *
      * @param value  the value
      * @return the date, not null
-     * @throws DateTimeException if the value exceeds the supported date range
+     * @throws IllegalArgumentException if the value exceeds the supported date range
      */
     public LocalDate createDate(long value) {
         return doSet(LocalDate.MIN_DATE, value);
@@ -208,7 +207,7 @@ public enum JulianDayField implements DateTimeField {
     @Override
     public DateTimeValueRange doRange(DateTimeAccessor dateTime) {
         if (doIsSupported(dateTime) == false) {
-            throw new DateTimeException("Unsupported field: " + this);
+            throw new IllegalArgumentException("Unsupported field: " + this);
         }
         return range();
     }
@@ -221,7 +220,7 @@ public enum JulianDayField implements DateTimeField {
     @Override
     public <R extends DateTimeAccessor> R doSet(R dateTime, long newValue) {
         if (range().isValidValue(newValue) == false) {
-            throw new DateTimeException("Invalid value: " + name + " " + newValue);
+            throw new IllegalArgumentException("Invalid value: " + name + " " + newValue);
         }
         return (R) dateTime.with(EPOCH_DAY, Jdk8Methods.safeSubtract(newValue, offset));
     }

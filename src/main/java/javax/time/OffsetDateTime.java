@@ -139,8 +139,8 @@ public final class OffsetDateTime
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @param offset  the zone offset, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public static OffsetDateTime of(
             int year, Month month, int dayOfMonth,
@@ -164,8 +164,8 @@ public final class OffsetDateTime
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param offset  the zone offset, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public static OffsetDateTime of(
             int year, Month month, int dayOfMonth,
@@ -189,8 +189,8 @@ public final class OffsetDateTime
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @param offset  the zone offset, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public static OffsetDateTime of(
             int year, Month month, int dayOfMonth,
@@ -214,8 +214,8 @@ public final class OffsetDateTime
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @param offset  the zone offset, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public static OffsetDateTime of(
             int year, int month, int dayOfMonth,
@@ -239,8 +239,8 @@ public final class OffsetDateTime
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param offset  the zone offset, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public static OffsetDateTime of(
             int year, int month, int dayOfMonth,
@@ -264,8 +264,8 @@ public final class OffsetDateTime
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @param offset  the zone offset, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public static OffsetDateTime of(
             int year, int month, int dayOfMonth,
@@ -321,7 +321,7 @@ public final class OffsetDateTime
      *
      * @param instant  the instant to create a date-time from, not null
      * @return the offset date-time in UTC, not null
-     * @throws DateTimeException if the instant exceeds the supported date range
+     * @throws IllegalArgumentException if the instant exceeds the supported date range
      */
     public static OffsetDateTime ofInstantUTC(Instant instant) {
         return ofInstant(instant, ZoneOffset.UTC);
@@ -336,7 +336,7 @@ public final class OffsetDateTime
      * @param instant  the instant to create the date-time from, not null
      * @param offset  the zone offset to use, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if the instant exceeds the supported date range
+     * @throws IllegalArgumentException if the instant exceeds the supported date range
      */
     public static OffsetDateTime ofInstant(Instant instant, ZoneOffset offset) {
         Objects.requireNonNull(instant, "instant");
@@ -353,7 +353,7 @@ public final class OffsetDateTime
      * @param instant  the instant to create the date-time from, not null
      * @param zone  the time-zone to use, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if the instant exceeds the supported date range
+     * @throws IllegalArgumentException if the instant exceeds the supported date range
      */
     public static OffsetDateTime ofInstant(Instant instant, ZoneId zone) {
         Objects.requireNonNull(instant, "instant");
@@ -370,7 +370,7 @@ public final class OffsetDateTime
      *
      * @param epochSecond  the number of seconds from the epoch of 1970-01-01T00:00:00Z
      * @return the offset date-time, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public static OffsetDateTime ofEpochSecond(long epochSecond, ZoneOffset offset) {
         Objects.requireNonNull(offset, "offset");
@@ -384,7 +384,7 @@ public final class OffsetDateTime
      * @param epochSecond  the number of seconds from the epoch of 1970-01-01T00:00:00Z
      * @param nanoOfSecond  the nanosecond within the second, from 0 to 999,999,999
      * @return the offset date-time, not null
-     * @throws DateTimeException if the instant exceeds the supported date range
+     * @throws IllegalArgumentException if the instant exceeds the supported date range
      */
     static OffsetDateTime create(long epochSecond, int nanoOfSecond, ZoneOffset offset) {
         long localSeconds = epochSecond + offset.getTotalSeconds();  // overflow caught later
@@ -401,7 +401,7 @@ public final class OffsetDateTime
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the offset date-time, not null
-     * @throws DateTimeException if unable to convert to an {@code OffsetDateTime}
+     * @throws IllegalArgumentException if unable to convert to an {@code OffsetDateTime}
      */
     public static OffsetDateTime from(DateTimeAccessor dateTime) {
         if (dateTime instanceof OffsetDateTime) {
@@ -412,12 +412,12 @@ public final class OffsetDateTime
             try {
                 LocalDateTime ldt = LocalDateTime.from(dateTime);
                 return of(ldt, offset);
-            } catch (DateTimeException ignore) {
+            } catch (IllegalArgumentException ignore) {
                 Instant instant = Instant.from(dateTime);
                 return OffsetDateTime.ofInstant(instant, offset);
             }
-        } catch (DateTimeException ex) {
-            throw new DateTimeException("Unable to convert date-time to OffsetDateTime: " + dateTime.getClass(), ex);
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Unable to convert date-time to OffsetDateTime: " + dateTime.getClass(), ex);
         }
     }
 
@@ -536,7 +536,7 @@ public final class OffsetDateTime
      *
      * @param offset  the zone offset to change to, not null
      * @return an {@code OffsetDateTime} based on this date-time with the requested offset, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     @Override
     public OffsetDateTime withOffsetSameInstant(ZoneOffset offset) {
@@ -731,7 +731,7 @@ public final class OffsetDateTime
      *
      * @param adjuster the adjuster to use, not null
      * @return an {@code OffsetDateTime} based on this date-time with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     @Override
     public OffsetDateTime with(WithAdjuster adjuster) {
@@ -762,7 +762,7 @@ public final class OffsetDateTime
      * @param field  the field to set in the returned date-time, not null
      * @param newValue  the new value of the field in the returned date-time, not null
      * @return an {@code OffsetDateTime} based on this date-time with the specified field set, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
      */
     @Override
     public OffsetDateTime with(DateTimeField field, long newValue) {
@@ -789,7 +789,7 @@ public final class OffsetDateTime
      *
      * @param year  the year to set in the returned date, from MIN_YEAR to MAX_YEAR
      * @return an {@code OffsetDateTime} based on this date-time with the requested year, not null
-     * @throws DateTimeException if the year value is invalid
+     * @throws IllegalArgumentException if the year value is invalid
      */
     public OffsetDateTime withYear(int year) {
         return with(dateTime.withYear(year), offset);
@@ -804,7 +804,7 @@ public final class OffsetDateTime
      *
      * @param month  the month-of-year to set in the returned date, from 1 (January) to 12 (December)
      * @return an {@code OffsetDateTime} based on this date-time with the requested month, not null
-     * @throws DateTimeException if the month-of-year value is invalid
+     * @throws IllegalArgumentException if the month-of-year value is invalid
      */
     public OffsetDateTime withMonth(int month) {
         return with(dateTime.withMonth(month), offset);
@@ -819,8 +819,8 @@ public final class OffsetDateTime
      *
      * @param dayOfMonth  the day-of-month to set in the returned date, from 1 to 28-31
      * @return an {@code OffsetDateTime} based on this date-time with the requested day, not null
-     * @throws DateTimeException if the day-of-month value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the day-of-month value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public OffsetDateTime withDayOfMonth(int dayOfMonth) {
         return with(dateTime.withDayOfMonth(dayOfMonth), offset);
@@ -834,8 +834,8 @@ public final class OffsetDateTime
      *
      * @param dayOfYear  the day-of-year to set in the returned date, from 1 to 365-366
      * @return an {@code OffsetDateTime} based on this date with the requested day, not null
-     * @throws DateTimeException if the day-of-year value is invalid
-     * @throws DateTimeException if the day-of-year is invalid for the year
+     * @throws IllegalArgumentException if the day-of-year value is invalid
+     * @throws IllegalArgumentException if the day-of-year is invalid for the year
      */
     public OffsetDateTime withDayOfYear(int dayOfYear) {
         return with(dateTime.withDayOfYear(dayOfYear), offset);
@@ -854,8 +854,8 @@ public final class OffsetDateTime
      * @param month  the month-of-year to represent, not null
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return an {@code OffsetDateTime} based on this date-time with the requested date, not null
-     * @throws DateTimeException if any field value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if any field value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
       public OffsetDateTime withDate(int year, Month month, int dayOfMonth) {
           return with(dateTime.withDate(year, month, dayOfMonth), offset);
@@ -873,8 +873,8 @@ public final class OffsetDateTime
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return an {@code OffsetDateTime} based on this date-time with the requested date, not null
-     * @throws DateTimeException if any field value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if any field value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public OffsetDateTime withDate(int year, int month, int dayOfMonth) {
         return with(dateTime.withDate(year, month, dayOfMonth), offset);
@@ -888,7 +888,7 @@ public final class OffsetDateTime
      *
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @return an {@code OffsetDateTime} based on this date-time with the requested hour, not null
-     * @throws DateTimeException if the hour value is invalid
+     * @throws IllegalArgumentException if the hour value is invalid
      */
     public OffsetDateTime withHour(int hour) {
         LocalDateTime newDT = dateTime.withHour(hour);
@@ -902,7 +902,7 @@ public final class OffsetDateTime
      *
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return an {@code OffsetDateTime} based on this date-time with the requested minute, not null
-     * @throws DateTimeException if the minute value is invalid
+     * @throws IllegalArgumentException if the minute value is invalid
      */
     public OffsetDateTime withMinute(int minute) {
         LocalDateTime newDT = dateTime.withMinute(minute);
@@ -916,7 +916,7 @@ public final class OffsetDateTime
      *
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return an {@code OffsetDateTime} based on this date-time with the requested second, not null
-     * @throws DateTimeException if the second value is invalid
+     * @throws IllegalArgumentException if the second value is invalid
      */
     public OffsetDateTime withSecond(int second) {
         LocalDateTime newDT = dateTime.withSecond(second);
@@ -930,7 +930,7 @@ public final class OffsetDateTime
      *
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return an {@code OffsetDateTime} based on this date-time with the requested nanosecond, not null
-     * @throws DateTimeException if the nanos value is invalid
+     * @throws IllegalArgumentException if the nanos value is invalid
      */
     public OffsetDateTime withNano(int nanoOfSecond) {
         LocalDateTime newDT = dateTime.withNano(nanoOfSecond);
@@ -950,7 +950,7 @@ public final class OffsetDateTime
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return an {@code OffsetDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     public OffsetDateTime withTime(int hour, int minute) {
         LocalDateTime newDT = dateTime.withTime(hour, minute);
@@ -971,7 +971,7 @@ public final class OffsetDateTime
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return an {@code OffsetDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     public OffsetDateTime withTime(int hour, int minute, int second) {
         LocalDateTime newDT = dateTime.withTime(hour, minute, second);
@@ -988,7 +988,7 @@ public final class OffsetDateTime
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return an {@code OffsetDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     public OffsetDateTime withTime(int hour, int minute, int second, int nanoOfSecond) {
         LocalDateTime newDT = dateTime.withTime(hour, minute, second, nanoOfSecond);
@@ -1010,7 +1010,7 @@ public final class OffsetDateTime
      *
      * @param adjuster  the adjuster to use, not null
      * @return an {@code OffsetDateTime} based on this date-time with the addition made, not null
-     * @throws DateTimeException if the addition cannot be made
+     * @throws IllegalArgumentException if the addition cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -1032,7 +1032,7 @@ public final class OffsetDateTime
      * @param amountToAdd  the amount of the unit to add to the returned date-time, not null
      * @param unit  the unit of the period to add, not null
      * @return an {@code OffsetDateTime} based on this date-time with the specified period added, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     @Override
     public OffsetDateTime plus(long amountToAdd, PeriodUnit unit) {
@@ -1061,7 +1061,7 @@ public final class OffsetDateTime
      *
      * @param years  the years to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime plusYears(long years) {
         LocalDateTime newDT = dateTime.plusYears(years);
@@ -1086,7 +1086,7 @@ public final class OffsetDateTime
      *
      * @param months  the months to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the months added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime plusMonths(long months) {
         LocalDateTime newDT = dateTime.plusMonths(months);
@@ -1106,7 +1106,7 @@ public final class OffsetDateTime
      *
      * @param weeks  the weeks to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the weeks added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime plusWeeks(long weeks) {
         LocalDateTime newDT = dateTime.plusWeeks(weeks);
@@ -1126,7 +1126,7 @@ public final class OffsetDateTime
      *
      * @param days  the days to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the days added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime plusDays(long days) {
         LocalDateTime newDT = dateTime.plusDays(days);
@@ -1140,7 +1140,7 @@ public final class OffsetDateTime
      *
      * @param hours  the hours to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the hours added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime plusHours(long hours) {
         LocalDateTime newDT = dateTime.plusHours(hours);
@@ -1154,7 +1154,7 @@ public final class OffsetDateTime
      *
      * @param minutes  the minutes to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the minutes added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime plusMinutes(long minutes) {
         LocalDateTime newDT = dateTime.plusMinutes(minutes);
@@ -1168,7 +1168,7 @@ public final class OffsetDateTime
      *
      * @param seconds  the seconds to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the seconds added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime plusSeconds(long seconds) {
         LocalDateTime newDT = dateTime.plusSeconds(seconds);
@@ -1182,7 +1182,7 @@ public final class OffsetDateTime
      *
      * @param nanos  the nanos to add, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the nanoseconds added, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     public OffsetDateTime plusNanos(long nanos) {
         LocalDateTime newDT = dateTime.plusNanos(nanos);
@@ -1204,7 +1204,7 @@ public final class OffsetDateTime
      *
      * @param adjuster  the adjuster to use, not null
      * @return an {@code OffsetDateTime} based on this date-time with the subtraction made, not null
-     * @throws DateTimeException if the subtraction cannot be made
+     * @throws IllegalArgumentException if the subtraction cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -1251,7 +1251,7 @@ public final class OffsetDateTime
      *
      * @param years  the years to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the years subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime minusYears(long years) {
         LocalDateTime newDT = dateTime.minusYears(years);
@@ -1276,7 +1276,7 @@ public final class OffsetDateTime
      *
      * @param months  the months to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the months subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime minusMonths(long months) {
         LocalDateTime newDT = dateTime.minusMonths(months);
@@ -1296,7 +1296,7 @@ public final class OffsetDateTime
      *
      * @param weeks  the weeks to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the weeks subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime minusWeeks(long weeks) {
         LocalDateTime newDT = dateTime.minusWeeks(weeks);
@@ -1316,7 +1316,7 @@ public final class OffsetDateTime
      *
      * @param days  the days to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the days subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime minusDays(long days) {
         LocalDateTime newDT = dateTime.minusDays(days);
@@ -1330,7 +1330,7 @@ public final class OffsetDateTime
      *
      * @param hours  the hours to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the hours subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime minusHours(long hours) {
         LocalDateTime newDT = dateTime.minusHours(hours);
@@ -1344,7 +1344,7 @@ public final class OffsetDateTime
      *
      * @param minutes  the minutes to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the minutes subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime minusMinutes(long minutes) {
         LocalDateTime newDT = dateTime.minusMinutes(minutes);
@@ -1358,7 +1358,7 @@ public final class OffsetDateTime
      *
      * @param seconds  the seconds to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the seconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime minusSeconds(long seconds) {
         LocalDateTime newDT = dateTime.minusSeconds(seconds);
@@ -1372,7 +1372,7 @@ public final class OffsetDateTime
      *
      * @param nanos  the nanos to subtract, may be negative
      * @return an {@code OffsetDateTime} based on this date-time with the nanoseconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public OffsetDateTime minusNanos(long nanos) {
         LocalDateTime newDT = dateTime.minusNanos(nanos);
@@ -1472,7 +1472,7 @@ public final class OffsetDateTime
      * @param zone  the time-zone to use, not null
      * @param resolver  the zone resolver to use for gaps and overlaps, not null
      * @return the zoned date-time formed from this date and the earliest valid time for the zone, not null
-     * @throws DateTimeException if the date-time cannot be resolved
+     * @throws IllegalArgumentException if the date-time cannot be resolved
      */
     @Override
     public ZonedDateTime atZoneSimilarLocal(ZoneId zone, ZoneResolver resolver) {
@@ -1483,7 +1483,7 @@ public final class OffsetDateTime
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof OffsetDateTime == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         if (unit instanceof ChronoUnit) {
             OffsetDateTime end = (OffsetDateTime) endDateTime;

@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import javax.time.DateTimeException;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTimeAccessor;
 import javax.time.calendrical.DateTimeValueRange;
@@ -268,7 +267,7 @@ public final class HijrahChrono extends Chrono<HijrahChrono> implements Serializ
     @Override
     public int prolepticYear(Era<HijrahChrono> era, int yearOfEra) {
         if (era instanceof HijrahEra == false) {
-            throw new DateTimeException("Era must be HijrahEra");
+            throw new IllegalArgumentException("Era must be HijrahEra");
         }
         return (era == HijrahEra.AH ? yearOfEra : 1 - yearOfEra);
     }
@@ -281,7 +280,7 @@ public final class HijrahChrono extends Chrono<HijrahChrono> implements Serializ
             case 1:
                 return HijrahEra.AH;
             default:
-                throw new DateTimeException("invalid Hijrah era");
+                throw new IllegalArgumentException("invalid Hijrah era");
         }
     }
 

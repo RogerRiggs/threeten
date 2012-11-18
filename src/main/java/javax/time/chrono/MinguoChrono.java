@@ -39,7 +39,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTimeAccessor;
@@ -182,7 +181,7 @@ public final class MinguoChrono extends Chrono<MinguoChrono> implements Serializ
     @Override
     public int prolepticYear(Era<MinguoChrono> era, int yearOfEra) {
         if (era instanceof MinguoEra == false) {
-            throw new DateTimeException("Era must be MinguoEra");
+            throw new IllegalArgumentException("Era must be MinguoEra");
         }
         return (era == MinguoEra.ROC ? yearOfEra : 1 - yearOfEra);
     }

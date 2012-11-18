@@ -33,7 +33,7 @@ package javax.time.chrono;
 
 import static org.testng.Assert.assertEquals;
 
-import javax.time.DateTimeException;
+
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.calendrical.DateTimeAdjusters;
@@ -114,7 +114,7 @@ public class TestJapaneseChrono {
         };
     }
 
-    @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=DateTimeException.class)
+    @Test(dataProvider="badDates", groups={"tck"}, expectedExceptions=IllegalArgumentException.class)
     public void test_badDates(int year, int month, int dom) {
         JapaneseChrono.INSTANCE.date(year, month, dom);
     }
@@ -146,7 +146,7 @@ public class TestJapaneseChrono {
         assertEquals(test, JapaneseChrono.INSTANCE.date(2012, 7, 6));
     }
 
-//    @Test(groups={"tck"}, expectedExceptions=DateTimeException.class)
+//    @Test(groups={"tck"}, expectedExceptions=IllegalArgumentException.class)
 //    public void test_adjust_toMonth() {
 //        ChronoLocalDate jdate = JapaneseChrono.INSTANCE.date(1726, 1, 4);
 //        jdate.with(Month.APRIL);

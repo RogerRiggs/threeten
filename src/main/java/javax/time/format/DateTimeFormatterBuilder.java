@@ -54,7 +54,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.time.DateTimeException;
 import javax.time.Instant;
 import javax.time.OffsetDateTime;
 import javax.time.ZoneId;
@@ -1042,7 +1041,7 @@ public final class DateTimeFormatterBuilder {
         case MINUTE_OF_HOUR:
             return ChronoField.SECOND_OF_MINUTE;
         default:
-            throw new DateTimeException(field + " is an invalid field to have a duplicate of");
+            throw new IllegalArgumentException(field + " is an invalid field to have a duplicate of");
         }
     }
 
@@ -1988,7 +1987,7 @@ public final class DateTimeFormatterBuilder {
             this.baseValue = baseValue;
             this.range = EXCEED_POINTS[width];
             if ((((long) baseValue) + range) > Integer.MAX_VALUE) {
-                throw new DateTimeException("Unable to add printer-parser as the range exceeds the capacity of an int");
+                throw new IllegalArgumentException("Unable to add printer-parser as the range exceeds the capacity of an int");
             }
         }
 
@@ -2127,12 +2126,12 @@ public final class DateTimeFormatterBuilder {
          *
          * @param value  the value to convert, must be valid for this rule
          * @return the value as a fraction within the range, from 0 to 1, not null
-         * @throws DateTimeException if the value cannot be converted to a fraction
+         * @throws IllegalArgumentException if the value cannot be converted to a fraction
          */
         private BigDecimal convertToFraction(long value) {
             DateTimeValueRange range = field.range();
             if (range.isFixed() == false) {
-                throw new DateTimeException("Unable to obtain fraction as field range is not fixed: " + field.getName());
+                throw new IllegalArgumentException("Unable to obtain fraction as field range is not fixed: " + field.getName());
             }
             range.checkValidValue(value, field);
             BigDecimal minBD = BigDecimal.valueOf(range.getMinimum());
@@ -2157,12 +2156,12 @@ public final class DateTimeFormatterBuilder {
          *
          * @param fraction  the fraction to convert, not null
          * @return the value of the field, valid for this rule
-         * @throws DateTimeException if the value cannot be converted
+         * @throws IllegalArgumentException if the value cannot be converted
          */
         private long convertFromFraction(BigDecimal fraction) {
             DateTimeValueRange range = field.range();
             if (range.isFixed() == false) {
-                throw new DateTimeException("Unable to obtain fraction as field range is not fixed: " + field.getName());
+                throw new IllegalArgumentException("Unable to obtain fraction as field range is not fixed: " + field.getName());
             }
             BigDecimal minBD = BigDecimal.valueOf(range.getMinimum());
             BigDecimal rangeBD = BigDecimal.valueOf(range.getMaximum()).subtract(minBD).add(BigDecimal.ONE);

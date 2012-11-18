@@ -392,7 +392,7 @@ public class TCKZoneOffset extends AbstractDateTimeTest {
         assertEquals(ZoneOffset.from(OffsetDateTime.of(2007, 7, 15, 17, 30, 0, 0, ZoneOffset.ofHours(2))), ZoneOffset.ofHours(2));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         ZoneOffset.from(LocalTime.of(12, 30));
     }
@@ -444,7 +444,7 @@ public class TCKZoneOffset extends AbstractDateTimeTest {
         assertEquals(ZoneOffset.ofHoursMinutesSeconds(0, 1, 5).getLong(OFFSET_SECONDS), 65);
     }
 
-    @Test(dataProvider="invalidFields", expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(dataProvider="invalidFields", expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_invalidField(DateTimeField field) {
         ZoneOffset.UTC.getLong(field);
     }
@@ -469,7 +469,7 @@ public class TCKZoneOffset extends AbstractDateTimeTest {
         ZoneOffset.UTC.with((DateTimeField) null, 0);
     }
 
-    @Test(dataProvider="invalidFields", expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(dataProvider="invalidFields", expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_with_DateTimeField_invalidField(DateTimeField field) {
         ZoneOffset.UTC.with(field, 0);
     }

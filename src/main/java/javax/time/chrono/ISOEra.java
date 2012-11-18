@@ -35,7 +35,6 @@ import static javax.time.calendrical.ChronoField.ERA;
 
 import java.util.Locale;
 
-import javax.time.DateTimeException;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTime;
 import javax.time.calendrical.DateTimeField;
@@ -82,7 +81,7 @@ enum ISOEra implements Era<ISOChrono> {
      *
      * @param era  the BCE/CE value to represent, from 0 (BCE) to 1 (CE)
      * @return the era singleton, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
      */
     public static ISOEra of(int era) {
         switch (era) {
@@ -91,7 +90,7 @@ enum ISOEra implements Era<ISOChrono> {
             case 1:
                 return CE;
             default:
-                throw new DateTimeException("Invalid era: " + era);
+                throw new IllegalArgumentException("Invalid era: " + era);
         }
     }
 
@@ -139,7 +138,7 @@ enum ISOEra implements Era<ISOChrono> {
         if (field == ERA) {
             return field.range();
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }
@@ -157,7 +156,7 @@ enum ISOEra implements Era<ISOChrono> {
         if (field == ERA) {
             return getValue();
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -168,7 +167,7 @@ enum ISOEra implements Era<ISOChrono> {
             int eravalue = ((ChronoField) field).checkValidIntValue(newValue);
             return getChrono().eraOf(eravalue);
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }

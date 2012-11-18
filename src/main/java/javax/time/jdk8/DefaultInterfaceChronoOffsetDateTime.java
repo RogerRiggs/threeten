@@ -39,7 +39,6 @@ import static javax.time.calendrical.ChronoField.OFFSET_SECONDS;
 
 import java.util.Objects;
 
-import javax.time.DateTimeException;
 import javax.time.Instant;
 import javax.time.LocalTime;
 import javax.time.calendrical.ChronoField;
@@ -77,7 +76,7 @@ public abstract class DefaultInterfaceChronoOffsetDateTime<C extends Chrono<C>>
     public int get(DateTimeField field) {
         if (field instanceof ChronoField) {
             switch ((ChronoField) field) {
-                case INSTANT_SECONDS: throw new DateTimeException("Field too large for an int: " + field);
+                case INSTANT_SECONDS: throw new IllegalArgumentException("Field too large for an int: " + field);
                 case OFFSET_SECONDS: return getOffset().getTotalSeconds();
             }
             return getDateTime().get(field);

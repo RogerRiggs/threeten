@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.time.DateTimeException;
+
 import javax.time.LocalDate;
 import javax.time.LocalTime;
 import javax.time.OffsetDate;
@@ -107,7 +107,7 @@ public class TCKDateTimeFormatter {
         assertEquals(result, "ONE30");
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_print_Calendrical_noSuchField() throws Exception {
         DateTimeFormatter test = new DateTimeFormatter(compPP, Locale.ENGLISH, DateTimeFormatSymbols.STANDARD);
         test.print(LocalTime.of(11, 30));
@@ -128,7 +128,7 @@ public class TCKDateTimeFormatter {
         assertEquals(buf.toString(), "ONE30");
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_print_CalendricalAppendable_noSuchField() throws Exception {
         DateTimeFormatter test = new DateTimeFormatter(compPP, Locale.ENGLISH, DateTimeFormatSymbols.STANDARD);
         StringBuilder buf = new StringBuilder();

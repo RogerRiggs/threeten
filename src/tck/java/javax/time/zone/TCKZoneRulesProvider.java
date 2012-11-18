@@ -162,7 +162,7 @@ public class TCKZoneRulesProvider {
     }
 
     //-----------------------------------------------------------------------
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_registerProvider_invalidGroupId() {
         ZoneRulesProvider.registerProvider(new MockTempProviderInvalidGroupId());
     }

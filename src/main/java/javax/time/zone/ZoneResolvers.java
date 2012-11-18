@@ -33,7 +33,6 @@ package javax.time.zone;
 
 import java.util.Objects;
 
-import javax.time.DateTimeException;
 import javax.time.LocalDateTime;
 import javax.time.OffsetDateTime;
 import javax.time.ZoneId;
@@ -218,10 +217,10 @@ public final class ZoneResolvers {
             @Override
             public OffsetDateTime resolve(LocalDateTime desiredLocalDateTime, ZoneOffsetTransition transition, ZoneRules rules, ZoneId zone, OffsetDateTime oldDateTime) {
                 if (transition.isGap()) {
-                    throw new DateTimeException("Local date-time " + desiredLocalDateTime + " does not exist in time-zone " +
+                    throw new IllegalArgumentException("Local date-time " + desiredLocalDateTime + " does not exist in time-zone " +
                             zone + " due to a gap in the local time-line");
                 } else {  // overlap
-                    throw new DateTimeException("Local date-time " + desiredLocalDateTime +
+                    throw new IllegalArgumentException("Local date-time " + desiredLocalDateTime +
                             " has two matching offsets, " + transition.getOffsetBefore() +
                             " and " + transition.getOffsetAfter() + ", in time-zone " + zone);
                 }

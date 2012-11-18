@@ -37,7 +37,6 @@ import static javax.time.chrono.ThaiBuddhistChrono.YEARS_DIFFERENCE;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTimeAccessor;
@@ -107,7 +106,7 @@ final class ThaiBuddhistDate
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the Thai Buddhist date, not null
-     * @throws DateTimeException if unable to convert to a {@code LocalDate}
+     * @throws IllegalArgumentException if unable to convert to a {@code LocalDate}
      */
     public static ThaiBuddhistDate from(DateTimeAccessor dateTime) {
         if (dateTime instanceof ThaiBuddhistDate) {
@@ -124,7 +123,7 @@ final class ThaiBuddhistDate
      *
      * @param epochDay  the Epoch Day to convert, based on the epoch 1970-01-01
      * @return the Thai Buddhist date, not null
-     * @throws DateTimeException if the epoch days exceeds the supported date range
+     * @throws IllegalArgumentException if the epoch days exceeds the supported date range
      */
     public static ThaiBuddhistDate ofEpochDay(long epochDay) {
         return new ThaiBuddhistDate(LocalDate.ofEpochDay(epochDay));
@@ -171,7 +170,7 @@ final class ThaiBuddhistDate
                 }
                 return getChrono().range(f);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }

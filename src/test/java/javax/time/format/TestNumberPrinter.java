@@ -36,7 +36,7 @@ import static javax.time.calendrical.ChronoField.HOUR_OF_DAY;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
-import javax.time.DateTimeException;
+
 import javax.time.LocalDate;
 import javax.time.calendrical.MockFieldValue;
 import javax.time.format.DateTimeFormatterBuilder.NumberPrinterParser;
@@ -51,7 +51,7 @@ import org.testng.annotations.Test;
 public class TestNumberPrinter extends AbstractTestPrinterParser {
 
     //-----------------------------------------------------------------------
-    @Test(expectedExceptions=DateTimeException.class)
+    @Test(expectedExceptions=IllegalArgumentException.class)
     public void test_print_emptyCalendrical() throws Exception {
         NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER);
         pp.print(printEmptyContext, buf);

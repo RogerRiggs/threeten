@@ -185,8 +185,8 @@ public interface ChronoZonedDateTime<C extends Chrono<C>>
      * This instance is immutable and unaffected by this method call.
      *
      * @return a {@code ZoneChronoDateTime} based on this date-time with the later offset, not null
-     * @throws DateTimeException if no rules can be found for the zone
-     * @throws DateTimeException if no rules are valid for this date-time
+     * @throws IllegalArgumentException if no rules can be found for the zone
+     * @throws IllegalArgumentException if no rules are valid for this date-time
      */
     ChronoZonedDateTime<C> withLaterOffsetAtOverlap();
 
@@ -243,7 +243,7 @@ public interface ChronoZonedDateTime<C extends Chrono<C>>
      *
      * @param zone  the time-zone to change to, not null
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested zone, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoZonedDateTime<C> withZoneSameInstant(ZoneId zone);
 
@@ -274,7 +274,7 @@ public interface ChronoZonedDateTime<C extends Chrono<C>>
      * @param adjuster the adjuster to use, not null
      * @param resolver  the resolver to use, not null
      * @return a {@code ZoneChronoDateTime} based on this date-time with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     ChronoZonedDateTime<C> with(WithAdjuster adjuster, ZoneResolver resolver);
 
@@ -415,7 +415,7 @@ public interface ChronoZonedDateTime<C extends Chrono<C>>
      *
      * @param formatter  the formatter to use, not null
      * @return the formatted date-time string, not null
-     * @throws DateTimeException if an error occurs during printing
+     * @throws IllegalArgumentException if an error occurs during printing
      */
     String toString(CalendricalFormatter formatter) ;
 

@@ -191,12 +191,12 @@ final class DateTimePrintContext {
      *
      * @param field  the field to find, not null
      * @return the value, null if not found and optional is true
-     * @throws DateTimeException if the field is not available and the section is not optional
+     * @throws IllegalArgumentException if the field is not available and the section is not optional
      */
     Long getValue(DateTimeField field) {
         try {
             return dateTime.getLong(field);
-        } catch (DateTimeException ex) {
+        } catch (IllegalArgumentException ex) {
             if (optional > 0) {
                 return null;
             }

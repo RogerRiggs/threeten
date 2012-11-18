@@ -35,7 +35,7 @@ import static javax.time.calendrical.ChronoField.YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
-import javax.time.DateTimeException;
+
 import javax.time.LocalDate;
 import javax.time.calendrical.MockFieldValue;
 import javax.time.format.DateTimeFormatterBuilder.ReducedPrinterParser;
@@ -50,7 +50,7 @@ import org.testng.annotations.Test;
 public class TestReducedPrinter extends AbstractTestPrinterParser {
 
     //-----------------------------------------------------------------------
-    @Test(expectedExceptions=DateTimeException.class)
+    @Test(expectedExceptions=IllegalArgumentException.class)
     public void test_print_emptyCalendrical() throws Exception {
         ReducedPrinterParser pp = new ReducedPrinterParser(YEAR, 2, 2010);
         pp.print(printEmptyContext, buf);

@@ -32,7 +32,6 @@
 package javax.time.chrono;
 
 import java.util.Comparator;
-import javax.time.DateTimeException;
 import javax.time.Instant;
 import javax.time.LocalTime;
 import javax.time.OffsetDateTime;
@@ -179,7 +178,7 @@ public interface ChronoOffsetDateTime<C extends Chrono<C>>
      *
      * @param offset  the zone offset to change to, not null
      * @return an offset date-time based on this date-time with the requested offset, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoOffsetDateTime<C> withOffsetSameInstant(ZoneOffset offset);
 
@@ -262,7 +261,7 @@ public interface ChronoOffsetDateTime<C extends Chrono<C>>
      * @param zone  the time-zone to use, not null
      * @param resolver  the zone resolver to use for gaps and overlaps, not null
      * @return the zoned date-time formed from this date and the earliest valid time for the zone, not null
-     * @throws DateTimeException if the date-time cannot be resolved
+     * @throws IllegalArgumentException if the date-time cannot be resolved
      */
     ChronoZonedDateTime<C> atZoneSimilarLocal(ZoneId zone, ZoneResolver resolver);
 
@@ -387,7 +386,7 @@ public interface ChronoOffsetDateTime<C extends Chrono<C>>
      *
      * @param formatter  the formatter to use, not null
      * @return the formatted date-time string, not null
-     * @throws DateTimeException if an error occurs during printing
+     * @throws IllegalArgumentException if an error occurs during printing
      */
     String toString(CalendricalFormatter formatter);
 

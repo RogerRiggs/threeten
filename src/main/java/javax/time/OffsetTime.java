@@ -131,7 +131,7 @@ public final class OffsetTime
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @param offset  the zone offset, not null
      * @return the offset time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public static OffsetTime of(int hour, int minute, ZoneOffset offset) {
         LocalTime time = LocalTime.of(hour, minute);
@@ -148,7 +148,7 @@ public final class OffsetTime
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param offset  the zone offset, not null
      * @return the offset time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public static OffsetTime of(int hour, int minute, int second, ZoneOffset offset) {
         LocalTime time = LocalTime.of(hour, minute, second);
@@ -164,7 +164,7 @@ public final class OffsetTime
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @param offset  the zone offset, not null
      * @return the offset time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public static OffsetTime of(int hour, int minute, int second, int nanoOfSecond, ZoneOffset offset) {
         LocalTime time = LocalTime.of(hour, minute, second, nanoOfSecond);
@@ -215,7 +215,7 @@ public final class OffsetTime
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the offset time, not null
-     * @throws DateTimeException if unable to convert to an {@code OffsetTime}
+     * @throws IllegalArgumentException if unable to convert to an {@code OffsetTime}
      */
     public static OffsetTime from(DateTimeAccessor dateTime) {
         if (dateTime instanceof OffsetTime) {
@@ -424,7 +424,7 @@ public final class OffsetTime
      *
      * @param adjuster the adjuster to use, not null
      * @return an {@code OffsetTime} based on this time with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     public OffsetTime with(WithAdjuster adjuster) {
         if (adjuster instanceof LocalTime) {
@@ -449,7 +449,7 @@ public final class OffsetTime
      * @param field  the field to set in the returned time, not null
      * @param newValue  the new value of the field in the returned time, not null
      * @return an {@code OffsetTime} based on this time with the specified field set, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
      */
     public OffsetTime with(DateTimeField field, long newValue) {
         if (field instanceof ChronoField) {
@@ -470,7 +470,7 @@ public final class OffsetTime
      *
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @return an {@code OffsetTime} based on this time with the requested hour, not null
-     * @throws DateTimeException if the hour value is invalid
+     * @throws IllegalArgumentException if the hour value is invalid
      */
     public OffsetTime withHour(int hour) {
         return with(time.withHour(hour), offset);
@@ -483,7 +483,7 @@ public final class OffsetTime
      *
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return an {@code OffsetTime} based on this time with the requested minute, not null
-     * @throws DateTimeException if the minute value is invalid
+     * @throws IllegalArgumentException if the minute value is invalid
      */
     public OffsetTime withMinute(int minute) {
         return with(time.withMinute(minute), offset);
@@ -496,7 +496,7 @@ public final class OffsetTime
      *
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return an {@code OffsetTime} based on this time with the requested second, not null
-     * @throws DateTimeException if the second value is invalid
+     * @throws IllegalArgumentException if the second value is invalid
      */
     public OffsetTime withSecond(int second) {
         return with(time.withSecond(second), offset);
@@ -509,7 +509,7 @@ public final class OffsetTime
      *
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return an {@code OffsetTime} based on this time with the requested nanosecond, not null
-     * @throws DateTimeException if the nanos value is invalid
+     * @throws IllegalArgumentException if the nanos value is invalid
      */
     public OffsetTime withNano(int nanoOfSecond) {
         return with(time.withNano(nanoOfSecond), offset);
@@ -530,7 +530,7 @@ public final class OffsetTime
      *
      * @param adjuster  the adjuster to use, not null
      * @return an {@code OffsetTime} based on this time with the addition made, not null
-     * @throws DateTimeException if the addition cannot be made
+     * @throws IllegalArgumentException if the addition cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     public OffsetTime plus(PlusAdjuster adjuster) {
@@ -551,7 +551,7 @@ public final class OffsetTime
      * @param amountToAdd  the amount of the unit to add to the returned time, not null
      * @param unit  the unit of the period to add, not null
      * @return an {@code OffsetTime} based on this time with the specified period added, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     public OffsetTime plus(long amountToAdd, PeriodUnit unit) {
         if (unit instanceof ChronoUnit) {
@@ -636,7 +636,7 @@ public final class OffsetTime
      *
      * @param adjuster  the adjuster to use, not null
      * @return an {@code OffsetTime} based on this time with the subtraction made, not null
-     * @throws DateTimeException if the subtraction cannot be made
+     * @throws IllegalArgumentException if the subtraction cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     public OffsetTime minus(MinusAdjuster adjuster) {
@@ -657,7 +657,7 @@ public final class OffsetTime
      * @param amountToSubtract  the amount of the unit to subtract from the returned time, not null
      * @param unit  the unit of the period to subtract, not null
      * @return an {@code OffsetTime} based on this time with the specified period subtracted, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     public OffsetTime minus(long amountToSubtract, PeriodUnit unit) {
         return (amountToSubtract == Long.MIN_VALUE ? plus(Long.MAX_VALUE, unit).plus(1, unit) : plus(-amountToSubtract, unit));
@@ -735,7 +735,7 @@ public final class OffsetTime
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof OffsetTime == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         if (unit instanceof ChronoUnit) {
             OffsetTime end = (OffsetTime) endDateTime;
@@ -749,7 +749,7 @@ public final class OffsetTime
                 case HOURS: return nanosUntil / NANOS_PER_HOUR;
                 case HALF_DAYS: return nanosUntil / (12 * NANOS_PER_HOUR);
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.between(this, endDateTime).getAmount();
     }

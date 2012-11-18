@@ -38,7 +38,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTimeAccessor;
@@ -190,7 +189,7 @@ public final class ISOChrono extends Chrono<ISOChrono> implements Serializable {
     @Override
     public int prolepticYear(Era<ISOChrono> era, int yearOfEra) {
         if (era instanceof ISOEra == false) {
-            throw new DateTimeException("Era must be ISOEra");
+            throw new IllegalArgumentException("Era must be ISOEra");
         }
         return (era == ISOEra.CE ? yearOfEra : 1 - yearOfEra);
     }

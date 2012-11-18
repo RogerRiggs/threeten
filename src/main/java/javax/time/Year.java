@@ -170,7 +170,7 @@ public final class Year
      *
      * @param isoYear  the ISO proleptic year to represent, from MIN_YEAR to MAX_YEAR
      * @return the year, not null
-     * @throws DateTimeException if the field is invalid
+     * @throws IllegalArgumentException if the field is invalid
      */
     public static Year of(int isoYear) {
         YEAR.checkValidValue(isoYear);
@@ -186,7 +186,7 @@ public final class Year
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the year, not null
-     * @throws DateTimeException if unable to convert to a {@code Year}
+     * @throws IllegalArgumentException if unable to convert to a {@code Year}
      */
     public static Year from(DateTimeAccessor dateTime) {
         if (dateTime instanceof Year) {
@@ -296,7 +296,7 @@ public final class Year
                 case YEAR: return year;
                 case ERA: return (year < 1 ? 0 : 1);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -343,7 +343,7 @@ public final class Year
      *
      * @param adjuster the adjuster to use, not null
      * @return a {@code LocalDate} based on this date with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     public Year with(WithAdjuster adjuster) {
         if (adjuster instanceof Year) {
@@ -362,7 +362,7 @@ public final class Year
                 case YEAR: return Year.of((int) newValue);
                 case ERA: return (getLong(ERA) == newValue ? this : Year.of(1 - year));
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }
@@ -381,7 +381,7 @@ public final class Year
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code Year} based on this year with the addition made, not null
-     * @throws DateTimeException if the addition cannot be made
+     * @throws IllegalArgumentException if the addition cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Year plus(PlusAdjuster adjuster) {
@@ -398,7 +398,7 @@ public final class Year
                 case MILLENNIA: return plusYears(Jdk8Methods.safeMultiply(amountToAdd, 1000));
                 case ERAS: return with(ERA, Jdk8Methods.safeAdd(getLong(ERA), amountToAdd));
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.doAdd(this, amountToAdd);
     }
@@ -410,7 +410,7 @@ public final class Year
      *
      * @param yearsToAdd  the years to add, may be negative
      * @return a {@code Year} based on this year with the period added, not null
-     * @throws DateTimeException if the result exceeds the supported year range
+     * @throws IllegalArgumentException if the result exceeds the supported year range
      */
     public Year plusYears(long yearsToAdd) {
         if (yearsToAdd == 0) {
@@ -433,7 +433,7 @@ public final class Year
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code Year} based on this year with the subtraction made, not null
-     * @throws DateTimeException if the subtraction cannot be made
+     * @throws IllegalArgumentException if the subtraction cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Year minus(MinusAdjuster adjuster) {
@@ -452,7 +452,7 @@ public final class Year
      *
      * @param yearsToSubtract  the years to subtract, may be negative
      * @return a {@code Year} based on this year with the period subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported year range
+     * @throws IllegalArgumentException if the result exceeds the supported year range
      */
     public Year minusYears(long yearsToSubtract) {
         return (yearsToSubtract == Long.MIN_VALUE ? plusYears(Long.MAX_VALUE).plusYears(1) : plusYears(-yearsToSubtract));
@@ -524,7 +524,7 @@ public final class Year
      *
      * @param monthDay  the month-day to use, not null
      * @return the local date formed from this year and the specified month-day, not null
-     * @throws DateTimeException if the month-day is February 29th and this is not a leap year
+     * @throws IllegalArgumentException if the month-day is February 29th and this is not a leap year
      */
     public LocalDate atMonthDay(MonthDay monthDay) {
         return LocalDate.of(year, monthDay.getMonth(), monthDay.getDayOfMonth());
@@ -543,7 +543,7 @@ public final class Year
      *
      * @param dayOfYear  the day-of-year to use, not null
      * @return the local date formed from this year and the specified date of year, not null
-     * @throws DateTimeException if the day of year is 366 and this is not a leap year
+     * @throws IllegalArgumentException if the day of year is 366 and this is not a leap year
      */
     public LocalDate atDay(int dayOfYear) {
         return LocalDate.ofYearDay(year, dayOfYear);
@@ -580,7 +580,7 @@ public final class Year
     @Override
     public DateTime doWithAdjustment(DateTime dateTime) {
         if (Chrono.from(dateTime).equals(ISOChrono.INSTANCE) == false) {
-            throw new DateTimeException("Adjustment only supported on ISO date-time");
+            throw new IllegalArgumentException("Adjustment only supported on ISO date-time");
         }
         return dateTime.with(YEAR, year);
     }
@@ -588,7 +588,7 @@ public final class Year
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof Year == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         Year end = (Year) endDateTime;
         if (unit instanceof ChronoUnit) {
@@ -600,7 +600,7 @@ public final class Year
                 case MILLENNIA: return yearsUntil / 1000;
                 case ERAS: return end.getLong(ERA) - getLong(ERA);
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.between(this, endDateTime).getAmount();
     }

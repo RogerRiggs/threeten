@@ -32,7 +32,6 @@
 package javax.time.chrono;
 
 import java.util.Comparator;
-import javax.time.DateTimeException;
 import javax.time.LocalDateTime;
 import javax.time.LocalTime;
 import javax.time.ZoneId;

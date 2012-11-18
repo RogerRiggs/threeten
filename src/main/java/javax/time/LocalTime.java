@@ -203,7 +203,7 @@ public final class LocalTime
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return the local time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public static LocalTime of(int hour, int minute) {
         HOUR_OF_DAY.checkValidValue(hour);
@@ -225,7 +225,7 @@ public final class LocalTime
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return the local time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public static LocalTime of(int hour, int minute, int second) {
         HOUR_OF_DAY.checkValidValue(hour);
@@ -247,7 +247,7 @@ public final class LocalTime
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return the local time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public static LocalTime of(int hour, int minute, int second, int nanoOfSecond) {
         HOUR_OF_DAY.checkValidValue(hour);
@@ -265,7 +265,7 @@ public final class LocalTime
      *
      * @param secondOfDay  the second-of-day, from {@code 0} to {@code 24 * 60 * 60 - 1}
      * @return the local time, not null
-     * @throws DateTimeException if the second-of-day value is invalid
+     * @throws IllegalArgumentException if the second-of-day value is invalid
      */
     public static LocalTime ofSecondOfDay(long secondOfDay) {
         SECOND_OF_DAY.checkValidValue(secondOfDay);
@@ -285,7 +285,7 @@ public final class LocalTime
      * @param secondOfDay  the second-of-day, from {@code 0} to {@code 24 * 60 * 60 - 1}
      * @param nanoOfSecond  the nano-of-second, from 0 to 999,999,999
      * @return the local time, not null
-     * @throws DateTimeException if the either input value is invalid
+     * @throws IllegalArgumentException if the either input value is invalid
      */
     public static LocalTime ofSecondOfDay(long secondOfDay, int nanoOfSecond) {
         SECOND_OF_DAY.checkValidValue(secondOfDay);
@@ -304,7 +304,7 @@ public final class LocalTime
      *
      * @param nanoOfDay  the nano of day, from {@code 0} to {@code 24 * 60 * 60 * 1,000,000,000 - 1}
      * @return the local time, not null
-     * @throws DateTimeException if the nanos of day value is invalid
+     * @throws IllegalArgumentException if the nanos of day value is invalid
      */
     public static LocalTime ofNanoOfDay(long nanoOfDay) {
         NANO_OF_DAY.checkValidValue(nanoOfDay);
@@ -326,7 +326,7 @@ public final class LocalTime
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the local time, not null
-     * @throws DateTimeException if unable to convert to a {@code LocalTime}
+     * @throws IllegalArgumentException if unable to convert to a {@code LocalTime}
      */
     public static LocalTime from(DateTimeAccessor dateTime) {
         // handle builder as a special case
@@ -427,7 +427,7 @@ public final class LocalTime
             if (((ChronoField) field).isTimeField()) {
                 return field.range();
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }
@@ -457,9 +457,9 @@ public final class LocalTime
     private int get0(DateTimeField field) {
         switch ((ChronoField) field) {
             case NANO_OF_SECOND: return nano;
-            case NANO_OF_DAY: throw new DateTimeException("Field too large for an int: " + field);
+            case NANO_OF_DAY: throw new IllegalArgumentException("Field too large for an int: " + field);
             case MICRO_OF_SECOND: return nano / 1000;
-            case MICRO_OF_DAY: throw new DateTimeException("Field too large for an int: " + field);
+            case MICRO_OF_DAY: throw new IllegalArgumentException("Field too large for an int: " + field);
             case MILLI_OF_SECOND: return nano / 1000_000;
             case MILLI_OF_DAY: return (int) (toNanoOfDay() / 1000_000);
             case SECOND_OF_MINUTE: return second;
@@ -472,7 +472,7 @@ public final class LocalTime
             case CLOCK_HOUR_OF_DAY: return (hour == 0 ? 24 : hour);
             case AMPM_OF_DAY: return hour / 12;
         }
-        throw new DateTimeException("Unsupported field: " + field.getName());
+        throw new IllegalArgumentException("Unsupported field: " + field.getName());
     }
 
     //-----------------------------------------------------------------------
@@ -529,7 +529,7 @@ public final class LocalTime
      *
      * @param adjuster the adjuster to use, not null
      * @return a {@code LocalTime} based on this time with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     public LocalTime with(WithAdjuster adjuster) {
         if (adjuster instanceof LocalTime) {
@@ -549,7 +549,7 @@ public final class LocalTime
      * @param field  the field to set in the returned time, not null
      * @param newValue  the new value of the field in the returned time, not null
      * @return a {@code LocalTime} based on this time with the specified field set, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
      */
     public LocalTime with(DateTimeField field, long newValue) {
         if (field instanceof ChronoField) {
@@ -572,7 +572,7 @@ public final class LocalTime
                 case CLOCK_HOUR_OF_DAY: return withHour((int) (newValue == 24 ? 0 : newValue));
                 case AMPM_OF_DAY: return plusHours((newValue - (hour / 12)) * 12);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }
@@ -585,7 +585,7 @@ public final class LocalTime
      *
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @return a {@code LocalTime} based on this time with the requested hour, not null
-     * @throws DateTimeException if the hour value is invalid
+     * @throws IllegalArgumentException if the hour value is invalid
      */
     public LocalTime withHour(int hour) {
         if (this.hour == hour) {
@@ -602,7 +602,7 @@ public final class LocalTime
      *
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return a {@code LocalTime} based on this time with the requested minute, not null
-     * @throws DateTimeException if the minute value is invalid
+     * @throws IllegalArgumentException if the minute value is invalid
      */
     public LocalTime withMinute(int minute) {
         if (this.minute == minute) {
@@ -619,7 +619,7 @@ public final class LocalTime
      *
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return a {@code LocalTime} based on this time with the requested second, not null
-     * @throws DateTimeException if the second value is invalid
+     * @throws IllegalArgumentException if the second value is invalid
      */
     public LocalTime withSecond(int second) {
         if (this.second == second) {
@@ -636,7 +636,7 @@ public final class LocalTime
      *
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return a {@code LocalTime} based on this time with the requested nanosecond, not null
-     * @throws DateTimeException if the nanos value is invalid
+     * @throws IllegalArgumentException if the nanos value is invalid
      */
     public LocalTime withNano(int nanoOfSecond) {
         if (this.nano == nanoOfSecond) {
@@ -660,7 +660,7 @@ public final class LocalTime
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code LocalTime} based on this time with the addition made, not null
-     * @throws DateTimeException if the addition cannot be made
+     * @throws IllegalArgumentException if the addition cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     public LocalTime plus(PlusAdjuster adjuster) {
@@ -680,7 +680,7 @@ public final class LocalTime
      * @param amountToAdd  the amount of the unit to add to the returned time, not null
      * @param unit  the unit of the period to add, not null
      * @return a {@code LocalTime} based on this time with the specified period added, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     public LocalTime plus(long amountToAdd, PeriodUnit unit) {
         if (unit instanceof ChronoUnit) {
@@ -695,7 +695,7 @@ public final class LocalTime
                 case HALF_DAYS: return plusHours((amountToAdd % 2) * 12);
                 case DAYS: return this;
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.doAdd(this, amountToAdd);
     }
@@ -813,7 +813,7 @@ public final class LocalTime
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code LocalTime} based on this time with the subtraction made, not null
-     * @throws DateTimeException if the subtraction cannot be made
+     * @throws IllegalArgumentException if the subtraction cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     public LocalTime minus(MinusAdjuster adjuster) {
@@ -833,7 +833,7 @@ public final class LocalTime
      * @param amountToSubtract  the amount of the unit to subtract from the returned time, not null
      * @param unit  the unit of the period to subtract, not null
      * @return a {@code LocalTime} based on this time with the specified period subtracted, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     public LocalTime minus(long amountToSubtract, PeriodUnit unit) {
         return (amountToSubtract == Long.MIN_VALUE ? plus(Long.MAX_VALUE, unit).plus(1, unit) : plus(-amountToSubtract, unit));
@@ -925,7 +925,7 @@ public final class LocalTime
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof LocalTime == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         LocalTime end = (LocalTime) endDateTime;
         if (unit instanceof ChronoUnit) {
@@ -939,7 +939,7 @@ public final class LocalTime
                 case HOURS: return nanosUntil / NANOS_PER_HOUR;
                 case HALF_DAYS: return nanosUntil / (12 * NANOS_PER_HOUR);
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.between(this, endDateTime).getAmount();
     }

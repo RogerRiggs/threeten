@@ -296,7 +296,7 @@ public class TCKZonedDateTime extends AbstractDateTimeTest {
         check(test, 2008, 6, 30, 11, 30, 10, 500, OFFSET_0200, ZONE_PARIS);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_of_intMonthIntHMSN_gap() {
         ZonedDateTime.of(2008, Month.MARCH, 30, 02, 30, 0, 0, ZONE_PARIS);
     }
@@ -321,7 +321,7 @@ public class TCKZonedDateTime extends AbstractDateTimeTest {
         check(test, 2008, 6, 30, 11, 30, 10, 500, OFFSET_0200, ZONE_PARIS);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_of_intsHMSN_gap() {
         ZonedDateTime.of(2008, 3, 30, 02, 30, 0, 0, ZONE_PARIS);
     }
@@ -479,34 +479,34 @@ public class TCKZonedDateTime extends AbstractDateTimeTest {
         check(test, 2008, 6, 30, 11, 30, 10, 500, OFFSET_0200, ZONE_PARIS);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_of_OffsetDateTime_inGap() {
         OffsetDateTime odt = OffsetDateTime.of(2008, 3, 30, 2, 30, OFFSET_0100);
         try {
             ZonedDateTime.of(odt, ZONE_PARIS);
-        } catch (DateTimeException ex) {
+        } catch (IllegalArgumentException ex) {
             assertEquals(ex.getMessage().contains("daylight savings gap"), true);
             throw ex;
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_of_OffsetDateTime_inOverlap_invalidOfset() {
         OffsetDateTime odt = OffsetDateTime.of(2008, 10, 26, 2, 30, OFFSET_0130);
         try {
             ZonedDateTime.of(odt, ZONE_PARIS);
-        } catch (DateTimeException ex) {
+        } catch (IllegalArgumentException ex) {
             assertEquals(ex.getMessage().contains("invalid for time-zone"), true);
             throw ex;
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_of_OffsetDateTime_invalidOffset() {
         OffsetDateTime odt = OffsetDateTime.of(2008, 6, 30, 11, 30, 10, 500, OFFSET_0130);
         try {
             ZonedDateTime.of(odt, ZONE_PARIS);
-        } catch (DateTimeException ex) {
+        } catch (IllegalArgumentException ex) {
             assertEquals(ex.getMessage().contains("invalid for time-zone"), true);
             throw ex;
         }
@@ -626,12 +626,12 @@ public class TCKZonedDateTime extends AbstractDateTimeTest {
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_ofEpochSecond_longOffset_tooBig() {
         ZonedDateTime.ofEpochSecond(Long.MAX_VALUE, ZONE_PARIS);  // TODO: better test
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_ofEpochSecond_longOffset_tooSmall() {
         ZonedDateTime.ofEpochSecond(Long.MIN_VALUE, ZONE_PARIS);  // TODO: better test
     }
@@ -649,7 +649,7 @@ public class TCKZonedDateTime extends AbstractDateTimeTest {
         assertEquals(ZonedDateTime.from(ZonedDateTime.of(2007, 7, 15, 17, 30, 0, 0, ZONE_PARIS)), ZonedDateTime.of(2007, 7, 15, 17, 30, 0, 0, ZONE_PARIS));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         ZonedDateTime.from(LocalTime.of(12, 30));
     }
@@ -675,12 +675,12 @@ public class TCKZonedDateTime extends AbstractDateTimeTest {
         assertEquals(t.getZone().getId(), zoneId);
     }
 
-    @Test(expectedExceptions=DateTimeParseException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_parse_illegalValue() {
         ZonedDateTime.parse("2008-06-32T11:15+01:00[Europe/Paris]");
     }
 
-    @Test(expectedExceptions=DateTimeParseException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_parse_invalidValue() {
         ZonedDateTime.parse("2008-06-31T11:15+01:00[Europe/Paris]");
     }
@@ -797,7 +797,7 @@ public class TCKZonedDateTime extends AbstractDateTimeTest {
         test.getLong((DateTimeField) null);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_invalidField() {
         TEST_DATE_TIME.getLong(MockFieldNoValue.INSTANCE);
     }

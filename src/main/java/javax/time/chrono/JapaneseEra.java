@@ -36,7 +36,6 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.jdk8.DefaultInterfaceEra;
 
@@ -154,7 +153,7 @@ final class JapaneseEra
     private Object readResolve() throws ObjectStreamException {
         try {
             return of(eraValue);
-        } catch (DateTimeException e) {
+        } catch (IllegalArgumentException e) {
             InvalidObjectException ex = new InvalidObjectException("Invalid era");
             ex.initCause(e);
             throw ex;
@@ -184,12 +183,12 @@ final class JapaneseEra
      *
      * @param japaneseEra  the era to represent
      * @return the {@code JapaneseEra} singleton, never null
-     * @throws DateTimeException if {@code japaneseEra} is invalid
+     * @throws IllegalArgumentException if {@code japaneseEra} is invalid
      */
     public static JapaneseEra of(int japaneseEra) {
         int index = japaneseEra + ERA_OFFSET;
         if (index < 0 || index >= KNOWN_ERAS.length) {
-            throw new DateTimeException("japaneseEra is invalid");
+            throw new IllegalArgumentException("japaneseEra is invalid");
         }
         return KNOWN_ERAS[index];
     }

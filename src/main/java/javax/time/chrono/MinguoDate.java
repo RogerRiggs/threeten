@@ -37,7 +37,6 @@ import static javax.time.chrono.MinguoChrono.YEARS_DIFFERENCE;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.time.DateTimeException;
 import javax.time.DayOfWeek;
 import javax.time.LocalDate;
 import javax.time.calendrical.ChronoField;
@@ -124,7 +123,7 @@ final class MinguoDate
                 }
                 return getChrono().range(f);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }

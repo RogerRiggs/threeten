@@ -123,11 +123,11 @@ public enum DayOfWeek implements DateTimeAccessor, WithAdjuster {
      *
      * @param dayOfWeek  the day-of-week to represent, from 1 (Monday) to 7 (Sunday)
      * @return the DayOfWeek singleton, not null
-     * @throws DateTimeException if the day-of-week is invalid
+     * @throws IllegalArgumentException if the day-of-week is invalid
      */
     public static DayOfWeek of(int dayOfWeek) {
         if (dayOfWeek < 1 || dayOfWeek > 7) {
-            throw new DateTimeException("Invalid value for DayOfWeek: " + dayOfWeek);
+            throw new IllegalArgumentException("Invalid value for DayOfWeek: " + dayOfWeek);
         }
         return ENUMS[dayOfWeek - 1];
     }
@@ -141,7 +141,7 @@ public enum DayOfWeek implements DateTimeAccessor, WithAdjuster {
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the day-of-week, not null
-     * @throws DateTimeException if unable to convert to a {@code DayOfWeek}
+     * @throws IllegalArgumentException if unable to convert to a {@code DayOfWeek}
      */
     public static DayOfWeek from(DateTimeAccessor dateTime) {
         if (dateTime instanceof DayOfWeek) {
@@ -194,7 +194,7 @@ public enum DayOfWeek implements DateTimeAccessor, WithAdjuster {
         if (field == DAY_OF_WEEK) {
             return field.range();
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }
@@ -212,7 +212,7 @@ public enum DayOfWeek implements DateTimeAccessor, WithAdjuster {
         if (field == DAY_OF_WEEK) {
             return getValue();
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -223,7 +223,7 @@ public enum DayOfWeek implements DateTimeAccessor, WithAdjuster {
             ((ChronoField) field).checkValidValue(newValue);
             return DayOfWeek.of((int) newValue);
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }

@@ -160,7 +160,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      *
      * @param dateTime  the date-time to convert, not null
      * @return the chronology, not null
-     * @throws DateTimeException if unable to convert to an {@code Chrono}
+     * @throws IllegalArgumentException if unable to convert to an {@code Chrono}
      */
     public static Chrono<?> from(DateTimeAccessor dateTime) {
         Objects.requireNonNull(dateTime, "dateTime");
@@ -367,7 +367,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      * @param month  the chronology month-of-year
      * @param dayOfMonth  the chronology day-of-month
      * @return the date in this chronology, not null
-     * @throws DateTimeException if unable to create the date
+     * @throws IllegalArgumentException if unable to create the date
      */
     public ChronoLocalDate<C> date(Era<C> era, int yearOfEra, int month, int dayOfMonth) {
         return date(prolepticYear(era, yearOfEra), month, dayOfMonth);
@@ -380,7 +380,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      * @param month  the chronology month-of-year
      * @param dayOfMonth  the chronology day-of-month
      * @return the date in this chronology, not null
-     * @throws DateTimeException if unable to create the date
+     * @throws IllegalArgumentException if unable to create the date
      */
     public abstract ChronoLocalDate<C> date(int prolepticYear, int month, int dayOfMonth);
 
@@ -391,7 +391,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      * @param yearOfEra  the chronology year-of-era
      * @param dayOfYear  the chronology day-of-year
      * @return the date in this chronology, not null
-     * @throws DateTimeException if unable to create the date
+     * @throws IllegalArgumentException if unable to create the date
      */
     public ChronoLocalDate<C> dateFromYearDay(Era<C> era, int yearOfEra, int dayOfYear) {
         return dateFromYearDay(prolepticYear(era, yearOfEra), dayOfYear);
@@ -403,7 +403,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      * @param prolepticYear  the chronology proleptic-year
      * @param dayOfYear  the chronology day-of-year
      * @return the date in this chronology, not null
-     * @throws DateTimeException if unable to create the date
+     * @throws IllegalArgumentException if unable to create the date
      */
     public abstract ChronoLocalDate<C> dateFromYearDay(int prolepticYear, int dayOfYear);
 
@@ -415,7 +415,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the date in this chronology, not null
-     * @throws DateTimeException if unable to create the date
+     * @throws IllegalArgumentException if unable to create the date
      */
     public abstract ChronoLocalDate<C> date(DateTimeAccessor dateTime);
 
@@ -431,7 +431,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      * This implementation uses {@link #dateNow(Clock)}.
      *
      * @return the current date using the system clock and default time-zone, not null
-     * @throws DateTimeException if unable to create the date
+     * @throws IllegalArgumentException if unable to create the date
      */
     public ChronoLocalDate<C> dateNow() {
         return dateNow(Clock.systemDefaultZone());
@@ -447,7 +447,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      * because the clock is hard-coded.
      *
      * @return the current date using the system clock, not null
-     * @throws DateTimeException if unable to create the date
+     * @throws IllegalArgumentException if unable to create the date
      */
     public ChronoLocalDate<C> dateNow(ZoneId zone) {
         return dateNow(Clock.system(zone));
@@ -462,7 +462,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      *
      * @param clock  the clock to use, not null
      * @return the current date, not null
-     * @throws DateTimeException if unable to create the date
+     * @throws IllegalArgumentException if unable to create the date
      */
     public ChronoLocalDate<C> dateNow(Clock clock) {
         Objects.requireNonNull(clock, "clock");
@@ -493,7 +493,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      * @param era  the era of the correct type for the chronology, not null
      * @param yearOfEra  the chronology year-of-era
      * @return the proleptic-year
-     * @throws DateTimeException if unable to convert
+     * @throws IllegalArgumentException if unable to convert
      */
     public abstract int prolepticYear(Era<C> era, int yearOfEra);
 
@@ -514,7 +514,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      *
      * @param eraValue  the era value
      * @return the calendar system era, not null
-     * @throws DateTimeException if unable to create the era
+     * @throws IllegalArgumentException if unable to create the era
      */
     public abstract Era<C> eraOf(int eraValue);
 
@@ -544,7 +544,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
      *
      * @param field  the field to get the range for, not null
      * @return the range of valid values for the field, not null
-     * @throws DateTimeException if the range for the field cannot be obtained
+     * @throws IllegalArgumentException if the range for the field cannot be obtained
      */
     public abstract DateTimeValueRange range(ChronoField field);
 
@@ -563,7 +563,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
         return new DateTimeFormatterBuilder().appendChronoText(style).toFormatter(locale).print(new DefaultInterfaceDateTimeAccessor() {
             @Override
             public DateTimeAccessor with(DateTimeField field, long newValue) {
-                throw new DateTimeException("Unsupported field: " + field);
+                throw new IllegalArgumentException("Unsupported field: " + field);
             }
             @Override
             public boolean isSupported(DateTimeField field) {
@@ -571,7 +571,7 @@ public abstract class Chrono<C extends Chrono<C>> implements Comparable<Chrono<?
             }
             @Override
             public long getLong(DateTimeField field) {
-                throw new DateTimeException("Unsupported field: " + field);
+                throw new IllegalArgumentException("Unsupported field: " + field);
             }
             @SuppressWarnings("unchecked")
             @Override

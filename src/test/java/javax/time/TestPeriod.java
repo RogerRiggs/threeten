@@ -1376,17 +1376,17 @@ public class TestPeriod {
         assertEquals(Period.of(0, 0, 0, 0, 0, -2, -1).toDuration(), Duration.ofSeconds(-3, 999999999));
     }
 
-    @Test(expectedExceptions=DateTimeException.class)
+    @Test(expectedExceptions=IllegalArgumentException.class)
     public void test_toDuration_years() {
         Period.of(1, 0, 0, 4, 5, 6, 7).toDuration();
     }
 
-    @Test(expectedExceptions=DateTimeException.class)
+    @Test(expectedExceptions=IllegalArgumentException.class)
     public void test_toDuration_months() {
         Period.of(0, 1, 0, 4, 5, 6, 7).toDuration();
     }
 
-    @Test(expectedExceptions=DateTimeException.class)
+    @Test(expectedExceptions=IllegalArgumentException.class)
     public void test_toDuration_days() {
         Duration test = Period.of(0, 0, 1, 4, 5, 6, 7).toDuration();
         assertEquals(test, Duration.ofSeconds(101106, 7L));

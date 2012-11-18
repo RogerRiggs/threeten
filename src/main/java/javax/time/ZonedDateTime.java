@@ -155,9 +155,9 @@ public final class ZonedDateTime
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @param zone  the time-zone, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
-     * @throws DateTimeException if the local date-time is invalid for the time-zone
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the local date-time is invalid for the time-zone
      */
     public static ZonedDateTime of(int year, Month month, int dayOfMonth,
             int hour, int minute, int second, int nanoOfSecond, ZoneId zone) {
@@ -186,9 +186,9 @@ public final class ZonedDateTime
      * @param zone  the time-zone, not null
      * @param resolver  the resolver from local date-time to zoned, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
-     * @throws DateTimeException if the resolver cannot resolve an invalid local date-time
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the resolver cannot resolve an invalid local date-time
      */
     public static ZonedDateTime of(int year, Month month, int dayOfMonth,
             int hour, int minute, int second, int nanoOfSecond,
@@ -218,9 +218,9 @@ public final class ZonedDateTime
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @param zone  the time-zone, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
-     * @throws DateTimeException if the local date-time is invalid for the time-zone
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the local date-time is invalid for the time-zone
      */
     public static ZonedDateTime of(int year, int month, int dayOfMonth,
             int hour, int minute, int second, int nanoOfSecond, ZoneId zone) {
@@ -250,9 +250,9 @@ public final class ZonedDateTime
      * @param zone  the time-zone, not null
      * @param resolver  the resolver from local date-time to zoned, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
-     * @throws DateTimeException if the resolver cannot resolve an invalid local date-time
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the resolver cannot resolve an invalid local date-time
      */
     public static ZonedDateTime of(int year, int month, int dayOfMonth,
             int hour, int minute, int second, int nanoOfSecond,
@@ -275,7 +275,7 @@ public final class ZonedDateTime
      * @param time  the local time, not null
      * @param zone  the time-zone, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the local date-time is invalid for the time-zone
+     * @throws IllegalArgumentException if the local date-time is invalid for the time-zone
      */
     public static ZonedDateTime of(LocalDate date, LocalTime time, ZoneId zone) {
         return of(date, time, zone, ZoneResolvers.strict());
@@ -295,7 +295,7 @@ public final class ZonedDateTime
      * @param zone  the time-zone, not null
      * @param resolver  the resolver from local date-time to zoned, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the resolver cannot resolve an invalid local date-time
+     * @throws IllegalArgumentException if the resolver cannot resolve an invalid local date-time
      */
     public static ZonedDateTime of(LocalDate date, LocalTime time, ZoneId zone, ZoneResolver resolver) {
         return resolve(LocalDateTime.of(date, time), zone, null, resolver);
@@ -312,7 +312,7 @@ public final class ZonedDateTime
      * @param dateTime  the local date-time, not null
      * @param zone  the time-zone, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the local date-time is invalid for the time-zone
+     * @throws IllegalArgumentException if the local date-time is invalid for the time-zone
      */
     public static ZonedDateTime of(LocalDateTime dateTime, ZoneId zone) {
         return of(dateTime, zone, ZoneResolvers.strict());
@@ -331,7 +331,7 @@ public final class ZonedDateTime
      * @param zone  the time-zone, not null
      * @param resolver  the resolver from local date-time to zoned, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the resolver cannot resolve an invalid local date-time
+     * @throws IllegalArgumentException if the resolver cannot resolve an invalid local date-time
      */
     public static ZonedDateTime of(LocalDateTime dateTime, ZoneId zone, ZoneResolver resolver) {
         return resolve(dateTime, zone, null, resolver);
@@ -354,8 +354,8 @@ public final class ZonedDateTime
      * @param zone  the time-zone, not null
      * @return the zoned date-time, not null
      * @throws DateTimeException if no rules can be found for the zone
-     * @throws DateTimeException if the date-time is invalid due to a gap in the local time-line
-     * @throws DateTimeException if the offset is invalid for the time-zone at the date-time
+     * @throws IllegalArgumentException if the date-time is invalid due to a gap in the local time-line
+     * @throws IllegalArgumentException if the offset is invalid for the time-zone at the date-time
      */
     public static ZonedDateTime of(OffsetDateTime dateTime, ZoneId zone) {
         Objects.requireNonNull(dateTime, "dateTime");
@@ -366,10 +366,10 @@ public final class ZonedDateTime
         List<ZoneOffset> validOffsets = rules.getValidOffsets(inputLDT);
         if (validOffsets.contains(inputOffset) == false) {
             if (validOffsets.size() == 0) {
-                throw new DateTimeException("The local time " + inputLDT +
+                throw new IllegalArgumentException("The local time " + inputLDT +
                         " does not exist in time-zone " + zone + " due to a daylight savings gap");
             }
-            throw new DateTimeException("The offset in the date-time " + dateTime +
+            throw new IllegalArgumentException("The offset in the date-time " + dateTime +
                     " is invalid for time-zone " + zone);
         }
         return new ZonedDateTime(dateTime, zone);
@@ -388,7 +388,7 @@ public final class ZonedDateTime
      *
      * @param instant  the instant to create the date-time from, not null
      * @return the zoned date-time in UTC, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public static ZonedDateTime ofInstantUTC(Instant instant) {
         return ofInstant(instant, ZoneId.UTC);
@@ -406,7 +406,7 @@ public final class ZonedDateTime
      * @param instant  the instant to create the date-time from, not null
      * @param zone  the time-zone to use, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public static ZonedDateTime ofInstant(Instant instant, ZoneId zone) {
         Objects.requireNonNull(instant, "instant");
@@ -428,7 +428,7 @@ public final class ZonedDateTime
      * @param instantDateTime  the instant to create the date-time from, not null
      * @param zone  the time-zone to use, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public static ZonedDateTime ofInstant(OffsetDateTime instantDateTime, ZoneId zone) {
         Objects.requireNonNull(instantDateTime, "instantDateTime");
@@ -450,7 +450,7 @@ public final class ZonedDateTime
      * @param epochSecond  the number of seconds from the epoch of 1970-01-01T00:00:00Z
      * @param zone  the time-zone, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public static ZonedDateTime ofEpochSecond(long epochSecond, ZoneId zone) {
         Objects.requireNonNull(zone, "zone");
@@ -465,7 +465,7 @@ public final class ZonedDateTime
      * @param nanoOfSecond  the nanosecond within the second, from 0 to 999,999,999
      * @param zone  the time-zone, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     private static ZonedDateTime create(long epochSecond, int nanoOfSecond, ZoneId zone) {
         ZoneRules rules = zone.getRules();  // latest rules version
@@ -483,7 +483,7 @@ public final class ZonedDateTime
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if unable to convert to an {@code ZonedDateTime}
+     * @throws IllegalArgumentException if unable to convert to an {@code ZonedDateTime}
      */
     public static ZonedDateTime from(DateTimeAccessor dateTime) {
         if (dateTime instanceof ZonedDateTime) {
@@ -495,18 +495,18 @@ public final class ZonedDateTime
                 OffsetDateTime odt = OffsetDateTime.from(dateTime);
                 return ofInstant(odt, zone);
 
-            } catch (DateTimeException ex1) {
+            } catch (IllegalArgumentException ex1) {
                 try {
                     Instant instant = Instant.from(dateTime);
                     return ofInstant(instant, zone);
 
-                } catch (DateTimeException ex2) {
+                } catch (IllegalArgumentException ex2) {
                     LocalDateTime ldt = LocalDateTime.from(dateTime);
                     return of(ldt, zone, ZoneResolvers.postGapPreOverlap());
                 }
             }
-        } catch (DateTimeException ex) {
-            throw new DateTimeException("Unable to convert date-time to ZonedDateTime: " + dateTime.getClass(), ex);
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Unable to convert date-time to ZonedDateTime: " + dateTime.getClass(), ex);
         }
     }
 
@@ -550,7 +550,7 @@ public final class ZonedDateTime
      * @param oldDateTime  the old date-time prior to the calculation, may be null
      * @param resolver  the resolver from local date-time to zoned, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the date-time cannot be resolved
+     * @throws IllegalArgumentException if the date-time cannot be resolved
      */
     static ZonedDateTime resolve(LocalDateTime desiredLocalDateTime, ZoneId zone, OffsetDateTime oldDateTime, ZoneResolver resolver) {
         Objects.requireNonNull(desiredLocalDateTime, "desiredLocalDateTime");
@@ -566,7 +566,7 @@ public final class ZonedDateTime
             offsetDT = resolver.resolve(desiredLocalDateTime, trans, rules, zone, oldDateTime);
             if (((offsetDT.getDateTime() == desiredLocalDateTime && validOffsets.contains(offsetDT.getOffset())) ||
                     rules.isValidOffset(offsetDT.getDateTime(), offsetDT.getOffset())) == false) {
-                throw new DateTimeException(
+                throw new IllegalArgumentException(
                     "ZoneResolver implementation must return a valid date-time and offset for the zone: " + resolver.getClass().getName());
             }
         }
@@ -603,7 +603,7 @@ public final class ZonedDateTime
     public int get(DateTimeField field) {
         if (field instanceof ChronoField) {
             switch ((ChronoField) field) {
-                case INSTANT_SECONDS: throw new DateTimeException("Field too large for an int: " + field);
+                case INSTANT_SECONDS: throw new IllegalArgumentException("Field too large for an int: " + field);
                 case OFFSET_SECONDS: return getOffset().getTotalSeconds();
             }
             return dateTime.get(field);
@@ -682,8 +682,8 @@ public final class ZonedDateTime
      * This instance is immutable and unaffected by this method call.
      *
      * @return a {@code ZonedDateTime} based on this date-time with the later offset, not null
-     * @throws DateTimeException if no rules can be found for the zone
-     * @throws DateTimeException if no rules are valid for this date-time
+     * @throws IllegalArgumentException if no rules can be found for the zone
+     * @throws IllegalArgumentException if no rules are valid for this date-time
      */
     @Override
     public ZonedDateTime withLaterOffsetAtOverlap() {
@@ -772,7 +772,7 @@ public final class ZonedDateTime
      *
      * @param zone  the time-zone to change to, not null
      * @return a {@code ZonedDateTime} based on this date-time with the requested zone, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     @Override
     public ZonedDateTime withZoneSameInstant(ZoneId zone) {
@@ -1003,7 +1003,7 @@ public final class ZonedDateTime
      *
      * @param adjuster the adjuster to use, not null
      * @return a {@code ZonedDateTime} based on this date-time with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     @Override
     public ZonedDateTime with(WithAdjuster adjuster) {
@@ -1037,7 +1037,7 @@ public final class ZonedDateTime
      * @param adjuster the adjuster to use, not null
      * @param resolver  the resolver to use, not null
      * @return a {@code ZonedDateTime} based on this date-time with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     @Override
     public ZonedDateTime with(WithAdjuster adjuster, ZoneResolver resolver) {
@@ -1068,7 +1068,7 @@ public final class ZonedDateTime
      * @param field  the field to set in the returned date-time, not null
      * @param newValue  the new value of the field in the returned date-time, not null
      * @return a {@code ZonedDateTime} based on this date-time with the specified field set, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
      */
     @Override
     public ZonedDateTime with(DateTimeField field, long newValue) {
@@ -1099,7 +1099,7 @@ public final class ZonedDateTime
      *
      * @param year  the year to represent, from MIN_YEAR to MAX_YEAR
      * @return a {@code ZonedDateTime} based on this date-time with the requested year, not null
-     * @throws DateTimeException if the year value is invalid
+     * @throws IllegalArgumentException if the year value is invalid
      */
     public ZonedDateTime withYear(int year) {
         LocalDateTime newDT = dateTime.getDateTime().withYear(year);
@@ -1118,7 +1118,7 @@ public final class ZonedDateTime
      *
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @return a {@code ZonedDateTime} based on this date-time with the requested month, not null
-     * @throws DateTimeException if the month value is invalid
+     * @throws IllegalArgumentException if the month value is invalid
      */
     public ZonedDateTime withMonth(int month) {
         LocalDateTime newDT = dateTime.getDateTime().withMonth(month);
@@ -1136,8 +1136,8 @@ public final class ZonedDateTime
      *
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return a {@code ZonedDateTime} based on this date-time with the requested day, not null
-     * @throws DateTimeException if the day-of-month value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the day-of-month value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public ZonedDateTime withDayOfMonth(int dayOfMonth) {
         LocalDateTime newDT = dateTime.getDateTime().withDayOfMonth(dayOfMonth);
@@ -1155,8 +1155,8 @@ public final class ZonedDateTime
      *
      * @param dayOfYear  the day-of-year to set in the returned date, from 1 to 365-366
      * @return a {@code ZonedDateTime} based on this date with the requested day, not null
-     * @throws DateTimeException if the day-of-year value is invalid
-     * @throws DateTimeException if the day-of-year is invalid for the year
+     * @throws IllegalArgumentException if the day-of-year value is invalid
+     * @throws IllegalArgumentException if the day-of-year is invalid for the year
      */
     public ZonedDateTime withDayOfYear(int dayOfYear) {
         LocalDateTime newDT = dateTime.getDateTime().withDayOfYear(dayOfYear);
@@ -1180,8 +1180,8 @@ public final class ZonedDateTime
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return a {@code ZonedDateTime} based on this date-time with the requested date, not null
-     * @throws DateTimeException if the any field value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the any field value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public ZonedDateTime withDate(int year, int month, int dayOfMonth) {
         LocalDateTime newDT = dateTime.getDateTime().withDate(year, month, dayOfMonth);
@@ -1200,7 +1200,7 @@ public final class ZonedDateTime
      *
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @return a {@code ZonedDateTime} based on this date-time with the requested hour, not null
-     * @throws DateTimeException if the hour value is invalid
+     * @throws IllegalArgumentException if the hour value is invalid
      */
     public ZonedDateTime withHour(int hour) {
         LocalDateTime newDT = dateTime.getDateTime().withHour(hour);
@@ -1218,7 +1218,7 @@ public final class ZonedDateTime
      *
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return a {@code ZonedDateTime} based on this date-time with the requested minute, not null
-     * @throws DateTimeException if the minute value is invalid
+     * @throws IllegalArgumentException if the minute value is invalid
      */
     public ZonedDateTime withMinute(int minute) {
         LocalDateTime newDT = dateTime.getDateTime().withMinute(minute);
@@ -1236,7 +1236,7 @@ public final class ZonedDateTime
      *
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return a {@code ZonedDateTime} based on this date-time with the requested second, not null
-     * @throws DateTimeException if the second value is invalid
+     * @throws IllegalArgumentException if the second value is invalid
      */
     public ZonedDateTime withSecond(int second) {
         LocalDateTime newDT = dateTime.getDateTime().withSecond(second);
@@ -1254,7 +1254,7 @@ public final class ZonedDateTime
      *
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return a {@code ZonedDateTime} based on this date-time with the requested nanosecond, not null
-     * @throws DateTimeException if the nanos value is invalid
+     * @throws IllegalArgumentException if the nanos value is invalid
      */
     public ZonedDateTime withNano(int nanoOfSecond) {
         LocalDateTime newDT = dateTime.getDateTime().withNano(nanoOfSecond);
@@ -1278,7 +1278,7 @@ public final class ZonedDateTime
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return a {@code ZonedDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     public ZonedDateTime withTime(int hour, int minute) {
         LocalDateTime newDT = dateTime.getDateTime().withTime(hour, minute);
@@ -1298,7 +1298,7 @@ public final class ZonedDateTime
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return a {@code ZonedDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     public ZonedDateTime withTime(int hour, int minute, int second) {
         LocalDateTime newDT = dateTime.getDateTime().withTime(hour, minute, second);
@@ -1319,7 +1319,7 @@ public final class ZonedDateTime
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return a {@code ZonedDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     public ZonedDateTime withTime(int hour, int minute, int second, int nanoOfSecond) {
         LocalDateTime newDT = dateTime.getDateTime().withTime(hour, minute, second, nanoOfSecond);
@@ -1344,7 +1344,7 @@ public final class ZonedDateTime
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code ZonedDateTime} based on this date-time with the addition made, not null
-     * @throws DateTimeException if the addition cannot be made
+     * @throws IllegalArgumentException if the addition cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -1368,7 +1368,7 @@ public final class ZonedDateTime
      * @param amountToAdd  the amount of the unit to add to the returned date-time, not null
      * @param unit  the unit of the period to add, not null
      * @return a {@code ZonedDateTime} based on this date-time with the specified period added, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     public ZonedDateTime plus(long amountToAdd, PeriodUnit unit) {
         if (unit instanceof ChronoUnit) {
@@ -1397,7 +1397,7 @@ public final class ZonedDateTime
      *
      * @param years  the years to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusYears(long years) {
         LocalDateTime newDT = dateTime.getDateTime().plusYears(years);
@@ -1424,7 +1424,7 @@ public final class ZonedDateTime
      *
      * @param months  the months to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the months added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusMonths(long months) {
         LocalDateTime newDT = dateTime.getDateTime().plusMonths(months);
@@ -1448,7 +1448,7 @@ public final class ZonedDateTime
      *
      * @param weeks  the weeks to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the weeks added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusWeeks(long weeks) {
         LocalDateTime newDT = dateTime.getDateTime().plusWeeks(weeks);
@@ -1472,7 +1472,7 @@ public final class ZonedDateTime
      *
      * @param days  the days to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the days added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusDays(long days) {
         LocalDateTime newDT = dateTime.getDateTime().plusDays(days);
@@ -1500,7 +1500,7 @@ public final class ZonedDateTime
      *
      * @param hours  the hours to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the hours added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusHours(long hours) {
         LocalDateTime newDT = dateTime.getDateTime().plusHours(hours);
@@ -1518,7 +1518,7 @@ public final class ZonedDateTime
      *
      * @param minutes  the minutes to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the minutes added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusMinutes(long minutes) {
         LocalDateTime newDT = dateTime.getDateTime().plusMinutes(minutes);
@@ -1536,7 +1536,7 @@ public final class ZonedDateTime
      *
      * @param seconds  the seconds to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the seconds added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusSeconds(long seconds) {
         LocalDateTime newDT = dateTime.getDateTime().plusSeconds(seconds);
@@ -1554,7 +1554,7 @@ public final class ZonedDateTime
      *
      * @param nanos  the nanos to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the nanoseconds added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusNanos(long nanos) {
         LocalDateTime newDT = dateTime.getDateTime().plusNanos(nanos);
@@ -1581,7 +1581,7 @@ public final class ZonedDateTime
      * @param nanos  the nanos to add, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the duration added, not null
      * @throws ArithmeticException if the calculation exceeds the capacity of {@code Instant}
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime plusDuration(int hours, int minutes, int seconds, long nanos) {
         if ((hours | minutes | seconds | nanos) == 0) {
@@ -1608,7 +1608,7 @@ public final class ZonedDateTime
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code ZonedDateTime} based on this date-time with the subtraction made, not null
-     * @throws DateTimeException if the subtraction cannot be made
+     * @throws IllegalArgumentException if the subtraction cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -1632,7 +1632,7 @@ public final class ZonedDateTime
      * @param amountToSubtract  the amount of the unit to subtract from the returned date-time, not null
      * @param unit  the unit of the period to subtract, not null
      * @return a {@code ZonedDateTime} based on this date-time with the specified period subtracted, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     @Override
     public ZonedDateTime minus(long amountToSubtract, PeriodUnit unit) {
@@ -1659,7 +1659,7 @@ public final class ZonedDateTime
      *
      * @param years  the years to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the years subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusYears(long years) {
         LocalDateTime newDT = dateTime.getDateTime().minusYears(years);
@@ -1686,7 +1686,7 @@ public final class ZonedDateTime
      *
      * @param months  the months to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the months subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusMonths(long months) {
         LocalDateTime newDT = dateTime.getDateTime().minusMonths(months);
@@ -1710,7 +1710,7 @@ public final class ZonedDateTime
      *
      * @param weeks  the weeks to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the weeks subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusWeeks(long weeks) {
         LocalDateTime newDT = dateTime.getDateTime().minusWeeks(weeks);
@@ -1734,7 +1734,7 @@ public final class ZonedDateTime
      *
      * @param days  the days to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the days subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusDays(long days) {
         LocalDateTime newDT = dateTime.getDateTime().minusDays(days);
@@ -1762,7 +1762,7 @@ public final class ZonedDateTime
      *
      * @param hours  the hours to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the hours subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusHours(long hours) {
         LocalDateTime newDT = dateTime.getDateTime().minusHours(hours);
@@ -1780,7 +1780,7 @@ public final class ZonedDateTime
      *
      * @param minutes  the minutes to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the minutes subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusMinutes(long minutes) {
         LocalDateTime newDT = dateTime.getDateTime().minusMinutes(minutes);
@@ -1798,7 +1798,7 @@ public final class ZonedDateTime
      *
      * @param seconds  the seconds to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the seconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusSeconds(long seconds) {
         LocalDateTime newDT = dateTime.getDateTime().minusSeconds(seconds);
@@ -1816,7 +1816,7 @@ public final class ZonedDateTime
      *
      * @param nanos  the nanos to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the nanoseconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusNanos(long nanos) {
         LocalDateTime newDT = dateTime.getDateTime().minusNanos(nanos);
@@ -1843,7 +1843,7 @@ public final class ZonedDateTime
      * @param nanos  the nanos to subtract, positive or negative
      * @return a {@code ZonedDateTime} based on this date-time with the duration subtracted, not null
      * @throws ArithmeticException if the calculation exceeds the capacity of {@code Instant}
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public ZonedDateTime minusDuration(int hours, int minutes, int seconds, long nanos) {
         if ((hours | minutes | seconds | nanos) == 0) {
@@ -1857,7 +1857,7 @@ public final class ZonedDateTime
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof ZonedDateTime == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         ZonedDateTime end = (ZonedDateTime) endDateTime;
         if (unit instanceof ChronoUnit) {

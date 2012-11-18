@@ -41,7 +41,7 @@ import javax.time.DateTimeException;
  * <h4>Implementation notes</h4>
  * This class is intended for use in a single thread.
  */
-public class DateTimeParseException extends DateTimeException {
+public class DateTimeParseException extends IllegalArgumentException {
 
     /**
      * Serialization version.

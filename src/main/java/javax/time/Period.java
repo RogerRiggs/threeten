@@ -218,7 +218,7 @@ public final class Period
      * @param amount  the amount of the period, measured in terms of the unit, positive or negative
      * @param unit  the unit that the period is measured in, must have an exact duration, not null
      * @return the period, not null
-     * @throws DateTimeException if the period unit is invalid
+     * @throws IllegalArgumentException if the period unit is invalid
      * @throws ArithmeticException if a numeric overflow occurs
      */
     public static Period of(long amount, PeriodUnit unit) {
@@ -269,12 +269,12 @@ public final class Period
      * @param start  the start date, inclusive, not null
      * @param end  the end date, exclusive, not null
      * @return the period between the date-times, not null
-     * @throws DateTimeException if the two date-times do have similar available fields
+     * @throws IllegalArgumentException if the two date-times do not have similar available fields
      * @throws ArithmeticException if numeric overflow occurs
      */
     public static Period between(DateTimeAccessor start, DateTimeAccessor end) {
         if (Chrono.from(start).equals(Chrono.from(end)) == false) {
-            throw new DateTimeException("Unable to calculate period as date-times have different chronologies");
+            throw new IllegalArgumentException("Unable to calculate period as date-times have different chronologies");
         }
         int years = 0;
         int months = 0;
@@ -306,7 +306,7 @@ public final class Period
             valid = true;
         }
         if (valid == false) {
-            throw new DateTimeException("Unable to calculate period as date-times do not have any valid fields");
+            throw new IllegalArgumentException("Unable to calculate period as date-times do not have any valid fields");
         }
         return create(years, months, days, nanos);
     }
@@ -675,12 +675,12 @@ public final class Period
                     case DAYS: return plusDays(amount);
                     case MONTHS: return plusMonths(amount);
                     case YEARS: return plusYears(amount);
-                    default: throw new DateTimeException("Unsupported unit: " + unit.getName());
+                    default: throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
                 }
             }
         }
         if (unit.isDurationEstimated()) {
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return plusNanos(Duration.of(amount, unit).toNanos());
     }
@@ -931,7 +931,7 @@ public final class Period
      *
      * @param dateTime  the date-time object to adjust, not null
      * @return an object of the same type with the adjustment made, not null
-     * @throws DateTimeException if unable to add
+     * @throws IllegalArgumentException if unable to add
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -973,7 +973,7 @@ public final class Period
      *
      * @param dateTime  the date-time object to adjust, not null
      * @return an object of the same type with the adjustment made, not null
-     * @throws DateTimeException if unable to subtract
+     * @throws IllegalArgumentException if unable to subtract
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -1030,11 +1030,11 @@ public final class Period
      * {@link #normalizedDaysToHours()} for a way to convert days to hours.
      *
      * @return a {@code Duration} equivalent to this period, not null
-     * @throws DateTimeException if the period cannot be converted as it contains years, months or days
+     * @throws IllegalArgumentException if the period cannot be converted as it contains years, months or days
      */
     public Duration toDuration() {
         if ((years | months | days) != 0) {
-            throw new DateTimeException("Unable to convert period to duration as years/months/days are present: " + this);
+            throw new IllegalArgumentException("Unable to convert period to duration as years/months/days are present: " + this);
         }
         return Duration.ofNanos(nanos);
     }

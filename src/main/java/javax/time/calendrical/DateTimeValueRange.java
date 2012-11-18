@@ -33,8 +33,6 @@ package javax.time.calendrical;
 
 import java.io.Serializable;
 
-import javax.time.DateTimeException;
-
 /**
  * The range of valid values for a date-time field.
  * <p>
@@ -253,14 +251,15 @@ public final class DateTimeValueRange implements Serializable {
      * @param value  the value to check
      * @param field  the field being checked, may be null
      * @return the value that was passed in
+     * @throws IllegalArgumentException if the value is not valid for the field
      * @see #isValidValue(long)
      */
     public long checkValidValue(long value, DateTimeField field) {
         if (isValidValue(value) == false) {
             if (field != null) {
-                throw new DateTimeException("Invalid value for " + field.getName() + " (valid values " + this + "): " + value);
+                throw new IllegalArgumentException("Invalid value for " + field.getName() + " (valid values " + this + "): " + value);
             } else {
-                throw new DateTimeException("Invalid value (valid values " + this + "): " + value);
+                throw new IllegalArgumentException("Invalid value (valid values " + this + "): " + value);
             }
         }
         return value;
@@ -276,11 +275,12 @@ public final class DateTimeValueRange implements Serializable {
      * @param value  the value to check
      * @param field  the field being checked, may be null
      * @return the value that was passed in
+     * @throws IllegalArgumentException if the value is not valid for the field
      * @see #isValidIntValue(long)
      */
     public int checkValidIntValue(long value, DateTimeField field) {
         if (isValidIntValue(value) == false) {
-            throw new DateTimeException("Invalid int value for " + field.getName() + ": " + value);
+            throw new IllegalArgumentException("Invalid int value for " + field.getName() + ": " + value);
         }
         return (int) value;
     }

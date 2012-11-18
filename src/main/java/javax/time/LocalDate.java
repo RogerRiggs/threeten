@@ -195,8 +195,8 @@ public final class LocalDate
      * @param month  the month-of-year to represent, not null
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return the local date, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public static LocalDate of(int year, Month month, int dayOfMonth) {
         YEAR.checkValidValue(year);
@@ -214,8 +214,8 @@ public final class LocalDate
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return the local date, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public static LocalDate of(int year, int month, int dayOfMonth) {
         YEAR.checkValidValue(year);
@@ -233,15 +233,15 @@ public final class LocalDate
      * @param year  the year to represent, from MIN_YEAR to MAX_YEAR
      * @param dayOfYear  the day-of-year to represent, from 1 to 366
      * @return the local date, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-year is invalid for the month-year
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-year is invalid for the month-year
      */
     public static LocalDate ofYearDay(int year, int dayOfYear) {
         YEAR.checkValidValue(year);
         DAY_OF_YEAR.checkValidValue(dayOfYear);
         boolean leap = ISOChrono.INSTANCE.isLeapYear(year);
         if (dayOfYear == 366 && leap == false) {
-            throw new DateTimeException("Invalid date 'DayOfYear 366' as '" + year + "' is not a leap year");
+            throw new IllegalArgumentException("Invalid date 'DayOfYear 366' as '" + year + "' is not a leap year");
         }
         Month moy = Month.of((dayOfYear - 1) / 31 + 1);
         int monthEnd = moy.firstDayOfYear(leap) + moy.length(leap) - 1;
@@ -261,7 +261,7 @@ public final class LocalDate
      *
      * @param epochDay  the Epoch Day to convert, based on the epoch 1970-01-01
      * @return the local date, not null
-     * @throws DateTimeException if the epoch days exceeds the supported date range
+     * @throws IllegalArgumentException if the epoch days exceeds the supported date range
      */
     public static LocalDate ofEpochDay(long epochDay) {
         long zeroDay = epochDay + DAYS_0000_TO_1970;
@@ -304,7 +304,7 @@ public final class LocalDate
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the local date, not null
-     * @throws DateTimeException if unable to convert to a {@code LocalDate}
+     * @throws IllegalArgumentException if unable to convert to a {@code LocalDate}
      */
     public static LocalDate from(DateTimeAccessor dateTime) {
         // handle builder as a special case
@@ -356,14 +356,14 @@ public final class LocalDate
      * @param month  the month-of-year to represent, validated not null
      * @param dayOfMonth  the day-of-month to represent, validated from 1 to 31
      * @return the local date, not null
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     private static LocalDate create(int year, Month month, int dayOfMonth) {
         if (dayOfMonth > 28 && dayOfMonth > month.length(ISOChrono.INSTANCE.isLeapYear(year))) {
             if (dayOfMonth == 29) {
-                throw new DateTimeException("Invalid date 'February 29' as '" + year + "' is not a leap year");
+                throw new IllegalArgumentException("Invalid date 'February 29' as '" + year + "' is not a leap year");
             } else {
-                throw new DateTimeException("Invalid date '" + month.name() + " " + dayOfMonth + "'");
+                throw new IllegalArgumentException("Invalid date '" + month.name() + " " + dayOfMonth + "'");
             }
         }
         return new LocalDate(year, month.getValue(), dayOfMonth);
@@ -431,7 +431,7 @@ public final class LocalDate
                 }
                 return field.range();
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }
@@ -465,20 +465,20 @@ public final class LocalDate
             case ALIGNED_DAY_OF_WEEK_IN_YEAR: return ((getDayOfYear() - 1) % 7) + 1;
             case DAY_OF_MONTH: return day;
             case DAY_OF_YEAR: return getDayOfYear();
-            case EPOCH_DAY: throw new DateTimeException("Field too large for an int: " + field);
+            case EPOCH_DAY: throw new IllegalArgumentException("Field too large for an int: " + field);
             case ALIGNED_WEEK_OF_MONTH: return ((day - 1) / 7) + 1;
             case WEEK_OF_MONTH: throw new UnsupportedOperationException("TODO");
             case WEEK_OF_WEEK_BASED_YEAR: throw new UnsupportedOperationException("TODO");
             case ALIGNED_WEEK_OF_YEAR: return ((getDayOfYear() - 1) / 7) + 1;
             case WEEK_OF_YEAR: throw new UnsupportedOperationException("TODO");
             case MONTH_OF_YEAR: return month;
-            case EPOCH_MONTH: throw new DateTimeException("Field too large for an int: " + field);
+            case EPOCH_MONTH: throw new IllegalArgumentException("Field too large for an int: " + field);
             case WEEK_BASED_YEAR: throw new UnsupportedOperationException("TODO");
             case YEAR_OF_ERA: return (year >= 1 ? year : 1 - year);
             case YEAR: return year;
             case ERA: return (year >= 1 ? 1 : 0);
         }
-        throw new DateTimeException("Unsupported field: " + field.getName());
+        throw new IllegalArgumentException("Unsupported field: " + field.getName());
     }
 
     private long getEpochMonth() {
@@ -689,7 +689,7 @@ public final class LocalDate
      *
      * @param adjuster the adjuster to use, not null
      * @return a {@code LocalDate} based on this date with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     @Override
     public LocalDate with(WithAdjuster adjuster) {
@@ -715,7 +715,7 @@ public final class LocalDate
      * @param field  the field to set in the returned date, not null
      * @param newValue  the new value of the field in the returned date, not null
      * @return a {@code LocalDate} based on this date with the specified field set, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
      */
     @Override
     public LocalDate with(DateTimeField field, long newValue) {
@@ -741,7 +741,7 @@ public final class LocalDate
                 case YEAR: return withYear((int) newValue);
                 case ERA: return (getLong(ERA) == newValue ? this : withYear(1 - year));
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }
@@ -755,7 +755,7 @@ public final class LocalDate
      *
      * @param year  the year to set in the returned date, from MIN_YEAR to MAX_YEAR
      * @return a {@code LocalDate} based on this date with the requested year, not null
-     * @throws DateTimeException if the year value is invalid
+     * @throws IllegalArgumentException if the year value is invalid
      */
     public LocalDate withYear(int year) {
         if (this.year == year) {
@@ -773,7 +773,7 @@ public final class LocalDate
      *
      * @param month  the month-of-year to set in the returned date, from 1 (January) to 12 (December)
      * @return a {@code LocalDate} based on this date with the requested month, not null
-     * @throws DateTimeException if the month-of-year value is invalid
+     * @throws IllegalArgumentException if the month-of-year value is invalid
      */
     public LocalDate withMonth(int month) {
         if (this.month == month) {
@@ -791,8 +791,8 @@ public final class LocalDate
      *
      * @param dayOfMonth  the day-of-month to set in the returned date, from 1 to 28-31
      * @return a {@code LocalDate} based on this date with the requested day, not null
-     * @throws DateTimeException if the day-of-month value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the day-of-month value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     public LocalDate withDayOfMonth(int dayOfMonth) {
         if (this.day == dayOfMonth) {
@@ -809,8 +809,8 @@ public final class LocalDate
      *
      * @param dayOfYear  the day-of-year to set in the returned date, from 1 to 365-366
      * @return a {@code LocalDate} based on this date with the requested day, not null
-     * @throws DateTimeException if the day-of-year value is invalid
-     * @throws DateTimeException if the day-of-year is invalid for the year
+     * @throws IllegalArgumentException if the day-of-year value is invalid
+     * @throws IllegalArgumentException if the day-of-year is invalid for the year
      */
     public LocalDate withDayOfYear(int dayOfYear) {
         if (this.getDayOfYear() == dayOfYear) {
@@ -833,7 +833,7 @@ public final class LocalDate
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code LocalDate} based on this date with the addition made, not null
-     * @throws DateTimeException if the addition cannot be made
+     * @throws IllegalArgumentException if the addition cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -854,7 +854,7 @@ public final class LocalDate
      * @param amountToAdd  the amount of the unit to add to the returned date, not null
      * @param unit  the unit of the period to add, not null
      * @return a {@code LocalDate} based on this date with the specified period added, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     @Override
     public LocalDate plus(long amountToAdd, PeriodUnit unit) {
@@ -873,7 +873,7 @@ public final class LocalDate
                 case MILLENNIA: return plusYears(Jdk8Methods.safeMultiply(amountToAdd, 1000));
                 case ERAS: return with(ERA, Jdk8Methods.safeAdd(getLong(ERA), amountToAdd));
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.doAdd(this, amountToAdd);
     }
@@ -897,7 +897,7 @@ public final class LocalDate
      *
      * @param yearsToAdd  the years to add, may be negative
      * @return a {@code LocalDate} based on this date with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public LocalDate plusYears(long yearsToAdd) {
         if (yearsToAdd == 0) {
@@ -925,7 +925,7 @@ public final class LocalDate
      *
      * @param monthsToAdd  the months to add, may be negative
      * @return a {@code LocalDate} based on this date with the months added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public LocalDate plusMonths(long monthsToAdd) {
         if (monthsToAdd == 0) {
@@ -951,7 +951,7 @@ public final class LocalDate
      *
      * @param weeksToAdd  the weeks to add, may be negative
      * @return a {@code LocalDate} based on this date with the weeks added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public LocalDate plusWeeks(long weeksToAdd) {
         return plusDays(Jdk8Methods.safeMultiply(weeksToAdd, 7));
@@ -970,7 +970,7 @@ public final class LocalDate
      *
      * @param daysToAdd  the days to add, may be negative
      * @return a {@code LocalDate} based on this date with the days added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public LocalDate plusDays(long daysToAdd) {
         if (daysToAdd == 0) {
@@ -994,7 +994,7 @@ public final class LocalDate
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code LocalDate} based on this date with the subtraction made, not null
-     * @throws DateTimeException if the subtraction cannot be made
+     * @throws IllegalArgumentException if the subtraction cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -1015,7 +1015,7 @@ public final class LocalDate
      * @param amountToSubtract  the amount of the unit to subtract from the returned date, not null
      * @param unit  the unit of the period to subtract, not null
      * @return a {@code LocalDate} based on this date with the specified period subtracted, not null
-     * @throws DateTimeException if the unit cannot be added to this type
+     * @throws IllegalArgumentException if the unit cannot be added to this type
      */
     @Override
     public LocalDate minus(long amountToSubtract, PeriodUnit unit) {
@@ -1041,7 +1041,7 @@ public final class LocalDate
      *
      * @param yearsToSubtract  the years to subtract, may be negative
      * @return a {@code LocalDate} based on this date with the years subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public LocalDate minusYears(long yearsToSubtract) {
         return (yearsToSubtract == Long.MIN_VALUE ? plusYears(Long.MAX_VALUE).plusYears(1) : plusYears(-yearsToSubtract));
@@ -1065,7 +1065,7 @@ public final class LocalDate
      *
      * @param monthsToSubtract  the months to subtract, may be negative
      * @return a {@code LocalDate} based on this date with the months subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public LocalDate minusMonths(long monthsToSubtract) {
         return (monthsToSubtract == Long.MIN_VALUE ? plusMonths(Long.MAX_VALUE).plusMonths(1) : plusMonths(-monthsToSubtract));
@@ -1084,7 +1084,7 @@ public final class LocalDate
      *
      * @param weeksToSubtract  the weeks to subtract, may be negative
      * @return a {@code LocalDate} based on this date with the weeks subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public LocalDate minusWeeks(long weeksToSubtract) {
         return (weeksToSubtract == Long.MIN_VALUE ? plusWeeks(Long.MAX_VALUE).plusWeeks(1) : plusWeeks(-weeksToSubtract));
@@ -1103,7 +1103,7 @@ public final class LocalDate
      *
      * @param daysToSubtract  the days to subtract, may be negative
      * @return a {@code LocalDate} based on this date with the days subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     public LocalDate minusDays(long daysToSubtract) {
         return (daysToSubtract == Long.MIN_VALUE ? plusDays(Long.MAX_VALUE).plusDays(1) : plusDays(-daysToSubtract));
@@ -1152,7 +1152,7 @@ public final class LocalDate
      * @param hour  the hour-of-day to use, from 0 to 23
      * @param minute  the minute-of-hour to use, from 0 to 59
      * @return the local date-time formed from this date and the specified time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public LocalDateTime atTime(int hour, int minute) {
         return atTime(LocalTime.of(hour, minute));
@@ -1170,7 +1170,7 @@ public final class LocalDate
      * @param minute  the minute-of-hour to use, from 0 to 59
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return the local date-time formed from this date and the specified time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public LocalDateTime atTime(int hour, int minute, int second) {
         return atTime(LocalTime.of(hour, minute, second));
@@ -1189,7 +1189,7 @@ public final class LocalDate
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return the local date-time formed from this date and the specified time, not null
-     * @throws DateTimeException if the value of any field is out of range
+     * @throws IllegalArgumentException if the value of any field is out of range
      */
     public LocalDateTime atTime(int hour, int minute, int second, int nanoOfSecond) {
         return atTime(LocalTime.of(hour, minute, second, nanoOfSecond));
@@ -1237,7 +1237,7 @@ public final class LocalDate
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof LocalDate == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         LocalDate end = (LocalDate) endDateTime;
         if (unit instanceof ChronoUnit) {
@@ -1254,7 +1254,7 @@ public final class LocalDate
                 case MILLENNIA: return monthsUntil(end) / 12000;
                 case ERAS: return end.getLong(ERA) - getLong(ERA);
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.between(this, endDateTime).getAmount();
     }

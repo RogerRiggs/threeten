@@ -93,12 +93,12 @@ public class TCKMonth extends AbstractDateTimeTest {
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_int_tooLow() {
         Month.of(0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_int_tooHigh() {
         Month.of(13);
     }
@@ -109,7 +109,7 @@ public class TCKMonth extends AbstractDateTimeTest {
         assertEquals(Month.from(LocalDate.of(2011, 6, 6)), JUNE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         Month.from(LocalTime.of(12, 30));
     }

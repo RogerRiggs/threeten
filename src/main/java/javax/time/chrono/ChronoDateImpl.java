@@ -38,7 +38,6 @@ import static javax.time.calendrical.ChronoField.WEEK_OF_YEAR;
 
 import java.io.Serializable;
 
-import javax.time.DateTimeException;
 import javax.time.DayOfWeek;
 import javax.time.LocalDate;
 import javax.time.LocalTime;
@@ -225,7 +224,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param era  the era to set, not null
      * @return a date based on this one with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoLocalDate<C> withEra(Era<C> era) {
         return with(ChronoField.ERA, era.getValue());
@@ -294,10 +293,10 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
                 case DECADES: return plusYears(Jdk8Methods.safeMultiply(amountToAdd, 10));
                 case CENTURIES: return plusYears(Jdk8Methods.safeMultiply(amountToAdd, 100));
                 case MILLENNIA: return plusYears(Jdk8Methods.safeMultiply(amountToAdd, 1000));
-//                case ERAS: throw new DateTimeException("Unable to add era, standard calendar system only has one era");
+//                case ERAS: throw new IllegalArgumentException("Unable to add era, standard calendar system only has one era");
 //                case FOREVER: return (period == 0 ? this : (period > 0 ? LocalDate.MAX_DATE : LocalDate.MIN_DATE));
             }
-            throw new DateTimeException(unit.getName() + " not valid for chronology " + getChrono().getId());
+            throw new IllegalArgumentException(unit.getName() + " not valid for chronology " + getChrono().getId());
         }
         return (ChronoDateImpl<C>)getChrono().ensureChronoLocalDate(unit.doAdd(this, amountToAdd));
     }
@@ -315,7 +314,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param yearsToAdd  the years to add, may be negative
      * @return a date based on this one with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     abstract ChronoDateImpl<C> plusYears(long yearsToAdd);
 
@@ -331,7 +330,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param monthsToAdd  the months to add, may be negative
      * @return a date based on this one with the months added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     abstract ChronoDateImpl<C> plusMonths(long monthsToAdd);
 
@@ -348,7 +347,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param weeksToAdd  the weeks to add, may be negative
      * @return a date based on this one with the weeks added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateImpl<C> plusWeeks(long weeksToAdd) {
         return plusDays(Jdk8Methods.safeMultiply(weeksToAdd, 7));
@@ -363,7 +362,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param daysToAdd  the days to add, may be negative
      * @return a date based on this one with the days added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     abstract ChronoDateImpl<C> plusDays(long daysToAdd);
 
@@ -382,7 +381,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param yearsToSubtract  the years to subtract, may be negative
      * @return a date based on this one with the years subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateImpl<C> minusYears(long yearsToSubtract) {
         return (yearsToSubtract == Long.MIN_VALUE ? plusYears(Long.MAX_VALUE).plusYears(1) : plusYears(-yearsToSubtract));
@@ -402,7 +401,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param monthsToSubtract  the months to subtract, may be negative
      * @return a date based on this one with the months subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateImpl<C> minusMonths(long monthsToSubtract) {
         return (monthsToSubtract == Long.MIN_VALUE ? plusMonths(Long.MAX_VALUE).plusMonths(1) : plusMonths(-monthsToSubtract));
@@ -421,7 +420,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param weeksToSubtract  the weeks to subtract, may be negative
      * @return a date based on this one with the weeks subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateImpl<C> minusWeeks(long weeksToSubtract) {
         return (weeksToSubtract == Long.MIN_VALUE ? plusWeeks(Long.MAX_VALUE).plusWeeks(1) : plusWeeks(-weeksToSubtract));
@@ -438,7 +437,7 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
      *
      * @param daysToSubtract  the days to subtract, may be negative
      * @return a date based on this one with the days subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateImpl<C> minusDays(long daysToSubtract) {
         return (daysToSubtract == Long.MIN_VALUE ? plusDays(Long.MAX_VALUE).plusDays(1) : plusDays(-daysToSubtract));
@@ -453,11 +452,11 @@ abstract class ChronoDateImpl<C extends Chrono<C>>
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof ChronoLocalDate == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         ChronoLocalDate<?> end = (ChronoLocalDate<?>) endDateTime;
         if (getChrono().equals(end.getChrono()) == false) {
-            throw new DateTimeException("Unable to calculate period between two different chronologies");
+            throw new IllegalArgumentException("Unable to calculate period between two different chronologies");
         }
         if (unit instanceof ChronoUnit) {
             return LocalDate.from(this).periodUntil(end, unit);  // TODO: this is wrong

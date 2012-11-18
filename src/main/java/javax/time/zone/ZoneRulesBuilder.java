@@ -43,7 +43,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.time.DateTimeConstants;
-import javax.time.DateTimeException;
 import javax.time.DayOfWeek;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
@@ -215,7 +214,7 @@ class ZoneRulesBuilder {
      * @param timeDefinition  the definition of how to convert local to actual time, not null
      * @param savingAmountSecs  the amount of saving from the standard offset after the transition in seconds
      * @return this, for chaining
-     * @throws DateTimeException if a date-time field is out of range
+     * @throws IllegalArgumentException if a date-time field is out of range
      * @throws IllegalStateException if no window has yet been added
      * @throws IllegalStateException if the window already has fixed savings
      * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
@@ -248,7 +247,7 @@ class ZoneRulesBuilder {
      * @param timeDefinition  the definition of how to convert local to actual time, not null
      * @param savingAmountSecs  the amount of saving from the standard offset after the transition in seconds
      * @return this, for chaining
-     * @throws DateTimeException if a date-time field is out of range
+     * @throws IllegalArgumentException if a date-time field is out of range
      * @throws IllegalArgumentException if the day of month indicator is invalid
      * @throws IllegalArgumentException if the end of day midnight flag does not match the time
      * @throws IllegalStateException if no window has yet been added

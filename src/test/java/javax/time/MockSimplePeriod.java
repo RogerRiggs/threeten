@@ -74,7 +74,7 @@ public final class MockSimplePeriod
      * @param amount  the amount of the period, measured in terms of the unit, positive or negative
      * @param unit  the unit that the period is measured in, must not be the 'Forever' unit, not null
      * @return the {@code MockSimplePeriod} instance, not null
-     * @throws DateTimeException if the period unit is {@link javax.time.calendrical.ChronoUnit#FOREVER}.
+     * @throws IllegalArgumentException if the period unit is {@link javax.time.calendrical.ChronoUnit#FOREVER}.
      */
     public static MockSimplePeriod of(long amount, PeriodUnit unit) {
         return new MockSimplePeriod(amount, unit);
@@ -83,7 +83,7 @@ public final class MockSimplePeriod
     private MockSimplePeriod(long amount, PeriodUnit unit) {
         Objects.requireNonNull(unit, "unit");
         if (unit == FOREVER) {
-            throw new DateTimeException("Cannot create a period of the Forever unit");
+            throw new IllegalArgumentException("Cannot create a period of the Forever unit");
         }
         this.amount = amount;
         this.unit = unit;

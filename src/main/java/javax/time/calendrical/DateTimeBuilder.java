@@ -179,13 +179,13 @@ public final class DateTimeBuilder
      *
      * @param field  the field to query in the field-value map, not null
      * @return the value of the field, may be out of range
-     * @throws DateTimeException if the field is not present
+     * @throws IllegalArgumentException if the field is not present
      */
     public long getFieldValue(DateTimeField field) {
         Objects.requireNonNull(field, "field");
         Long value = getFieldValue0(field);
         if (value == null) {
-            throw new DateTimeException("Field not found: " + field);
+            throw new IllegalArgumentException("Field not found: " + field);
         }
         return value;
     }
@@ -204,7 +204,7 @@ public final class DateTimeBuilder
      *
      * @param field  the field to query in the field-value map, not null
      * @return the value of the field, may be out of range
-     * @throws DateTimeException if the field is not present
+     * @throws IllegalArgumentException if the field is not present
      */
     public long getValidFieldValue(DateTimeField field) {
         long value = getFieldValue(field);
@@ -223,13 +223,13 @@ public final class DateTimeBuilder
      * @param field  the field to add, not null
      * @param value  the value to add, not null
      * @return {@code this}, for method chaining
-     * @throws DateTimeException if the field is already present with a different value
+     * @throws IllegalArgumentException if the field is already present with a different value
      */
     public DateTimeBuilder addFieldValue(DateTimeField field, long value) {
         Objects.requireNonNull(field, "field");
         Long old = getFieldValue0(field);  // check first for better error message
         if (old != null && old.longValue() != value) {
-            throw new DateTimeException("Conflict found: " + field + " " + old + " differs from " + field + " " + value + ": " + this);
+            throw new IllegalArgumentException("Conflict found: " + field + " " + old + " differs from " + field + " " + value + ": " + this);
         }
         return putFieldValue0(field, value);
     }
@@ -254,7 +254,7 @@ public final class DateTimeBuilder
      *
      * @param field  the field to remove, not null
      * @return the previous value of the field
-     * @throws DateTimeException if the field is not found
+     * @throws IllegalArgumentException if the field is not found
      */
     public long removeFieldValue(DateTimeField field) {
         Objects.requireNonNull(field, "field");
@@ -265,7 +265,7 @@ public final class DateTimeBuilder
             value = otherFields.remove(field);
         }
         if (value == null) {
-            throw new DateTimeException("Field not found: " + field);
+            throw new IllegalArgumentException("Field not found: " + field);
         }
         return value;
     }
@@ -332,7 +332,7 @@ public final class DateTimeBuilder
      *
      * @param object  the object to add, not null
      * @return {@code this}, for method chaining
-     * @throws DateTimeException if the field is already present with a different value
+     * @throws IllegalArgumentException if the field is already present with a different value
      */
     public DateTimeBuilder addCalendrical(Object object) {
         Objects.requireNonNull(object, "object");
@@ -475,7 +475,7 @@ public final class DateTimeBuilder
             long val1;
             try {
                 val1 = date.getLong(field);
-            } catch (DateTimeException ex) {
+            } catch (IllegalArgumentException | DateTimeException ex) {
                 continue;
             }
             Long val2 = standardFields.get(field);
@@ -634,7 +634,7 @@ public final class DateTimeBuilder
      * @param <R>  the type to return
      * @param type  the type to invoke {@code from} on, not null
      * @return the extracted value, not null
-     * @throws DateTimeException if an error occurs
+     * @throws IllegalArgumentException if this builder date-time does not have the fields needed by the {@code from} method of the type
      */
     public <R> R build(Class<R> type) {
         return invokeFrom(type, this);
@@ -650,15 +650,16 @@ public final class DateTimeBuilder
      * @param type  the type to invoke {@code from} on, not null
      * @param dateTime  the date-time to pass as the argument, not null
      * @return the value returned from the {@code from} method, not null
-     * @throws DateTimeException if an error occurs
+     * @throws IllegalArgumentException if this builder date-time does not have the fields needed by the {@code from} method of the type
      */
     private static <R> R invokeFrom(Class<R> type, DateTimeAccessor dateTime) {
         try {
             Method m = type.getDeclaredMethod("from", DateTimeAccessor.class);
             return type.cast(m.invoke(null, dateTime));
         } catch (ReflectiveOperationException ex) {
-            if (ex.getCause() instanceof DateTimeException == false) {
-                throw new DateTimeException("Unable to invoke method from(DateTime)", ex);
+            // TODO: the exception may also be InvalidArgumentException because from(dt) throws that if it cannot convert
+            if (ex.getCause() instanceof IllegalArgumentException == false) {
+                throw new IllegalArgumentException("Unable to invoke method from(DateTime)", ex);
             }
             throw (DateTimeException) ex.getCause();
         }

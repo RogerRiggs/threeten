@@ -243,7 +243,7 @@ public final class Duration
      * @param amount  the amount of the duration, measured in terms of the unit, positive or negative
      * @param unit  the unit that the duration is measured in, must have an exact duration, not null
      * @return a {@code Duration}, not null
-     * @throws DateTimeException if the period unit has an estimated duration
+     * @throws IllegalArgumentException if the period unit has an estimated duration
      * @throws ArithmeticException if a numeric overflow occurs
      */
     public static Duration of(long amount, PeriodUnit unit) {
@@ -497,6 +497,7 @@ public final class Duration
      * @param amountToAdd  the amount of the period, measured in terms of the unit, positive or negative
      * @param unit  the unit that the period is measured in, must have an exact duration, not null
      * @return a {@code Duration} based on this duration with the specified duration added, not null
+     * @throws IllegalArgumentException if the period unit has an estimated duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Duration plus(long amountToAdd, PeriodUnit unit) {
@@ -505,7 +506,7 @@ public final class Duration
             return plus(Jdk8Methods.safeMultiply(amountToAdd, SECONDS_PER_DAY), 0);
         }
         if (unit.isDurationEstimated()) {
-            throw new DateTimeException("Unit must not have an estimated duration");
+            throw new IllegalArgumentException("Unit must not have an estimated duration");
         }
         if (amountToAdd == 0) {
             return this;
@@ -769,7 +770,7 @@ public final class Duration
      *
      * @param dateTime  the date-time object to adjust, not null
      * @return an object of the same type with the adjustment made, not null
-     * @throws DateTimeException if unable to add
+     * @throws IllegalArgumentException if unable to add
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override
@@ -792,7 +793,7 @@ public final class Duration
      *
      * @param dateTime  the date-time object to adjust, not null
      * @return an object of the same type with the adjustment made, not null
-     * @throws DateTimeException if unable to subtract
+     * @throws IllegalArgumentException if unable to subtract
      * @throws ArithmeticException if numeric overflow occurs
      */
     @Override

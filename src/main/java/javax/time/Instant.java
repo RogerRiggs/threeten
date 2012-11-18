@@ -265,7 +265,7 @@ public final class Instant
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the instant, not null
-     * @throws DateTimeException if unable to convert to an {@code Instant}
+     * @throws IllegalArgumentException if unable to convert to an {@code Instant}
      */
     public static Instant from(DateTimeAccessor dateTime) {
         long instantSecs = dateTime.getLong(INSTANT_SECONDS);
@@ -346,7 +346,7 @@ public final class Instant
                 case MILLI_OF_SECOND: return nanos / 1000_000;
                 case INSTANT_SECONDS: return seconds;
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -401,7 +401,7 @@ public final class Instant
                 case NANO_OF_SECOND: return (newValue != nanos ? create(seconds, (int) newValue) : this);
                 case INSTANT_SECONDS: return (newValue != seconds ? create(newValue, nanos) : this);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }
@@ -425,7 +425,7 @@ public final class Instant
                 case HALF_DAYS: return plusSeconds(Jdk8Methods.safeMultiply(amountToAdd, SECONDS_PER_DAY / 2));
                 case DAYS: return plusSeconds(Jdk8Methods.safeMultiply(amountToAdd, SECONDS_PER_DAY));
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.doAdd(this, amountToAdd);
     }
@@ -564,7 +564,7 @@ public final class Instant
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof Instant == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         Instant end = (Instant) endDateTime;
         if (unit instanceof ChronoUnit) {
@@ -579,7 +579,7 @@ public final class Instant
                 case HALF_DAYS: return secondsUntil(end) / (12 * SECONDS_PER_HOUR);
                 case DAYS: return secondsUntil(end) / (SECONDS_PER_DAY);
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.between(this, endDateTime).getAmount();
     }

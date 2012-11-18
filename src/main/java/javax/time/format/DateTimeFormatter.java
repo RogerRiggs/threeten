@@ -221,7 +221,7 @@ public final class DateTimeFormatter implements CalendricalFormatter {
         try {
             DateTimeBuilder builder = parseToBuilder(str).resolve();
             return builder.build(type);
-        } catch (DateTimeParseException ex) {
+        } catch (IllegalArgumentException ex) {
             throw ex;
         } catch (RuntimeException ex) {
             throw createError(str, ex);

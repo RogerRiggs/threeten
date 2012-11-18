@@ -99,12 +99,12 @@ public class TCKDayOfWeek extends AbstractDateTimeTest {
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_int_valueTooLow() {
         DayOfWeek.of(0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_int_valueTooHigh() {
         DayOfWeek.of(8);
     }
@@ -115,7 +115,7 @@ public class TCKDayOfWeek extends AbstractDateTimeTest {
         assertEquals(DayOfWeek.from(LocalDate.of(2011, 6, 6)), DayOfWeek.MONDAY);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         DayOfWeek.from(LocalTime.of(12, 30));
     }

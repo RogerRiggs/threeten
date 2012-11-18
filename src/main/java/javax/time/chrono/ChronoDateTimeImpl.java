@@ -45,7 +45,6 @@ import static javax.time.calendrical.ChronoField.EPOCH_DAY;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.time.DateTimeException;
 import javax.time.DayOfWeek;
 import javax.time.LocalTime;
 import javax.time.ZoneId;
@@ -313,7 +312,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param year  the year to set in the returned date, from MIN_YEAR to MAX_YEAR
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested year, not null
-     * @throws DateTimeException if the year value is invalid
+     * @throws IllegalArgumentException if the year value is invalid
      */
     ChronoDateTimeImpl<C> withYear(int year) {
         return with(date.with(ChronoField.YEAR_OF_ERA, year), time);
@@ -328,7 +327,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param month  the month-of-year to set in the returned date, from 1 (January) to 12 (December)
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested month, not null
-     * @throws DateTimeException if the month-of-year value is invalid
+     * @throws IllegalArgumentException if the month-of-year value is invalid
      */
     ChronoDateTimeImpl<C> withMonth(int month) {
         return with(date.with(ChronoField.MONTH_OF_YEAR, month), time);
@@ -343,8 +342,8 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param dayOfMonth  the day-of-month to set in the returned date, from 1 to 28-31
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested day, not null
-     * @throws DateTimeException if the day-of-month value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the day-of-month value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     ChronoDateTimeImpl<C> withDayOfMonth(int dayOfMonth) {
         return with(date.with(ChronoField.DAY_OF_MONTH, dayOfMonth), time);
@@ -358,8 +357,8 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param dayOfYear  the day-of-year to set in the returned date, from 1 to 365-366
      * @return a {@code ChronoLocalDateTime} based on this date with the requested day, not null
-     * @throws DateTimeException if the day-of-year value is invalid
-     * @throws DateTimeException if the day-of-year is invalid for the year
+     * @throws IllegalArgumentException if the day-of-year value is invalid
+     * @throws IllegalArgumentException if the day-of-year is invalid for the year
      */
     ChronoDateTimeImpl<C> withDayOfYear(int dayOfYear) {
         return with(date.with(ChronoField.DAY_OF_YEAR, dayOfYear), time);
@@ -377,8 +376,8 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested date, not null
-     * @throws DateTimeException if any field value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if any field value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     ChronoDateTimeImpl<C> withDate(int year, int month, int dayOfMonth) {
         if (year == getYear() &&
@@ -397,7 +396,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested hour, not null
-     * @throws DateTimeException if the hour value is invalid
+     * @throws IllegalArgumentException if the hour value is invalid
      */
     ChronoDateTimeImpl<C> withHour(int hour) {
         LocalTime newTime = time.withHour(hour);
@@ -411,7 +410,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested minute, not null
-     * @throws DateTimeException if the minute value is invalid
+     * @throws IllegalArgumentException if the minute value is invalid
      */
     ChronoDateTimeImpl<C> withMinute(int minute) {
         LocalTime newTime = time.withMinute(minute);
@@ -425,7 +424,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested second, not null
-     * @throws DateTimeException if the second value is invalid
+     * @throws IllegalArgumentException if the second value is invalid
      */
     ChronoDateTimeImpl<C> withSecond(int second) {
         LocalTime newTime = time.withSecond(second);
@@ -439,7 +438,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested nanosecond, not null
-     * @throws DateTimeException if the nano value is invalid
+     * @throws IllegalArgumentException if the nano value is invalid
      */
     ChronoDateTimeImpl<C> withNano(int nanoOfSecond) {
         LocalTime newTime = time.withNano(nanoOfSecond);
@@ -459,7 +458,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     ChronoDateTimeImpl<C> withTime(int hour, int minute) {
         return withTime(hour, minute, 0, 0);
@@ -479,7 +478,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     ChronoDateTimeImpl<C> withTime(int hour, int minute, int second) {
         return withTime(hour, minute, second, 0);
@@ -498,7 +497,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      * @param second  the second-of-minute to represent, from 0 to 59
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return a {@code ChronoLocalDateTime} based on this date-time with the requested time, not null
-     * @throws DateTimeException if any field value is invalid
+     * @throws IllegalArgumentException if any field value is invalid
      */
     ChronoDateTimeImpl<C> withTime(int hour, int minute, int second, int nanoOfSecond) {
         if (hour == getHour() && minute == getMinute() &&
@@ -547,7 +546,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param years  the years to add, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> plusYears(long years) {
         return with(date.plus(years, ChronoUnit.YEARS), time);
@@ -571,7 +570,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param months  the months to add, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the months added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> plusMonths(long months) {
         return with(date.plus(months, ChronoUnit.MONTHS), time);
@@ -590,7 +589,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param weeks  the weeks to add, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the weeks added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> plusWeeks(long weeks) {
         return with(date.plus(weeks, ChronoUnit.WEEKS), time);
@@ -609,7 +608,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param days  the days to add, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the days added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> plusDays(long days) {
         return with(date.plus(days, ChronoUnit.DAYS), time);
@@ -622,7 +621,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param hours  the hours to add, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the hours added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> plusHours(long hours) {
         return plusWithOverflow(date, hours, 0, 0, 0, 1);
@@ -635,7 +634,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param minutes  the minutes to add, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the minutes added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> plusMinutes(long minutes) {
         return plusWithOverflow(date, 0, minutes, 0, 0, 1);
@@ -648,7 +647,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param seconds  the seconds to add, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the seconds added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> plusSeconds(long seconds) {
         return plusWithOverflow(date, 0, 0, seconds, 0, 1);
@@ -661,7 +660,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param nanos  the nanos to add, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the nanoseconds added, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> plusNanos(long nanos) {
         return plusWithOverflow(date, 0, 0, 0, nanos, 1);
@@ -686,7 +685,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param years  the years to subtract, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the years subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> minusYears(long years) {
         return with(date.minus(years, ChronoUnit.YEARS), time);
@@ -710,7 +709,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param months  the months to subtract, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the months subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> minusMonths(long months) {
         return with(date.minus(months, ChronoUnit.MONTHS), time);
@@ -729,7 +728,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param weeks  the weeks to subtract, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the weeks subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> minusWeeks(long weeks) {
         return with(date.minus(weeks, ChronoUnit.WEEKS), time);
@@ -748,7 +747,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param days  the days to subtract, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the days subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> minusDays(long days) {
         return with(date.minus(days, ChronoUnit.DAYS), time);
@@ -761,7 +760,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param hours  the hours to subtract, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the hours subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> minusHours(long hours) {
         return plusWithOverflow(date, hours, 0, 0, 0, -1);
@@ -774,7 +773,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param minutes  the minutes to subtract, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the minutes subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> minusMinutes(long minutes) {
         return plusWithOverflow(date, 0, minutes, 0, 0, -1);
@@ -787,7 +786,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param seconds  the seconds to subtract, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the seconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> minusSeconds(long seconds) {
         return plusWithOverflow(date, 0, 0, seconds, 0, -1);
@@ -800,7 +799,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
      *
      * @param nanos  the nanos to subtract, may be negative
      * @return a {@code ChronoLocalDateTime} based on this date-time with the nanoseconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     ChronoDateTimeImpl<C> minusNanos(long nanos) {
         return plusWithOverflow(date, 0, 0, 0, nanos, -1);
@@ -910,7 +909,7 @@ class ChronoDateTimeImpl<C extends Chrono<C>>
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof ChronoLocalDateTime == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         @SuppressWarnings("unchecked")
         ChronoLocalDateTime<C> end = (ChronoLocalDateTime<C>) endDateTime;

@@ -52,7 +52,7 @@ import java.util.Set;
 
 import javax.time.AbstractDateTimeTest;
 import javax.time.Clock;
-import javax.time.DateTimeException;
+
 import javax.time.Instant;
 import javax.time.LocalDate;
 import javax.time.LocalTime;
@@ -205,12 +205,12 @@ public class TCKMonthDay extends AbstractDateTimeTest {
         assertEquals(TEST_07_15, MonthDay.of(Month.JULY, 15));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_intMonth_dayTooLow() {
         MonthDay.of(Month.JANUARY, 0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_intMonth_dayTooHigh() {
         MonthDay.of(Month.JANUARY, 32);
     }
@@ -226,23 +226,23 @@ public class TCKMonthDay extends AbstractDateTimeTest {
         check(TEST_07_15, 7, 15);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_ints_dayTooLow() {
         MonthDay.of(1, 0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_ints_dayTooHigh() {
         MonthDay.of(1, 32);
     }
 
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_ints_monthTooLow() {
         MonthDay.of(0, 1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_ints_monthTooHigh() {
         MonthDay.of(13, 1);
     }
@@ -253,7 +253,7 @@ public class TCKMonthDay extends AbstractDateTimeTest {
         assertEquals(MonthDay.from(LocalDate.of(2007, 7, 15)), TEST_07_15);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         MonthDay.from(LocalTime.of(12, 30));
     }
@@ -405,12 +405,12 @@ public class TCKMonthDay extends AbstractDateTimeTest {
         TEST_07_15.getLong((DateTimeField) null);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_invalidField() {
         TEST_07_15.getLong(MockFieldNoValue.INSTANCE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_timeField() {
         TEST_07_15.getLong(ChronoField.AMPM_OF_DAY);
     }
@@ -491,12 +491,12 @@ public class TCKMonthDay extends AbstractDateTimeTest {
         assertEquals(test.withMonth(6), test);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withMonth_tooLow() {
         MonthDay.of(6, 30).withMonth(0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withMonth_tooHigh() {
         MonthDay.of(6, 30).withMonth(13);
     }
@@ -509,7 +509,7 @@ public class TCKMonthDay extends AbstractDateTimeTest {
         assertEquals(MonthDay.of(6, 30).withDayOfMonth(1), MonthDay.of(6, 1));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withDayOfMonth_invalid() {
         MonthDay.of(6, 30).withDayOfMonth(31);
     }
@@ -525,12 +525,12 @@ public class TCKMonthDay extends AbstractDateTimeTest {
         assertEquals(test.withDayOfMonth(30), test);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withDayOfMonth_tooLow() {
         MonthDay.of(6, 30).withDayOfMonth(0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withDayOfMonth_tooHigh() {
         MonthDay.of(6, 30).withDayOfMonth(32);
     }
@@ -600,7 +600,7 @@ public class TCKMonthDay extends AbstractDateTimeTest {
         assertEquals(test.atYear(2005), LocalDate.of(2005, 2, 28));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_atYear_int_invalidYear() {
         MonthDay test = MonthDay.of(6, 30);
         test.atYear(Integer.MIN_VALUE);

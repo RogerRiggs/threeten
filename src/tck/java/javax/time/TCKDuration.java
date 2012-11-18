@@ -368,7 +368,7 @@ public class TCKDuration {
         Duration.of(amount, unit);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_of_long_PeriodUnit_estimatedUnit() {
         Duration.of(2, WEEKS);
     }

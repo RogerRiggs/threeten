@@ -166,14 +166,14 @@ public final class MonthDay
      * @param month  the month-of-year to represent, not null
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return the month-day, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month
      */
     public static MonthDay of(Month month, int dayOfMonth) {
         Objects.requireNonNull(month, "month");
         DAY_OF_MONTH.checkValidValue(dayOfMonth);
         if (dayOfMonth > month.maxLength()) {
-            throw new DateTimeException("Illegal value for DayOfMonth field, value " + dayOfMonth +
+            throw new IllegalArgumentException("Illegal value for DayOfMonth field, value " + dayOfMonth +
                     " is not valid for month " + month.name());
         }
         return new MonthDay(month.getValue(), dayOfMonth);
@@ -192,8 +192,8 @@ public final class MonthDay
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return the month-day, not null
-     * @throws DateTimeException if the value of any field is out of range
-     * @throws DateTimeException if the day-of-month is invalid for the month
+     * @throws IllegalArgumentException if the value of any field is out of range
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month
      */
     public static MonthDay of(int month, int dayOfMonth) {
         return of(Month.of(month), dayOfMonth);
@@ -208,7 +208,7 @@ public final class MonthDay
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the month-day, not null
-     * @throws DateTimeException if unable to convert to a {@code MonthDay}
+     * @throws IllegalArgumentException if unable to convert to a {@code MonthDay}
      */
     public static MonthDay from(DateTimeAccessor dateTime) {
         if (dateTime instanceof MonthDay) {
@@ -286,7 +286,7 @@ public final class MonthDay
                 case DAY_OF_MONTH: return day;
                 case MONTH_OF_YEAR: return month;
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -328,7 +328,7 @@ public final class MonthDay
                 case DAY_OF_MONTH: return withDayOfMonth((int) newValue);
                 case MONTH_OF_YEAR: return  withMonth((int) newValue);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }
@@ -344,7 +344,7 @@ public final class MonthDay
      *
      * @param month  the month-of-year to set in the returned month-day, from 1 (January) to 12 (December)
      * @return a {@code MonthDay} based on this month-day with the requested month, not null
-     * @throws DateTimeException if the month-of-year value is invalid
+     * @throws IllegalArgumentException if the month-of-year value is invalid
      */
     public MonthDay withMonth(int month) {
         return with(Month.of(month));
@@ -380,8 +380,8 @@ public final class MonthDay
      *
      * @param dayOfMonth  the day-of-month to set in the return month-day, from 1 to 31
      * @return a {@code MonthDay} based on this month-day with the requested day, not null
-     * @throws DateTimeException if the day-of-month value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month
+     * @throws IllegalArgumentException if the day-of-month value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month
      */
     public MonthDay withDayOfMonth(int dayOfMonth) {
         if (dayOfMonth == this.day) {
@@ -458,7 +458,7 @@ public final class MonthDay
     @Override
     public DateTime doWithAdjustment(DateTime dateTime) {
         if (Chrono.from(dateTime).equals(ISOChrono.INSTANCE) == false) {
-            throw new DateTimeException("Adjustment only supported on ISO date-time");
+            throw new IllegalArgumentException("Adjustment only supported on ISO date-time");
         }
         dateTime = dateTime.with(MONTH_OF_YEAR, month);
         return dateTime.with(DAY_OF_MONTH, Math.min(dateTime.range(DAY_OF_MONTH).getMaximum(), day));

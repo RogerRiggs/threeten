@@ -31,7 +31,6 @@
  */
 package javax.time.jdk8;
 
-import javax.time.DateTimeException;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTimeAccessor;
 import javax.time.calendrical.DateTimeField;
@@ -49,7 +48,7 @@ public abstract class DefaultInterfaceDateTimeAccessor implements DateTimeAccess
             if (isSupported(field)) {
                 return field.range();
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }

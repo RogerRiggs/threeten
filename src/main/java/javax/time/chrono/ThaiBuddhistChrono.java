@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTimeAccessor;
@@ -217,7 +216,7 @@ public final class ThaiBuddhistChrono extends Chrono<ThaiBuddhistChrono> impleme
     @Override
     public int prolepticYear(Era<ThaiBuddhistChrono> era, int yearOfEra) {
         if (era instanceof ThaiBuddhistEra == false) {
-            throw new DateTimeException("Era must be BuddhistEra");
+            throw new IllegalArgumentException("Era must be BuddhistEra");
         }
         return (era == ThaiBuddhistEra.BE ? yearOfEra : 1 - yearOfEra);
     }

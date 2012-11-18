@@ -31,7 +31,7 @@
  */
 package javax.time.calendrical;
 
-import javax.time.DateTimeException;
+
 import javax.time.jdk8.DefaultInterfaceDateTimeAccessor;
 
 /**
@@ -58,7 +58,7 @@ public final class MockFieldValue extends DefaultInterfaceDateTimeAccessor {
             if (isSupported(field)) {
                 return field.range();
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }
@@ -68,7 +68,7 @@ public final class MockFieldValue extends DefaultInterfaceDateTimeAccessor {
         if (this.field.equals(field)) {
             return value;
         }
-        throw new DateTimeException("Unsupported field: " + field);
+        throw new IllegalArgumentException("Unsupported field: " + field);
     }
 
     @Override
@@ -76,7 +76,7 @@ public final class MockFieldValue extends DefaultInterfaceDateTimeAccessor {
         if (this.field.equals(field)) {
             return new MockFieldValue(field, newValue);
         }
-        throw new DateTimeException("Unsupported field: " + field);
+        throw new IllegalArgumentException("Unsupported field: " + field);
     }
 
 }

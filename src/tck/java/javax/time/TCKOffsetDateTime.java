@@ -436,12 +436,12 @@ public class TCKOffsetDateTime extends AbstractDateTimeTest {
         }
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_ofEpochSecond_longOffset_tooBig() {
         OffsetDateTime.ofEpochSecond(Long.MAX_VALUE, OFFSET_PONE);  // TODO: better test
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_ofEpochSecond_longOffset_tooSmall() {
         OffsetDateTime.ofEpochSecond(Long.MIN_VALUE, OFFSET_PONE);  // TODO: better test
     }
@@ -459,7 +459,7 @@ public class TCKOffsetDateTime extends AbstractDateTimeTest {
         assertEquals(OffsetDateTime.from(OffsetDateTime.of(2007, 7, 15, 17, 30, OFFSET_PONE)), OffsetDateTime.of(2007, 7, 15, 17, 30, OFFSET_PONE));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         OffsetDateTime.from(LocalTime.of(12, 30));
     }
@@ -485,12 +485,12 @@ public class TCKOffsetDateTime extends AbstractDateTimeTest {
         assertEquals(t.getOffset().getId(), offsetId);
     }
 
-    @Test(expectedExceptions=DateTimeParseException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_parse_illegalValue() {
         OffsetDateTime.parse("2008-06-32T11:15+01:00");
     }
 
-    @Test(expectedExceptions=DateTimeParseException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void factory_parse_invalidValue() {
         OffsetDateTime.parse("2008-06-31T11:15+01:00");
     }
@@ -632,7 +632,7 @@ public class TCKOffsetDateTime extends AbstractDateTimeTest {
         assertEquals(test.getLong(ChronoField.OFFSET_SECONDS), 3600);
     }
 
-    @Test(dataProvider="invalidFields", expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(dataProvider="invalidFields", expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_invalidField(DateTimeField field) {
         TEST_2008_6_30_11_30_59_000000500.getLong(field);
     }
@@ -781,12 +781,12 @@ public class TCKOffsetDateTime extends AbstractDateTimeTest {
         assertEquals(t, OffsetDateTime.of(2008, 2, 2, 11, 30, 59, 500, OFFSET_PONE));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withDayOfYear_illegal() {
         TEST_2008_6_30_11_30_59_000000500.withDayOfYear(367);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withDayOfYear_invalid() {
         OffsetDateTime.of(2007, 2, 2, 11, 30, OFFSET_PONE).withDayOfYear(366);
     }

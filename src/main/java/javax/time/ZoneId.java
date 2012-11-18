@@ -320,6 +320,7 @@ public abstract class ZoneId implements Serializable {
      *
      * @param zoneId  the time-zone ID, not null
      * @return the zone ID, not null
+     * @throws IllegalArgumentException if the zone ID group or region syntax is illegal
      * @throws DateTimeException if the zone ID cannot be found
      */
     public static ZoneId of(String zoneId) {
@@ -341,6 +342,7 @@ public abstract class ZoneId implements Serializable {
      *
      * @param zoneId  the time-zone ID, not null
      * @return the zone ID, not null
+     * @throws IllegalArgumentException if the zone ID group or region syntax is illegal
      * @throws DateTimeException if the zone ID cannot be found
      */
     public static ZoneId ofUnchecked(String zoneId) {
@@ -353,6 +355,7 @@ public abstract class ZoneId implements Serializable {
      * @param zoneId  the time-zone ID, not null
      * @param checkAvailable  whether to check if the zone ID is available
      * @return the zone ID, not null
+     * @throws IllegalArgumentException if the zone ID group or region syntax is illegal
      * @throws DateTimeException if the zone ID cannot be found
      */
     private static ZoneId ofId(String zoneId, boolean checkAvailable) {
@@ -366,7 +369,7 @@ public abstract class ZoneId implements Serializable {
             try {
                 return of(ZoneOffset.of(zoneId.substring(4)));
             } catch (IllegalArgumentException ex) {
-                throw new DateTimeException("Unknown time-zone offset", ex);
+                throw new IllegalArgumentException("Unknown time-zone offset", ex);
             }
         }
         if (zoneId.startsWith("UTC") || zoneId.startsWith("GMT")) {
@@ -380,12 +383,13 @@ public abstract class ZoneId implements Serializable {
         // normal non-fixed IDs
         Matcher matcher = PATTERN.matcher(zoneId);
         if (matcher.matches() == false) {
-            throw new DateTimeException("Invalid time-zone ID: " + zoneId);
+            throw new IllegalArgumentException("Invalid time-zone ID: " + zoneId);
         }
         String groupId = matcher.group(2);
         String regionId = matcher.group(3);
         groupId = (groupId != null ? (groupId.equals(GROUP_TZDB) ? GROUP_TZDB : groupId) : GROUP_TZDB);
         ZoneRulesProvider provider = null;
+        // TODO: It seems like some arbitrary including "-", "+", "@" GMT and UTC strings get accepted for lookup
         try {
             // always attempt load for better behavior after deserialization
             provider = ZoneRulesProvider.getProvider(groupId);
@@ -427,12 +431,12 @@ public abstract class ZoneId implements Serializable {
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the zone ID, not null
-     * @throws DateTimeException if unable to convert to a {@code ZoneId}
+     * @throws IllegalArgumentException if unable to convert to a {@code ZoneId}
      */
     public static ZoneId from(DateTimeAccessor dateTime) {
         ZoneId obj = dateTime.query(Query.ZONE_ID);
         if (obj == null) {
-            throw new DateTimeException("Unable to convert DateTimeAccessor to ZoneId: " + dateTime.getClass());
+            throw new IllegalArgumentException("Unable to convert DateTimeAccessor to ZoneId: " + dateTime.getClass());
         }
         return obj;
     }

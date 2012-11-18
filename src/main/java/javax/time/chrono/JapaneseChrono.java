@@ -40,7 +40,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.time.DateTimeConstants;
-import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTimeAccessor;
@@ -194,7 +193,7 @@ public final class JapaneseChrono extends Chrono<JapaneseChrono> implements Seri
     @Override
     public ChronoLocalDate<JapaneseChrono> date(Era<JapaneseChrono> era, int yearOfEra, int month, int dayOfMonth) {
         if (era instanceof JapaneseEra == false) {
-            throw new DateTimeException("Era must be JapaneseEra");
+            throw new IllegalArgumentException("Era must be JapaneseEra");
         }
         return JapaneseDate.of((JapaneseEra) era, yearOfEra, month, dayOfMonth);
     }
@@ -237,7 +236,7 @@ public final class JapaneseChrono extends Chrono<JapaneseChrono> implements Seri
     @Override
     public int prolepticYear(Era<JapaneseChrono> era, int yearOfEra) {
         if (era instanceof JapaneseEra == false) {
-            throw new DateTimeException("Era must be JapaneseEra");
+            throw new IllegalArgumentException("Era must be JapaneseEra");
         }
         JapaneseEra jera = (JapaneseEra) era;
         int gregorianYear = jera.getPrivateEra().getSinceDate().getYear() + yearOfEra - 1;
@@ -250,7 +249,7 @@ public final class JapaneseChrono extends Chrono<JapaneseChrono> implements Seri
         if (jdate.getNormalizedYear() == gregorianYear) {
             return gregorianYear;
         }
-        throw new DateTimeException("invalid yearOfEra value");
+        throw new IllegalArgumentException("invalid yearOfEra value");
     }
 
     /**
@@ -259,7 +258,7 @@ public final class JapaneseChrono extends Chrono<JapaneseChrono> implements Seri
      *
      * @param eraValue  the era value
      * @return the {@code JapaneseEra} for the given numeric era value
-     * @throws DateTimeException if {@code eraValue} is invalid
+     * @throws IllegalArgumentException if {@code eraValue} is invalid
      */
     @Override
     public Era<JapaneseChrono> eraOf(int eraValue) {

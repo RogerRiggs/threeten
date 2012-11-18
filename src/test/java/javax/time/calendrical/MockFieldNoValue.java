@@ -34,7 +34,7 @@ package javax.time.calendrical;
 import static javax.time.calendrical.ChronoUnit.MONTHS;
 import static javax.time.calendrical.ChronoUnit.WEEKS;
 
-import javax.time.DateTimeException;
+
 
 /**
  * Mock DateTimeField that returns null.
@@ -81,13 +81,13 @@ public enum MockFieldNoValue implements DateTimeField {
 
     @Override
     public long doGet(DateTimeAccessor dateTime) {
-        throw new DateTimeException("Mock");
+        throw new IllegalArgumentException("Mock");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public DateTimeAccessor doSet(DateTimeAccessor dateTime, long newValue) {
-        throw new DateTimeException("Mock");
+        throw new IllegalArgumentException("Mock");
     }
 
     //-----------------------------------------------------------------------

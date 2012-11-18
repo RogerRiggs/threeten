@@ -55,7 +55,7 @@ import java.util.Set;
 
 import javax.time.AbstractDateTimeTest;
 import javax.time.Clock;
-import javax.time.DateTimeException;
+
 import javax.time.Instant;
 import javax.time.LocalDate;
 import javax.time.LocalTime;
@@ -210,12 +210,12 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         check(test, 2008, 2);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_intsMonth_yearTooLow() {
         YearMonth.of(Year.MIN_YEAR - 1, Month.JANUARY);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_intsMonth_dayTooHigh() {
         YearMonth.of(Year.MAX_YEAR + 1, Month.JANUARY);
     }
@@ -232,22 +232,22 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         check(test, 2008, 2);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_ints_yearTooLow() {
         YearMonth.of(Year.MIN_YEAR - 1, 2);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_ints_dayTooHigh() {
         YearMonth.of(Year.MAX_YEAR + 1, 2);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_ints_monthTooLow() {
         YearMonth.of(2008, 0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_ints_monthTooHigh() {
         YearMonth.of(2008, 13);
     }
@@ -258,7 +258,7 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         assertEquals(YearMonth.from(LocalDate.of(2007, 7, 15)), YearMonth.of(2007, 7));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_factory_CalendricalObject_invalid_noDerive() {
         YearMonth.from(LocalTime.of(12, 30));
     }
@@ -412,12 +412,12 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         TEST_2008_06.getLong((DateTimeField) null);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_invalidField() {
         TEST_2008_06.getLong(MockFieldNoValue.INSTANCE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"} )
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"} )
     public void test_get_DateTimeField_timeField() {
         TEST_2008_06.getLong(ChronoField.AMPM_OF_DAY);
     }
@@ -492,13 +492,13 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         assertEquals(test.withYear(2008), test);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withYear_tooLow() {
         YearMonth test = YearMonth.of(2008, 6);
         test.withYear(Year.MIN_YEAR - 1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withYear_tooHigh() {
         YearMonth test = YearMonth.of(2008, 6);
         test.withYear(Year.MAX_YEAR + 1);
@@ -519,13 +519,13 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         assertEquals(test.withMonth(6), test);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withMonth_tooLow() {
         YearMonth test = YearMonth.of(2008, 6);
         test.withMonth(0);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_withMonth_tooHigh() {
         YearMonth test = YearMonth.of(2008, 6);
         test.withMonth(13);
@@ -558,25 +558,25 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         assertEquals(test.plusYears(20L + Year.MAX_YEAR), YearMonth.of((int) (-40L + 20L + Year.MAX_YEAR), 6));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusYears_long_invalidTooLarge() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 6);
         test.plusYears(1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusYears_long_invalidTooLargeMaxAddMax() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 12);
         test.plusYears(Long.MAX_VALUE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusYears_long_invalidTooLargeMaxAddMin() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 12);
         test.plusYears(Long.MIN_VALUE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusYears_long_invalidTooSmall() {
         YearMonth test = YearMonth.of(Year.MIN_YEAR, 6);
         test.plusYears(-1);
@@ -622,25 +622,25 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         assertEquals(test.plusMonths(months), YearMonth.of((int) (-40L + months / 12), 6 + (int) (months % 12)));
     }
 
-    @Test(expectedExceptions={DateTimeException.class}, groups={"tck"})
+    @Test(expectedExceptions={IllegalArgumentException.class}, groups={"tck"})
     public void test_plusMonths_long_invalidTooLarge() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 12);
         test.plusMonths(1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusMonths_long_invalidTooLargeMaxAddMax() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 12);
         test.plusMonths(Long.MAX_VALUE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_plusMonths_long_invalidTooLargeMaxAddMin() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 12);
         test.plusMonths(Long.MIN_VALUE);
     }
 
-    @Test(expectedExceptions={DateTimeException.class}, groups={"tck"})
+    @Test(expectedExceptions={IllegalArgumentException.class}, groups={"tck"})
     public void test_plusMonths_long_invalidTooSmall() {
         YearMonth test = YearMonth.of(Year.MIN_YEAR, 1);
         test.plusMonths(-1);
@@ -673,25 +673,25 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         assertEquals(test.minusYears(20L + Year.MAX_YEAR), YearMonth.of((int) (40L - 20L - Year.MAX_YEAR), 6));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusYears_long_invalidTooLarge() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 6);
         test.minusYears(-1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusYears_long_invalidTooLargeMaxSubtractMax() {
         YearMonth test = YearMonth.of(Year.MIN_YEAR, 12);
         test.minusYears(Long.MAX_VALUE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusYears_long_invalidTooLargeMaxSubtractMin() {
         YearMonth test = YearMonth.of(Year.MIN_YEAR, 12);
         test.minusYears(Long.MIN_VALUE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusYears_long_invalidTooSmall() {
         YearMonth test = YearMonth.of(Year.MIN_YEAR, 6);
         test.minusYears(1);
@@ -737,25 +737,25 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         assertEquals(test.minusMonths(months), YearMonth.of((int) (40L - months / 12), 6 - (int) (months % 12)));
     }
 
-    @Test(expectedExceptions={DateTimeException.class}, groups={"tck"})
+    @Test(expectedExceptions={IllegalArgumentException.class}, groups={"tck"})
     public void test_minusMonths_long_invalidTooLarge() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 12);
         test.minusMonths(-1);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusMonths_long_invalidTooLargeMaxSubtractMax() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 12);
         test.minusMonths(Long.MAX_VALUE);
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_minusMonths_long_invalidTooLargeMaxSubtractMin() {
         YearMonth test = YearMonth.of(Year.MAX_YEAR, 12);
         test.minusMonths(Long.MIN_VALUE);
     }
 
-    @Test(expectedExceptions={DateTimeException.class}, groups={"tck"})
+    @Test(expectedExceptions={IllegalArgumentException.class}, groups={"tck"})
     public void test_minusMonths_long_invalidTooSmall() {
         YearMonth test = YearMonth.of(Year.MIN_YEAR, 1);
         test.minusMonths(1);
@@ -884,7 +884,7 @@ public class TCKYearMonth extends AbstractDateTimeTest {
         assertEquals(test.atDay(30), LocalDate.of(2008, 6, 30));
     }
 
-    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    @Test(expectedExceptions=IllegalArgumentException.class, groups={"tck"})
     public void test_atDay_int_invalidDay() {
         YearMonth test = YearMonth.of(2008, 6);
         test.atDay(31);

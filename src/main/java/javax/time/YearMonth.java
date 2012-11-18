@@ -157,7 +157,7 @@ public final class YearMonth
      * @param year  the year to represent, from MIN_YEAR to MAX_YEAR
      * @param month  the month-of-year to represent, not null
      * @return the year-month, not null
-     * @throws DateTimeException if the year value is invalid
+     * @throws IllegalArgumentException if the year value is invalid
      */
     public static YearMonth of(int year, Month month) {
         Objects.requireNonNull(month, "month");
@@ -170,7 +170,7 @@ public final class YearMonth
      * @param year  the year to represent, from MIN_YEAR to MAX_YEAR
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @return the year-month, not null
-     * @throws DateTimeException if either field value is invalid
+     * @throws IllegalArgumentException if either field value is invalid
      */
     public static YearMonth of(int year, int month) {
         YEAR.checkValidValue(year);
@@ -187,7 +187,7 @@ public final class YearMonth
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the year-month, not null
-     * @throws DateTimeException if unable to convert to a {@code YearMonth}
+     * @throws IllegalArgumentException if unable to convert to a {@code YearMonth}
      */
     public static YearMonth from(DateTimeAccessor dateTime) {
         if (dateTime instanceof YearMonth) {
@@ -282,7 +282,7 @@ public final class YearMonth
                 case YEAR: return year;
                 case ERA: return (year < 1 ? 0 : 1);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -385,7 +385,7 @@ public final class YearMonth
      *
      * @param adjuster the adjuster to use, not null
      * @return a {@code YearMonth} based on this year-month with the adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      */
     public YearMonth with(WithAdjuster adjuster) {
         if (adjuster instanceof YearMonth) {
@@ -406,7 +406,7 @@ public final class YearMonth
                 case YEAR: return withYear((int) newValue);
                 case ERA: return (getLong(ERA) == newValue ? this : withYear(1 - year));
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }
@@ -419,7 +419,7 @@ public final class YearMonth
      *
      * @param year  the year to set in the returned year-month, from MIN_YEAR to MAX_YEAR
      * @return a {@code YearMonth} based on this year-month with the requested year, not null
-     * @throws DateTimeException if the year value is invalid
+     * @throws IllegalArgumentException if the year value is invalid
      */
     public YearMonth withYear(int year) {
         YEAR.checkValidValue(year);
@@ -433,7 +433,7 @@ public final class YearMonth
      *
      * @param month  the month-of-year to set in the returned year-month, from 1 (January) to 12 (December)
      * @return a {@code YearMonth} based on this year-month with the requested month, not null
-     * @throws DateTimeException if the month-of-year value is invalid
+     * @throws IllegalArgumentException if the month-of-year value is invalid
      */
     public YearMonth withMonth(int month) {
         MONTH_OF_YEAR.checkValidValue(month);
@@ -454,7 +454,7 @@ public final class YearMonth
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code YearMonth} based on this year-month with the addition made, not null
-     * @throws DateTimeException if the addition cannot be made
+     * @throws IllegalArgumentException if the addition cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     public YearMonth plus(PlusAdjuster adjuster) {
@@ -474,7 +474,7 @@ public final class YearMonth
                 case MILLENNIA: return plusYears(Jdk8Methods.safeMultiply(amountToAdd, 1000));
                 case ERAS: return with(ERA, Jdk8Methods.safeAdd(getLong(ERA), amountToAdd));
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.doAdd(this, amountToAdd);
     }
@@ -486,7 +486,7 @@ public final class YearMonth
      *
      * @param yearsToAdd  the years to add, may be negative
      * @return a {@code YearMonth} based on this year-month with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public YearMonth plusYears(long yearsToAdd) {
         if (yearsToAdd == 0) {
@@ -503,7 +503,7 @@ public final class YearMonth
      *
      * @param monthsToAdd  the months to add, may be negative
      * @return a {@code YearMonth} based on this year-month with the months added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public YearMonth plusMonths(long monthsToAdd) {
         if (monthsToAdd == 0) {
@@ -530,7 +530,7 @@ public final class YearMonth
      *
      * @param adjuster  the adjuster to use, not null
      * @return a {@code YearMonth} based on this year-month with the subtraction made, not null
-     * @throws DateTimeException if the subtraction cannot be made
+     * @throws IllegalArgumentException if the subtraction cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     public YearMonth minus(MinusAdjuster adjuster) {
@@ -549,7 +549,7 @@ public final class YearMonth
      *
      * @param yearsToSubtract  the years to subtract, may be negative
      * @return a {@code YearMonth} based on this year-month with the years subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public YearMonth minusYears(long yearsToSubtract) {
         return (yearsToSubtract == Long.MIN_VALUE ? plusYears(Long.MAX_VALUE).plusYears(1) : plusYears(-yearsToSubtract));
@@ -562,7 +562,7 @@ public final class YearMonth
      *
      * @param monthsToSubtract  the months to subtract, may be negative
      * @return a {@code YearMonth} based on this year-month with the months subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     public YearMonth minusMonths(long monthsToSubtract) {
         return (monthsToSubtract == Long.MIN_VALUE ? plusMonths(Long.MAX_VALUE).plusMonths(1) : plusMonths(-monthsToSubtract));
@@ -597,7 +597,7 @@ public final class YearMonth
      *
      * @param dayOfMonth  the day-of-month to use, from 1 to 31
      * @return the date formed from this year-month and the specified day, not null
-     * @throws DateTimeException when the day is invalid for the year-month
+     * @throws IllegalArgumentException when the day is invalid for the year-month
      * @see #isValidDay(int)
      */
     public LocalDate atDay(int dayOfMonth) {
@@ -635,7 +635,7 @@ public final class YearMonth
     @Override
     public DateTime doWithAdjustment(DateTime dateTime) {
         if (Chrono.from(dateTime).equals(ISOChrono.INSTANCE) == false) {
-            throw new DateTimeException("Adjustment only supported on ISO date-time");
+            throw new IllegalArgumentException("Adjustment only supported on ISO date-time");
         }
         return dateTime.with(EPOCH_MONTH, getEpochMonth());
     }
@@ -643,7 +643,7 @@ public final class YearMonth
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof YearMonth == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
         YearMonth end = (YearMonth) endDateTime;
         if (unit instanceof ChronoUnit) {
@@ -658,7 +658,7 @@ public final class YearMonth
                 case MILLENNIA: return monthsUntil / 12000;
                 case ERAS: return end.getLong(ERA) - getLong(ERA);
             }
-            throw new DateTimeException("Unsupported unit: " + unit.getName());
+            throw new IllegalArgumentException("Unsupported unit: " + unit.getName());
         }
         return unit.between(this, endDateTime).getAmount();
     }

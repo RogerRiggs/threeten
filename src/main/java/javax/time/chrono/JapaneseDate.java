@@ -37,7 +37,6 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Objects;
 
-import javax.time.DateTimeException;
 import javax.time.DayOfWeek;
 import javax.time.LocalDate;
 import javax.time.calendrical.ChronoField;
@@ -90,7 +89,7 @@ final class JapaneseDate
      * @param month  the month-of-year to represent, not null
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return the Japanese date, never null
-     * @throws DateTimeException if the value of any field is out of range, or
+     * @throws IllegalArgumentException if the value of any field is out of range, or
      *                              if the day-of-month is invalid for the month-year
      */
     public static JapaneseDate of(int prolepticYear, int month, int dayOfMonth) {
@@ -106,7 +105,7 @@ final class JapaneseDate
      * @param month  the month-of-year to represent
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return the Japanese date, never null
-     * @throws DateTimeException if the value of any field is out of range, or
+     * @throws IllegalArgumentException if the value of any field is out of range, or
      *                           if the day-of-month is invalid for the month-year
      */
     static JapaneseDate of(JapaneseEra era, int yearOfEra, int month, int dayOfMonth) {
@@ -232,7 +231,7 @@ final class JapaneseDate
                 }
                 return getChrono().range(f);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }
@@ -326,7 +325,7 @@ final class JapaneseDate
      * @param era  the era to set in the returned date, not null
      * @param year  the year-of-era to set in the returned date
      * @return a {@code JapaneseDate} based on this date with the requested year, never null
-     * @throws DateTimeException if {@code year} is invalid
+     * @throws IllegalArgumentException if {@code year} is invalid
      */
     private JapaneseDate withYear(JapaneseEra era, int yearOfEra) {
         int year = JapaneseChrono.INSTANCE.prolepticYear(era, yearOfEra);
@@ -344,7 +343,7 @@ final class JapaneseDate
      *
      * @param year  the year to set in the returned date
      * @return a {@code JapaneseDate} based on this date with the requested year-of-era, never null
-     * @throws DateTimeException if {@code year} is invalid
+     * @throws IllegalArgumentException if {@code year} is invalid
      */
     @Override
     public JapaneseDate withYear(int year) {

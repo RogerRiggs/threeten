@@ -252,7 +252,7 @@ public class TestZoneId {
         assertEquals(test.getId(), TimeZone.getDefault().getID());
     }
 
-    @Test(expectedExceptions = DateTimeException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void test_systemDefault_unableToConvert() {
         TimeZone current = TimeZone.getDefault();
         try {
@@ -380,22 +380,36 @@ public class TestZoneId {
         return new Object[][] {
                 {"A"}, {"B"}, {"C"}, {"D"}, {"E"}, {"F"}, {"G"}, {"H"}, {"I"}, {"J"}, {"K"}, {"L"}, {"M"},
                 {"N"}, {"O"}, {"P"}, {"Q"}, {"R"}, {"S"}, {"T"}, {"U"}, {"V"}, {"W"}, {"X"}, {"Y"},
-                {"+0:00"}, {"+00:0"}, {"+0:0"},
-                {"+000"}, {"+00000"},
-                {"+0:00:00"}, {"+00:0:00"}, {"+00:00:0"}, {"+0:0:0"}, {"+0:0:00"}, {"+00:0:0"}, {"+0:00:0"},
-                {"+01_00"}, {"+01;00"}, {"+01@00"}, {"+01:AA"},
-                {"+19"}, {"+19:00"}, {"+18:01"}, {"+18:00:01"}, {"+1801"}, {"+180001"},
+                {"+000"}, {"+00000"}, {"+01_00"}, {"+01@00"}, {"+19"}, 
+                {"+1801"}, {"+180001"},
                 {"-0:00"}, {"-00:0"}, {"-0:0"},
                 {"-000"}, {"-00000"},
-                {"-0:00:00"}, {"-00:0:00"}, {"-00:00:0"}, {"-0:0:0"}, {"-0:0:00"}, {"-00:0:0"}, {"-0:00:0"},
-                {"-19"}, {"-19:00"}, {"-18:01"}, {"-18:00:01"}, {"-1801"}, {"-180001"},
-                {"-01_00"}, {"-01;00"}, {"-01@00"}, {"-01:AA"},
-                {"@01:00"},
+                {"-19"}, {"-19:00"}, {"-18:01"},  {"-1801"}, {"-180001"},
+                {"-01_00"}, {"-01@00"}, {"-01:AA"},
+                
         };
     }
 
     @Test(dataProvider="String_UTC_Invalid", expectedExceptions=DateTimeException.class)
     public void test_of_string_UTC_invalid(String id) {
+        ZoneId.of("UTC" + id);
+    }
+
+    //-----------------------------------------------------------------------
+    @DataProvider(name="String_UTC_Illegal")
+    Object[][] data_of_string_UTC_illegal() {
+        return new Object[][] {
+                {"+0:00"}, {"+00:0"}, {"+0:0"},
+                {"+0:00:00"}, {"+00:0:00"}, {"+00:00:0"}, {"+0:0:0"}, {"+0:0:00"}, {"+00:0:0"}, {"+0:00:0"},
+                {"+01;00"}, {"+01:AA"},
+                {"+19:00"}, {"+18:01"}, {"+18:00:01"}, {"-18:00:01"},
+                {"-0:00:00"}, {"-00:0:00"}, {"-00:00:0"}, {"-0:0:0"}, {"-0:0:00"}, {"-00:0:0"}, {"-0:00:0"},
+                {"@01:00"},  {"-01;00"},
+        };
+    }
+
+    @Test(dataProvider="String_UTC_Illegal", expectedExceptions=IllegalArgumentException.class)
+    public void test_of_string_UTC_illegal(String id) {
         ZoneId.of("UTC" + id);
     }
 
@@ -408,6 +422,12 @@ public class TestZoneId {
     public void test_of_string_GMT_invalid(String id) {
         ZoneId.of("GMT" + id);
     }
+
+    @Test(dataProvider="String_UTC_Illegal", expectedExceptions=IllegalArgumentException.class)
+    public void test_of_string_GMT_illegal(String id) {
+        ZoneId.of("GMT" + id);
+    }
+
 
     //-----------------------------------------------------------------------
     @DataProvider(name="String_Invalid")
@@ -426,12 +446,12 @@ public class TestZoneId {
         };
     }
 
-    @Test(dataProvider="String_Invalid", expectedExceptions=DateTimeException.class)
+    @Test(dataProvider="String_Invalid", expectedExceptions=IllegalArgumentException.class)
     public void test_of_string_invalid(String id) {
         ZoneId.of(id);
     }
 
-    @Test(dataProvider="String_Invalid", expectedExceptions=DateTimeException.class)
+    @Test(dataProvider="String_Invalid", expectedExceptions=IllegalArgumentException.class)
     public void test_ofUnchecked_string_invalid(String id) {
         ZoneId.ofUnchecked(id);
     }
@@ -486,12 +506,12 @@ public class TestZoneId {
         ZoneId.of("Unknown:Europe/London");
     }
 
-    @Test(expectedExceptions=DateTimeException.class)
+    @Test(expectedExceptions=IllegalArgumentException.class)
     public void test_of_string_unknown_version() {
         ZoneId.of("TZDB:Europe/London#Unknown");
     }
 
-    @Test(expectedExceptions=DateTimeException.class)
+    @Test(expectedExceptions=IllegalArgumentException.class)
     public void test_of_string_unknown_region() {
         ZoneId.of("TZDB:Unknown#2008i");
     }
@@ -518,7 +538,7 @@ public class TestZoneId {
         assertEquals(ZoneId.from(ZonedDateTime.of(2007, 7, 15, 17, 30, 0, 0, ZONE_PARIS)), ZONE_PARIS);
     }
 
-    @Test(expectedExceptions=DateTimeException.class)
+    @Test(expectedExceptions=IllegalArgumentException.class)
     public void test_factory_CalendricalObject_invalid_noDerive() {
         ZoneId.from(LocalTime.of(12, 30));
     }

@@ -31,7 +31,6 @@
  */
 package javax.time.calendrical;
 
-import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.LocalTime;
 
@@ -103,7 +102,7 @@ public interface DateTime extends DateTimeAccessor {
      *
      * @param adjuster the adjuster to use, not null
      * @return an object of the same type with the specified adjustment made, not null
-     * @throws DateTimeException if the adjustment cannot be made
+     * @throws IllegalArgumentException if the adjustment cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     DateTime with(WithAdjuster adjuster);
@@ -139,7 +138,7 @@ public interface DateTime extends DateTimeAccessor {
      *
      * @param adjuster  the adjuster to use, not null
      * @return an object of the same type with the specified adjustment made, not null
-     * @throws DateTimeException if the addition cannot be made
+     * @throws IllegalArgumentException if the addition cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     DateTime plus(PlusAdjuster adjuster);
@@ -173,7 +172,7 @@ public interface DateTime extends DateTimeAccessor {
      * @param amountToAdd  the amount of the specified unit to add, not null
      * @param unit  the unit of the period to add, not null
      * @return an object of the same type with the specified period added, not null
-     * @throws DateTimeException if the unit cannot be added
+     * @throws IllegalArgumentException if the unit cannot be added
      * @throws ArithmeticException if numeric overflow occurs
      */
     DateTime plus(long amountToAdd, PeriodUnit unit);
@@ -201,7 +200,7 @@ public interface DateTime extends DateTimeAccessor {
      *
      * @param adjuster  the adjuster to use, not null
      * @return an object of the same type with the specified adjustment made, not null
-     * @throws DateTimeException if the subtraction cannot be made
+     * @throws IllegalArgumentException if the subtraction cannot be made
      * @throws ArithmeticException if numeric overflow occurs
      */
     DateTime minus(MinusAdjuster adjuster);
@@ -237,7 +236,7 @@ public interface DateTime extends DateTimeAccessor {
      * @param amountToSubtract  the amount of the specified unit to subtract, not null
      * @param unit  the unit of the period to subtract, not null
      * @return an object of the same type with the specified period subtracted, not null
-     * @throws DateTimeException if the unit cannot be subtracted
+     * @throws IllegalArgumentException if the unit cannot be subtracted
      * @throws ArithmeticException if numeric overflow occurs
      */
     DateTime minus(long amountToSubtract, PeriodUnit unit);
@@ -263,7 +262,7 @@ public interface DateTime extends DateTimeAccessor {
      * @param endDateTime  the end date-time, of the same type as this object, not null
      * @param unit  the unit to measure the period in, not null
      * @return the amount of the period between this and the end
-     * @throws DateTimeException if the period cannot be calculated
+     * @throws IllegalArgumentException if the period cannot be calculated
      * @throws ArithmeticException if numeric overflow occurs
      */
     long periodUntil(DateTime endDateTime, PeriodUnit unit);
@@ -313,7 +312,7 @@ public interface DateTime extends DateTimeAccessor {
          *
          * @param dateTime  the date-time object to adjust, not null
          * @return an object of the same type with the adjustment made, not null
-         * @throws DateTimeException if unable to make the adjustment
+         * @throws IllegalArgumentException if unable to make the adjustment
          * @throws ArithmeticException if numeric overflow occurs
          */
         DateTime doWithAdjustment(DateTime dateTime);
@@ -360,7 +359,7 @@ public interface DateTime extends DateTimeAccessor {
          *
          * @param dateTime  the date-time object to adjust, not null
          * @return an object of the same type with the adjustment made, not null
-         * @throws DateTimeException if unable to add
+         * @throws IllegalArgumentException if unable to add
          * @throws ArithmeticException if numeric overflow occurs
          */
         DateTime doPlusAdjustment(DateTime dateTime);
@@ -406,7 +405,7 @@ public interface DateTime extends DateTimeAccessor {
          *
          * @param dateTime  the date-time object to adjust, not null
          * @return an object of the same type with the adjustment made, not null
-         * @throws DateTimeException if unable to subtract
+         * @throws IllegalArgumentException if unable to subtract
          * @throws ArithmeticException if numeric overflow occurs
          */
         DateTime doMinusAdjustment(DateTime dateTime);

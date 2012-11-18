@@ -112,7 +112,7 @@ public abstract class AbstractDateTimeTest extends AbstractTest {
                 try {
                     sample.range(field);
                     fail("Failed on " + sample + " " + field);
-                } catch (DateTimeException ex) {
+                } catch (IllegalArgumentException ex) {
                     // expected
                 }
             }
@@ -145,7 +145,7 @@ public abstract class AbstractDateTimeTest extends AbstractTest {
 //                    try {
 //                        sample.get(field);
 //                        fail("Failed on " + sample + " " + field);
-//                    } catch (DateTimeException ex) {
+//                    } catch (IllegalArgumentException ex) {
 //                        // expected
 //                    }
 //                }
@@ -160,7 +160,7 @@ public abstract class AbstractDateTimeTest extends AbstractTest {
                 try {
                     sample.get(field);
                     fail("Failed on " + sample + " " + field);
-                } catch (DateTimeException ex) {
+                } catch (IllegalArgumentException ex) {
                     // expected
                 }
             }
@@ -199,7 +199,7 @@ public abstract class AbstractDateTimeTest extends AbstractTest {
                 try {
                     sample.getLong(field);
                     fail("Failed on " + sample + " " + field);
-                } catch (DateTimeException ex) {
+                } catch (IllegalArgumentException ex) {
                     // expected
                 }
             }

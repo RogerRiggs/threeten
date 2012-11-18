@@ -35,7 +35,6 @@ import static javax.time.calendrical.ChronoField.ERA;
 
 import java.util.Locale;
 
-import javax.time.DateTimeException;
 import javax.time.calendrical.ChronoField;
 import javax.time.calendrical.DateTime;
 import javax.time.calendrical.DateTimeField;
@@ -87,7 +86,7 @@ public abstract class DefaultInterfaceEra<C extends Chrono<C>>
         if (field == ERA) {
             return getValue();
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -98,7 +97,7 @@ public abstract class DefaultInterfaceEra<C extends Chrono<C>>
             int eravalue = ((ChronoField) field).checkValidIntValue(newValue);
             return getChrono().eraOf(eravalue);
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }

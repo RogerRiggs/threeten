@@ -145,11 +145,11 @@ public enum Month implements DateTimeAccessor, WithAdjuster {
      *
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @return the month-of-year, not null
-     * @throws DateTimeException if the month-of-year is invalid
+     * @throws IllegalArgumentException if the month-of-year is invalid
      */
     public static Month of(int month) {
         if (month < 1 || month > 12) {
-            throw new DateTimeException("Invalid value for MonthOfYear: " + month);
+            throw new IllegalArgumentException("Invalid value for MonthOfYear: " + month);
         }
         return ENUMS[month - 1];
     }
@@ -163,7 +163,7 @@ public enum Month implements DateTimeAccessor, WithAdjuster {
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the month-of-year, not null
-     * @throws DateTimeException if unable to convert to a {@code Month}
+     * @throws IllegalArgumentException if unable to convert to a {@code Month}
      */
     public static Month from(DateTimeAccessor dateTime) {
         if (dateTime instanceof Month) {
@@ -216,7 +216,7 @@ public enum Month implements DateTimeAccessor, WithAdjuster {
         if (field == MONTH_OF_YEAR) {
             return field.range();
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }
@@ -234,7 +234,7 @@ public enum Month implements DateTimeAccessor, WithAdjuster {
         if (field == MONTH_OF_YEAR) {
             return getValue();
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -245,7 +245,7 @@ public enum Month implements DateTimeAccessor, WithAdjuster {
             ((ChronoField) field).checkValidValue(newValue);
             return Month.of((int) newValue);
         } else if (field instanceof ChronoField) {
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }
@@ -429,7 +429,7 @@ public enum Month implements DateTimeAccessor, WithAdjuster {
     @Override
     public DateTime doWithAdjustment(DateTime dateTime) {
         if (Chrono.from(dateTime).equals(ISOChrono.INSTANCE) == false) {
-            throw new DateTimeException("Adjustment only supported on ISO date-time");
+            throw new IllegalArgumentException("Adjustment only supported on ISO date-time");
         }
         return dateTime.with(MONTH_OF_YEAR, getValue());
     }

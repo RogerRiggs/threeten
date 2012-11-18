@@ -278,7 +278,7 @@ public final class ZoneOffset
      *
      * @param dateTime  the date-time object to convert, not null
      * @return the zone-offset, not null
-     * @throws DateTimeException if unable to convert to an {@code ZoneOffset}
+     * @throws IllegalArgumentException if unable to convert to an {@code ZoneOffset}
      */
     public static ZoneOffset from(DateTimeAccessor dateTime) {
         return ofTotalSeconds(dateTime.get(OFFSET_SECONDS));
@@ -465,7 +465,7 @@ public final class ZoneOffset
             switch ((ChronoField) field) {
                 case OFFSET_SECONDS: return totalSeconds;
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -477,7 +477,7 @@ public final class ZoneOffset
             switch (f) {
                 case OFFSET_SECONDS: return ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue));
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }

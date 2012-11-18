@@ -139,7 +139,7 @@ public abstract class ZoneRulesProvider {
      *
      * @param groupId  the group ID, not null
      * @return the provider for the group, not null
-     * @throws DateTimeException if there is no provider for the specified group
+     * @throws IllegalArgumentException if there is no provider for the specified group
      */
     public static ZoneRulesProvider getProvider(String groupId) {
         Objects.requireNonNull(groupId, "groupId");
@@ -165,12 +165,12 @@ public abstract class ZoneRulesProvider {
      * to deregister providers.
      *
      * @param provider  the provider to register, not null
-     * @throws DateTimeException if the provider is already registered
+     * @throws IllegalArgumentException if the provider is already registered
      */
     public static void registerProvider(ZoneRulesProvider provider) {
         ZoneRulesProvider old = GROUPS.putIfAbsent(provider.getGroupId(), provider);
         if (old != null) {
-            throw new DateTimeException("Provider already registered for time-zone group: " + provider.getGroupId());
+            throw new IllegalArgumentException("Provider already registered for time-zone group: " + provider.getGroupId());
         }
     }
 
@@ -179,12 +179,12 @@ public abstract class ZoneRulesProvider {
      * Constructor.
      *
      * @param groupId  the group ID, not null
-     * @throws DateTimeException if the group ID is invalid
+     * @throws IllegalArgumentException if the group ID is invalid
      */
     protected ZoneRulesProvider(String groupId) {
         Objects.requireNonNull(groupId, "groupId");
         if (PATTERN_GROUP.matcher(groupId).matches() == false) {
-            throw new DateTimeException("Invalid group ID '" + groupId + "', must match regex [A-Za-z0-9._-]+");
+            throw new IllegalArgumentException("Invalid group ID '" + groupId + "', must match regex [A-Za-z0-9._-]+");
         }
         this.groupId = groupId;
     }

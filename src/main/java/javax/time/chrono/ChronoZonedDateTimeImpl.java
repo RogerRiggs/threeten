@@ -37,7 +37,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import javax.time.DateTimeException;
 import javax.time.DayOfWeek;
 import javax.time.LocalDateTime;
 import javax.time.OffsetDateTime;
@@ -109,7 +108,7 @@ import javax.time.zone.ZoneRules;
      * @param zone  the time-zone, not null
      * @param resolver  the resolver from local date-time to zoned, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the resolver cannot resolve an invalid local date-time
+     * @throws IllegalArgumentException if the resolver cannot resolve an invalid local date-time
      */
     static <R extends Chrono<R>> ChronoZonedDateTime<R> of(ChronoDateTimeImpl<R> dateTime, ZoneId zone, ZoneResolver resolver) {
         return resolve(dateTime, zone, null, resolver);
@@ -132,8 +131,8 @@ import javax.time.zone.ZoneRules;
      * @param zone  the time-zone, not null
      * @return the zoned date-time, not null
      * @throws DateTimeException if no rules can be found for the zone
-     * @throws DateTimeException if the date-time is invalid due to a gap in the local time-line
-     * @throws DateTimeException if the offset is invalid for the time-zone at the date-time
+     * @throws IllegalArgumentException if the date-time is invalid due to a gap in the local time-line
+     * @throws IllegalArgumentException if the offset is invalid for the time-zone at the date-time
      */
     static <R extends Chrono<R>> ChronoZonedDateTimeImpl<R> of(ChronoOffsetDateTimeImpl<R> dateTime, ZoneId zone) {
         Objects.requireNonNull(dateTime, "dateTime");
@@ -144,10 +143,10 @@ import javax.time.zone.ZoneRules;
         List<ZoneOffset> validOffsets = rules.getValidOffsets(inputLDT);
         if (validOffsets.contains(inputOffset) == false) {
             if (validOffsets.size() == 0) {
-                throw new DateTimeException("The local time " + inputLDT +
+                throw new IllegalArgumentException("The local time " + inputLDT +
                         " does not exist in time-zone " + zone + " due to a daylight savings gap");
             }
-            throw new DateTimeException("The offset in the date-time " + dateTime +
+            throw new IllegalArgumentException("The offset in the date-time " + dateTime +
                     " is invalid for time-zone " + zone);
         }
         return new ChronoZonedDateTimeImpl<>(dateTime, zone);
@@ -165,7 +164,7 @@ import javax.time.zone.ZoneRules;
      * @param instantDateTime  the instant to create the date-time from, not null
      * @param zone  the time-zone to use, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     private static <R extends Chrono<R>> ChronoZonedDateTimeImpl<R>
             ofInstant(ChronoOffsetDateTimeImpl<R> instantDateTime, ZoneId zone) {
@@ -187,7 +186,7 @@ import javax.time.zone.ZoneRules;
      * @param oldDateTime  the old date-time prior to the calculation, may be null
      * @param resolver  the resolver from local date-time to zoned, not null
      * @return the zoned date-time, not null
-     * @throws DateTimeException if the date-time cannot be resolved
+     * @throws IllegalArgumentException if the date-time cannot be resolved
      */
     private static <R extends Chrono<R>> ChronoZonedDateTime<R>
             resolve(ChronoLocalDateTime<R> desiredLocalDateTime, ZoneId zone,
@@ -207,7 +206,7 @@ import javax.time.zone.ZoneRules;
             offsetDT = resolver.resolve(desired, trans, rules, zone, old);
             if (((offsetDT.getDateTime() == desired && validOffsets.contains(offsetDT.getOffset())) ||
                     rules.isValidOffset(offsetDT.getDateTime(), offsetDT.getOffset())) == false) {
-                throw new DateTimeException(
+                throw new IllegalArgumentException(
                     "ZoneResolver implementation must return a valid date-time and offset for the zone: " + resolver.getClass().getName());
             }
         }
@@ -293,8 +292,8 @@ import javax.time.zone.ZoneRules;
      * This instance is immutable and unaffected by this method call.
      *
      * @return a {@code ZoneChronoDateTime} based on this date-time with the later offset, not null
-     * @throws DateTimeException if no rules can be found for the zone
-     * @throws DateTimeException if no rules are valid for this date-time
+     * @throws IllegalArgumentException if no rules can be found for the zone
+     * @throws IllegalArgumentException if no rules are valid for this date-time
      */
     public ChronoZonedDateTime<C> withLaterOffsetAtOverlap() {
         ZoneOffsetTransition trans = getZone().getRules().getTransition(LocalDateTime.from(this));
@@ -380,7 +379,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param zone  the time-zone to change to, not null
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested zone, not null
-     * @throws DateTimeException if the result exceeds the supported date range
+     * @throws IllegalArgumentException if the result exceeds the supported date range
      */
     @Override
     public ChronoZonedDateTime<C> withZoneSameInstant(ZoneId zone) {
@@ -517,7 +516,7 @@ import javax.time.zone.ZoneRules;
      * @param field  the field to set in the returned date-time, not null
      * @param newValue  the new value of the field in the returned date-time, not null
      * @return a {@code ZoneChronoDateTime} based on this date-time with the specified field set, not null
-     * @throws DateTimeException if the value is invalid
+     * @throws IllegalArgumentException if the value is invalid
      */
     @Override
     public ChronoZonedDateTime<C> with(DateTimeField field, long newValue) {
@@ -550,7 +549,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param year  the year to represent, from MIN_YEAR to MAX_YEAR
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested year, not null
-     * @throws DateTimeException if the year value is invalid
+     * @throws IllegalArgumentException if the year value is invalid
      */
     ChronoZonedDateTime<C> withYear(int year) {
         ChronoOffsetDateTime<C> newDT = dateTime.withYear(year);
@@ -572,7 +571,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param month  the month-of-year to represent, from 1 (January) to 12 (December)
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested month, not null
-     * @throws DateTimeException if the month value is invalid
+     * @throws IllegalArgumentException if the month value is invalid
      */
     ChronoZonedDateTime<C> withMonth(int month) {
         ChronoOffsetDateTime<C> newDT = dateTime.withMonth(month);
@@ -590,8 +589,8 @@ import javax.time.zone.ZoneRules;
      *
      * @param dayOfMonth  the day-of-month to represent, from 1 to 31
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested day, not null
-     * @throws DateTimeException if the day-of-month value is invalid
-     * @throws DateTimeException if the day-of-month is invalid for the month-year
+     * @throws IllegalArgumentException if the day-of-month value is invalid
+     * @throws IllegalArgumentException if the day-of-month is invalid for the month-year
      */
     ChronoZonedDateTime<C> withDayOfMonth(int dayOfMonth) {
         ChronoOffsetDateTime<C> newDT = dateTime.withDayOfMonth(dayOfMonth);
@@ -609,8 +608,8 @@ import javax.time.zone.ZoneRules;
      *
      * @param dayOfYear  the day-of-year to set in the returned date, from 1 to 365-366
      * @return a {@code ZoneChronoDateTime} based on this date with the requested day, not null
-     * @throws DateTimeException if the day-of-year value is invalid
-     * @throws DateTimeException if the day-of-year is invalid for the year
+     * @throws IllegalArgumentException if the day-of-year value is invalid
+     * @throws IllegalArgumentException if the day-of-year is invalid for the year
      */
     ChronoZonedDateTime<C> withDayOfYear(int dayOfYear) {
         ChronoOffsetDateTime<C> newDT = dateTime.withDayOfYear(dayOfYear);
@@ -629,7 +628,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param hour  the hour-of-day to represent, from 0 to 23
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested hour, not null
-     * @throws DateTimeException if the hour value is invalid
+     * @throws IllegalArgumentException if the hour value is invalid
      */
     ChronoZonedDateTime<C> withHour(int hour) {
         ChronoOffsetDateTime<C> newDT = dateTime.withHour(hour);
@@ -647,7 +646,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param minute  the minute-of-hour to represent, from 0 to 59
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested minute, not null
-     * @throws DateTimeException if the minute value is invalid
+     * @throws IllegalArgumentException if the minute value is invalid
      */
     ChronoZonedDateTime<C> withMinute(int minute) {
         ChronoOffsetDateTime<C> newDT = dateTime.withMinute(minute);
@@ -665,7 +664,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param second  the second-of-minute to represent, from 0 to 59
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested second, not null
-     * @throws DateTimeException if the second value is invalid
+     * @throws IllegalArgumentException if the second value is invalid
      */
     ChronoZonedDateTime<C> withSecond(int second) {
         ChronoOffsetDateTime<C> newDT = dateTime.withSecond(second);
@@ -683,7 +682,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param nanoOfSecond  the nano-of-second to represent, from 0 to 999,999,999
      * @return a {@code ZoneChronoDateTime} based on this date-time with the requested nanosecond, not null
-     * @throws DateTimeException if the nanos value is invalid
+     * @throws IllegalArgumentException if the nanos value is invalid
      */
     ChronoZonedDateTime<C> withNano(int nanoOfSecond) {
         ChronoOffsetDateTime<C> newDT = dateTime.withNano(nanoOfSecond);
@@ -721,7 +720,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param years  the years to add, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the years added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> plusYears(long years) {
         ChronoOffsetDateTime<C> newDT = dateTime.plusYears(years);
@@ -748,7 +747,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param months  the months to add, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the months added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> plusMonths(long months) {
         ChronoOffsetDateTime<C> newDT = dateTime.plusMonths(months);
@@ -772,7 +771,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param weeks  the weeks to add, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the weeks added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> plusWeeks(long weeks) {
         ChronoOffsetDateTimeImpl<C> newDT = dateTime.plusWeeks(weeks);
@@ -796,7 +795,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param days  the days to add, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the days added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> plusDays(long days) {
         ChronoOffsetDateTimeImpl<C> newDT = dateTime.plusDays(days);
@@ -824,7 +823,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param hours  the hours to add, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the hours added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> plusHours(long hours) {
         ChronoOffsetDateTime<C> newDT = dateTime.plusHours(hours);
@@ -842,7 +841,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param minutes  the minutes to add, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the minutes added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> plusMinutes(long minutes) {
         ChronoOffsetDateTime<C> newDT = dateTime.plusMinutes(minutes);
@@ -860,7 +859,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param seconds  the seconds to add, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the seconds added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> plusSeconds(long seconds) {
         ChronoOffsetDateTime<C> newDT = dateTime.plusSeconds(seconds);
@@ -878,7 +877,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param nanos  the nanos to add, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the nanoseconds added, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> plusNanos(long nanos) {
         ChronoOffsetDateTime<C> newDT = dateTime.plusNanos(nanos);
@@ -906,7 +905,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param years  the years to subtract, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the years subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> minusYears(long years) {
         ChronoOffsetDateTime<C> newDT = dateTime.minusYears(years);
@@ -933,7 +932,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param months  the months to subtract, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the months subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> minusMonths(long months) {
         ChronoOffsetDateTime<C> newDT = dateTime.minusMonths(months);
@@ -957,7 +956,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param weeks  the weeks to subtract, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the weeks subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> minusWeeks(long weeks) {
         ChronoOffsetDateTime<C> newDT = dateTime.minusWeeks(weeks);
@@ -981,7 +980,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param days  the days to subtract, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the days subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> minusDays(long days) {
         ChronoOffsetDateTime<C> newDT = dateTime.minusDays(days);
@@ -1009,7 +1008,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param hours  the hours to subtract, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the hours subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> minusHours(long hours) {
         ChronoOffsetDateTime<C> newDT = dateTime.minusHours(hours);
@@ -1027,7 +1026,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param minutes  the minutes to subtract, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the minutes subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> minusMinutes(long minutes) {
         ChronoOffsetDateTime<C> newDT = dateTime.minusMinutes(minutes);
@@ -1045,7 +1044,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param seconds  the seconds to subtract, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the seconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> minusSeconds(long seconds) {
         ChronoOffsetDateTime<C> newDT = dateTime.minusSeconds(seconds);
@@ -1063,7 +1062,7 @@ import javax.time.zone.ZoneRules;
      *
      * @param nanos  the nanos to subtract, positive or negative
      * @return a {@code ZoneChronoDateTime} based on this date-time with the nanoseconds subtracted, not null
-     * @throws DateTimeException if the result exceeds the supported range
+     * @throws IllegalArgumentException if the result exceeds the supported range
      */
     ChronoZonedDateTime<C> minusNanos(long nanos) {
         ChronoOffsetDateTime<C> newDT = dateTime.minusNanos(nanos);
@@ -1075,14 +1074,14 @@ import javax.time.zone.ZoneRules;
     @Override
     public long periodUntil(DateTime endDateTime, PeriodUnit unit) {
         if (endDateTime instanceof ChronoOffsetDateTime == false) {
-            throw new DateTimeException("Unable to calculate period between objects of two different types");
+            throw new IllegalArgumentException("Unable to calculate period between objects of two different types");
         }
 //        ChronoZonedDateTimeImpl<?> end = (ChronoZonedDateTimeImpl<?>) endDateTime;
         if (unit instanceof ChronoUnit) {
 //            ChronoUnit f = (ChronoUnit) unit;
 //            long until = dateTime.periodUntil(end.dateTime, unit);
             // NYI Adjust for offsets
-            throw new DateTimeException("nyi: ChronoZonedDateTime.periodUntil");
+            throw new IllegalArgumentException("nyi: ChronoZonedDateTime.periodUntil");
         }
         return unit.between(this, endDateTime).getAmount();
     }

@@ -50,7 +50,6 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.time.DateTimeException;
 import javax.time.DayOfWeek;
 import javax.time.LocalDate;
 import javax.time.calendrical.ChronoField;
@@ -451,27 +450,27 @@ final class HijrahDate
     private static void checkValidYearOfEra(int yearOfEra) {
          if (yearOfEra < MIN_YEAR_OF_ERA  ||
                  yearOfEra > MAX_YEAR_OF_ERA) {
-             throw new DateTimeException("Invalid year of Hijrah Era");
+             throw new IllegalArgumentException("Invalid year of Hijrah Era");
          }
     }
 
     private static void checkValidDayOfYear(int dayOfYear) {
          if (dayOfYear < 1  ||
                  dayOfYear > getMaximumDayOfYear()) {
-             throw new DateTimeException("Invalid day of year of Hijrah date");
+             throw new IllegalArgumentException("Invalid day of year of Hijrah date");
          }
     }
 
     private static void checkValidMonth(int month) {
          if (month < 1 || month > 12) {
-             throw new DateTimeException("Invalid month of Hijrah date");
+             throw new IllegalArgumentException("Invalid month of Hijrah date");
          }
     }
 
     private static void checkValidDayOfMonth(int dayOfMonth) {
          if (dayOfMonth < 1  ||
                  dayOfMonth > getMaximumDayOfMonth()) {
-             throw new DateTimeException("Invalid day of month of Hijrah date, day "
+             throw new IllegalArgumentException("Invalid day of month of Hijrah date, day "
                      + dayOfMonth + " greater than " + getMaximumDayOfMonth() + " or less than 1");
          }
     }
@@ -543,7 +542,7 @@ final class HijrahDate
                 }
                 return getChrono().range(f);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doRange(this);
     }
@@ -565,7 +564,7 @@ final class HijrahDate
                 case YEAR: return yearOfEra;
                 case ERA: return era.getValue();
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doGet(this);
     }
@@ -590,7 +589,7 @@ final class HijrahDate
                 case YEAR: return resolvePreviousValid(nvalue, monthOfYear, dayOfMonth);
                 case ERA: return resolvePreviousValid(1 - yearOfEra, monthOfYear, dayOfMonth);
             }
-            throw new DateTimeException("Unsupported field: " + field.getName());
+            throw new IllegalArgumentException("Unsupported field: " + field.getName());
         }
         return field.doSet(this, newValue);
     }

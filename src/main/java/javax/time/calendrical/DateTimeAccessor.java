@@ -90,7 +90,7 @@ public interface DateTimeAccessor {
      *
      * @param field  the field to get, not null
      * @return the range of valid values for the field, not null
-     * @throws DateTimeException if the range for the field cannot be obtained
+     * @throws IllegalArgumentException if the range for the field cannot be obtained
      */
     DateTimeValueRange range(DateTimeField field);
 
@@ -108,9 +108,9 @@ public interface DateTimeAccessor {
      *
      * @param field  the field to get, not null
      * @return the value for the field
-     * @throws DateTimeException if a value for the field cannot be obtained
-     * @throws DateTimeException if the range of valid values for the field exceeds an {@code int}
-     * @throws DateTimeException if the value is outside the range of valid values for the field
+     * @throws IllegalArgumentException if a value for the field cannot be obtained
+     * @throws IllegalArgumentException if the range of valid values for the field exceeds an {@code int}
+     * @throws IllegalArgumentException if the value is outside the range of valid values for the field
      * @throws ArithmeticException if numeric overflow occurs
      */
     int get(DateTimeField field);
@@ -129,7 +129,7 @@ public interface DateTimeAccessor {
      *
      * @param field  the field to get, not null
      * @return the value for the field
-     * @throws DateTimeException if a value for the field cannot be obtained
+     * @throws IllegalArgumentException if a value for the field cannot be obtained
      * @throws ArithmeticException if numeric overflow occurs
      */
     long getLong(DateTimeField field);
@@ -155,7 +155,7 @@ public interface DateTimeAccessor {
      * @param field  the field to set in the returned date, not null
      * @param newValue  the new value of the field in the returned date, not null
      * @return an object of the same type with the specified field set, not null
-     * @throws DateTimeException if the field cannot be set
+     * @throws IllegalArgumentException if the field cannot be set
      * @throws ArithmeticException if numeric overflow occurs
      */
     DateTimeAccessor with(DateTimeField field, long newValue);
@@ -213,7 +213,7 @@ public interface DateTimeAccessor {
         Query<ZoneId> ZONE_ID = new Query<ZoneId>() {
             @Override
             public ZoneId doQuery(DateTimeAccessor dateTime) {
-                throw new DateTimeException("Cannot invoke dateTime.query(Query.ZONE_ID) directly");
+                throw new IllegalStateException("Cannot invoke dateTime.query(Query.ZONE_ID) directly");
             }
         };
         /**
@@ -222,7 +222,7 @@ public interface DateTimeAccessor {
         Query<Chrono<?>> CHRONO = new Query<Chrono<?>>() {
             @Override
             public Chrono<?> doQuery(DateTimeAccessor dateTime) {
-                throw new DateTimeException("Cannot invoke dateTime.query(Query.CHRONO) directly");
+                throw new IllegalStateException("Cannot invoke dateTime.query(Query.CHRONO) directly");
             }
         };
         /**
@@ -245,7 +245,7 @@ public interface DateTimeAccessor {
          *
          * @param dateTime  the date-time object to query, not null
          * @return the queried value, avoid returning null
-         * @throws DateTimeException if unable to query
+         * @throws DateTimeException if unable to query  // TODO: What does this mean?
          * @throws ArithmeticException if numeric overflow occurs
          */
         R doQuery(DateTimeAccessor dateTime);
